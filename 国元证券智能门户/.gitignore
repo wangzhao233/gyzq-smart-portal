@@ -9,6 +9,13 @@ package-lock.json
 # Playwright MCP logs (temporary)
 .playwright-mcp/
 
+# Large binary files (GitHub 100MB limit)
+*.zip
+*.jar
+*.war
+*.tar.gz
+*.7z
+
 # OS files
 .DS_Store
 Thumbs.db

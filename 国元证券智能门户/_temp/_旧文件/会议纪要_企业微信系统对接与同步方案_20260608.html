@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要_企业微信系统对接与同步方案_20260608</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>企业微信系统对接与同步方案 — 会议纪要</h1>
+
+<blockquote>日期：2026年6月8日<br>参会人员：何总、C总、张沿</blockquote>
+
+<hr>
+
+<h2>一、SSO单点登录</h2>
+
+<p><strong>需求</strong>：实现用户通过企微扫码/静默授权方式完成智能门户登录鉴权，支持单点认证对接。同时考虑旧系统兼容，定制统一登录页，将账号密码同时透传给老SSO和智能门户，实现平滑过渡。</p>
+
+<p><strong>实现方案</strong>：基于私有化企微OIDC协议对接，定制登录页面，后端实现双通道账号透传逻辑。</p>
+
+<p><strong>会议讨论</strong>：</p>
+
+<ul><li>确认定制中间页衔接SSO认证，用户使用SSO账号密码登录</li><li>登录页面需重构：去除冗余扫码组件，适配响应式布局；企微扫码入口仅保留PC端，移动端隐藏相关按钮</li><li>登录功能与同步程序并行开发，优先完成中间页接口对接</li></ul>
+
+<p><strong>工作量</strong>：12人天（含前端设计、前端开发、后端开发、编写测试用例）</p>
+
+<hr>
+
+<h2>二、组织架构同步</h2>
+
+<p><strong>需求</strong>：从HR系统同步人员信息到智能门户，再同步给企微，支持在门户侧进行组织架构及人员信息管理（新增、编辑、离职调岗等操作同步）。</p>
+
+<p><strong>实现方案</strong>：开发HR数据拉取接口，定时/实时同步至门户数据库，再通过企微组织架构同步API推送，支持增量和全量同步模式。</p>
+
+<p><strong>会议讨论</strong>：</p>
+
+<ul><li>确认数据同步链路：HR系统 → 门户中台 → 企微（私有化）+ SSO，门户中台作为唯一数据枢纽</li><li>一期先做手动用户导入验证，确保同步机制正常后切换为自动同步</li><li>人员信息修改权限锁定在门户本地系统，同步后手工调整仅限应急场景</li></ul>
+
+<p><strong>工作量</strong>：8人天（含技术方案设计、后端开发、编写测试用例）</p>
+
+<hr>
+
+<h2>三、人员信息中台接口</h2>
+
+<p><strong>需求</strong>：开发统一接口，将人员信息和组织架构通过接口分发给第三方系统调用，支持按人员组织架构定时能力。</p>
+
+<p><strong>实现方案</strong>：设计标准RESTful接口，封装人员查询/同步/变更等能力，提供SDK文档供第三方接入。</p>
+
+<p><strong>会议讨论</strong>：</p>
+
+<ul><li>接口需保持通用性，避免与老HR系统深度绑定，确保未来更换数据源时可无缝迁移</li></ul>
+
+<p><strong>工作量</strong>：5人天（含技术方案设计、后端开发、编写测试用例）</p>
+
+<hr>
+
+<h2>四、二期规划（额外讨论）</h2>
+
+<p>会议额外讨论了二期多租户架构改造方向：</p>
+
+<ul><li>整体架构升级为多租户模式，通过标签区分用户</li><li>标签规则：营销人员 → SaaS标签，中后台管理人员 → 私有化标签</li><li>HR系统负责新增人员时添加基础分类标签，同步程序根据标签规则双通道分发</li><li>当前同步程序仅支持单系统同步，二期需新增字段支持多选配置</li></ul>
+
+<hr>
+
+<blockquote>一期合计：25人天（SSO 12 + 同步 8 + 接口 5）</blockquote>
+
+<p><em>记录整理：王昭</em></p>
+
+</body>
+</html>

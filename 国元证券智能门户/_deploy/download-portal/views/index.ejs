@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>国元元信 · 下载中心</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .dl-card { background:#fff; border-radius:12px; padding:20px; margin-bottom:12px; box-shadow:0 1px 4px rgba(0,0,0,.08); display:flex; align-items:center; gap:14px; }
+    .dl-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+    .dl-icon.ios { background:#e8f0fe; color:#1F4E79; }
+    .dl-icon.android { background:#e8f5e9; color:#2e7d32; }
+    .dl-icon.pc { background:#e3f2fd; color:#1565c0; }
+    .dl-icon.mac { background:#f3e5f5; color:#7b1fa2; }
+    .dl-icon.linux { background:#fff3e0; color:#e65100; }
+    .dl-info { flex:1; min-width:0; }
+    .dl-info h3 { font-size:16px; margin:0 0 2px; color:#222; }
+    .dl-info .sub { font-size:12px; color:#999; }
+    .dl-btns { display:flex; gap:8px; flex-shrink:0; flex-wrap:wrap; }
+    .dl-btn { display:inline-block; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap; }
+    .dl-btn.primary { background:#1F4E79; color:#fff; }
+    .dl-btn.secondary { background:#e8f0fe; color:#1F4E79; border:1px solid #1F4E79; }
+    .variant-tag { display:inline-block; background:#f0f0f0; color:#888; font-size:10px; padding:1px 6px; border-radius:4px; margin-left:4px; vertical-align:middle; }
+    .arch-tag { display:inline-block; background:#e3f2fd; color:#1565c0; font-size:10px; padding:1px 6px; border-radius:4px; margin-left:4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">元</div>
+      <h1>国元元信</h1>
+      <p>统一下载中心</p>
+    </div>
+
+    <!-- iOS ABM -->
+    <div class="dl-card" onclick="location.href='/ios'" style="cursor:pointer">
+      <div class="dl-icon ios"></div>
+      <div class="dl-info">
+        <h3>iOS 版</h3>
+        <span class="sub">iPhone · iPad · ABM 兑换分发</span>
+      </div>
+      <div class="dl-btns">
+        <span class="dl-btn primary">扫码兑换</span>
+      </div>
+    </div>
+
+    <!-- Android: 扫码→云端, 点击→本地 -->
+    <div class="dl-card" onclick="location.href='/android'" style="cursor:pointer">
+      <div class="dl-icon android">▶</div>
+      <div class="dl-info">
+        <h3>Android 版</h3>
+        <span class="sub">安卓手机 · 平板 · 扫码下载</span>
+      </div>
+      <div class="dl-btns">
+        <span class="dl-btn primary">扫码下载</span>
+      </div>
+    </div>
+
+    <!-- PC Windows 64位: 本地+云端 -->
+    <div class="dl-card">
+      <div class="dl-icon pc">⊞</div>
+      <div class="dl-info">
+        <h3>PC 版 <span class="arch-tag">64位</span></h3>
+        <span class="sub">Windows x64</span>
+      </div>
+      <div class="dl-btns">
+        <a class="dl-btn primary" href="https://mc.oa.gyzq.com/wework_admin/downloadLocalFile?fileid=WD5730-gk8xSnpvlTVeU0shrNTuC10&filename=WXWorkLocal_3.5.0.4530_x64.exe&platform=pc">内网下载</a>
+        <a class="dl-btn secondary" href="https://work.weixin.qq.com/ld/8rS-83SmwJ9nzjsxuODkk7FiQ20uz1TAosvqc31scPs">云端下载</a>
+      </div>
+    </div>
+
+    <!-- PC Windows 32位 -->
+    <div class="dl-card">
+      <div class="dl-icon pc">⊞</div>
+      <div class="dl-info">
+        <h3>PC 版 <span class="arch-tag">32位</span></h3>
+        <span class="sub">Windows x86</span>
+      </div>
+      <div class="dl-btns">
+        <a class="dl-btn primary" href="https://mc.oa.gyzq.com/wework_admin/downloadLocalFile?fileid=WD5730-q1po8TIpRRlyfk4kovKKV10&filename=WXWorkLocal_3.5.0.4532_x86.exe&platform=pc_x86">内网下载</a>
+        <a class="dl-btn secondary" href="https://work.weixin.qq.com/ld/8rS-83SmwJ9nzjsxuODkk7FiQ20uz1TAosvqc31scPs">云端下载</a>
+      </div>
+    </div>
+
+    <!-- Mac Apple Silicon: 优先云端 -->
+    <div class="dl-card">
+      <div class="dl-icon mac">⌘</div>
+      <div class="dl-info">
+        <h3>Mac 版 <span class="variant-tag">Apple 芯片</span></h3>
+        <span class="sub">M1 / M2 / M3 / M4</span>
+      </div>
+      <div class="dl-btns">
+        <a class="dl-btn primary" href="https://mc.oa.gyzq.com/wework_admin/downloadLocalFile?fileid=WD5730-Xozjf6a4DZb9dRlzgLNzI10&filename=weworklocal_3.5.0.3009_Apple_Local.dmg&platform=mac_arm64">内网下载</a>
+        <a class="dl-btn secondary" href="https://work.weixin.qq.com/ld/8rS-83SmwJ9nzjsxuODkk7FiQ20uz1TAosvqc31scPs">云端下载</a>
+      </div>
+    </div>
+
+    <!-- Mac Intel -->
+    <div class="dl-card">
+      <div class="dl-icon mac">⌘</div>
+      <div class="dl-info">
+        <h3>Mac 版 <span class="variant-tag">Intel 芯片</span></h3>
+        <span class="sub">Intel Core 处理器</span>
+      </div>
+      <div class="dl-btns">
+        <a class="dl-btn primary" href="https://mc.oa.gyzq.com/wework_admin/downloadLocalFile?fileid=WD5930-wyogCfzlXGwHAXgS0dmbX10&filename=weworklocal_3.5.0.3007_Intel_Local.dmg&platform=mac">内网下载</a>
+        <a class="dl-btn secondary" href="https://work.weixin.qq.com/ld/8rS-83SmwJ9nzjsxuODkk7FiQ20uz1TAosvqc31scPs">云端下载</a>
+      </div>
+    </div>
+
+    <!-- Linux: 云端 -->
+    <div class="dl-card">
+      <div class="dl-icon linux">🐧</div>
+      <div class="dl-info">
+        <h3>Linux 版</h3>
+        <span class="sub">x86_64 · Deb 包</span>
+      </div>
+      <div class="dl-btns">
+        <a class="dl-btn primary" href="https://dldir1.qq.com/wework/weworklocalapp/8rS-83SmwJ9nzjsxuODkk7FiQ20uz1TAosvqc31scPs/weworklocal_3.4.0.1710.x86_64.deb">下载</a>
+      </div>
+    </div>
+
+    <div class="footer">道一云 · 国元证券智能门户项目</div>
+  </div>
+</body>
+</html>

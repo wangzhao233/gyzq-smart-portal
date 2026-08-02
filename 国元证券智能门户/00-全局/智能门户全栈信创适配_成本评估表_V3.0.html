@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能门户全栈信创适配_成本评估表_V3.0</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>智能门户全栈信创适配 — 成本评估表 V3.0</h1>
+
+<blockquote>项目：国元证券智能门户信创适配<br>日期：2026年6月8日<br>编制：王昭</blockquote>
+
+<hr>
+
+<h2>说明</h2>
+
+<p>本报价单按<strong>系统维度</strong>组织，每个系统包含其所需的全套软件（应用软件 + 配套操作系统 + 数据库 + 中间件）。各投标厂商技术栈不同，配套基础软件选型可能有所差异，本方案基于道一信创 V3.0 选型（海光 CPU + 银河麒麟 V10 + OceanBase + 宝兰德中间件）。</p>
+
+<blockquote>📌 <strong>关于七巧低代码系统</strong>：七巧低代码与智能门户使用<strong>完全一致的技术栈</strong>（操作系统、数据库、中间件、搜索引擎、文档数据库均相同），部署在各自独立的服务器上。若七巧低代码同步进行信创适配，基础软件采购可统一规划，具体复用关系见第二章采购清单标注。</blockquote>
+
+<hr>
+
+<h2>一、智能门户系统（全栈信创适配）</h2>
+
+<h3>1.1 应用软件适配</h3>
+
+<blockquote>客户已购买智能门户标准版，基础功能已含。信创适配以运行环境迁移验证为主，不涉及功能改造。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>门户管理后台</td><td>用户/权限/认证/应用/消息/日志/系统管理信创验证</td><td>3</td><td>22个功能点，已有适配方案，纯测试验证</td></tr><tr><td>自定义门户</td><td>H5工作台/资讯门户/数据源/统计分析信创验证</td><td>5</td><td>40+功能点，含前端渲染引擎兼容性测试</td></tr><tr><td>待办中心</td><td>统一待办/快速审批/应用配置信创验证</td><td>2</td><td>18个功能点，已有适配方案，纯测试验证</td></tr><tr><td>快捷表单</td><td>模板管理/表单提交/数据统计信创验证</td><td>2</td><td>21个功能点，已有适配方案，纯测试验证</td></tr><tr><td>新闻公告</td><td>新闻公告管理/专栏专题/评论信创验证</td><td>2</td><td>24个功能点，已有适配方案，纯测试验证</td></tr><tr><td>日程中心</td><td>日周月视图/会议室/日程同步信创验证</td><td>2</td><td>20个功能点，已有适配方案，纯测试验证</td></tr><tr><td>会议管家</td><td>会议预定/会议室配置信创验证</td><td>1</td><td>11个功能点，已有适配方案，纯测试验证</td></tr><tr><td>消息中心</td><td>消息发布/撤回信创验证</td><td>1</td><td>API对接场景验证</td></tr><tr><td>集成中心RC</td><td>服务/数据集成/API编排信创验证</td><td>1</td><td>合作方产品，仅做集成联调验证</td></tr><tr><td><strong>应用软件小计</strong></td><td></td><td><strong>19</strong></td><td></td></tr></tbody></table>
+
+<h3>1.2 基础软件适配（操作系统）</h3>
+
+<blockquote>现有系统已支持海光CPU + 银河麒麟V10，无适配开发工作量，仅需部署验证与兼容性测试。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>银河麒麟 V10 部署验证</td><td>中间件服务器×3 + 应用服务器×2，系统安装与基础配置验证</td><td>3</td><td>5台服务器 × 0.6人天/台（验证为主，非首次部署）</td></tr><tr><td>系统参数验证与调优</td><td>内核参数、文件句柄、网络参数验证与必要调整</td><td>1</td><td>已有调优方案，仅需验证并微调，标准配置项约15项</td></tr><tr><td>安全基线验证</td><td>防火墙规则、安全基线检查（参照等保2.0要求）</td><td>1</td><td>已有安全加固方案，仅需验证基线合规性</td></tr><tr><td>GlusterFS 部署验证</td><td>麒麟V10环境下存储卷验证与性能压测</td><td>1</td><td>已有部署方案，验证挂载与读写性能</td></tr><tr><td>操作系统兼容性验证</td><td>运行时依赖、JDK/Python运行环境验证</td><td>1</td><td>现有系统已验证通过，本次仅做回归验证</td></tr><tr><td><strong>操作系统小计</strong></td><td></td><td><strong>7</strong></td><td></td></tr></tbody></table>
+
+<h3>1.3 基础软件适配（数据库）</h3>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>OceanBase 部署与集群搭建</td><td>分布式部署架构、租户/资源池配置</td><td>5</td><td>参照已有部署方案，验证为主</td></tr><tr><td>SQL 兼容性改造</td><td>MySQL → OceanBase 语法差异适配、存储过程迁移</td><td>10</td><td>已有适配经验，预估剩余差异点约30处，0.3人天/处</td></tr><tr><td>数据迁移</td><td>历史数据全量迁移 + 增量同步验证</td><td>3</td><td>全量迁移1人天 + 一致性校验1人天 + 问题修复1人天</td></tr><tr><td>Canal 对接验证</td><td>Canal 1.1.6 与 OceanBase 增量同步对接验证</td><td>2</td><td>已有适配方案，验证binlog解析同步</td></tr><tr><td>读写分离与性能调优</td><td>主从配置、慢查询优化、连接池调优</td><td>3</td><td>已有调优方案，验证并微调</td></tr><tr><td><strong>数据库小计</strong></td><td></td><td><strong>23</strong></td><td></td></tr></tbody></table>
+
+<h3>1.4 基础软件适配（中间件）</h3>
+
+<blockquote>已有客户完成宝兰德中间件适配实施，本次重新适配以验证和微调为主，开发工作量显著减少。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>BES WebServer 部署验证</td><td>nginx → BES WebServer，代理规则迁移验证、SSL证书配置验证</td><td>2</td><td>已有适配方案，验证为主，预估验证点约10处 × 0.2人天/处</td></tr><tr><td>BES AppServer 部署验证</td><td>Tomcat → BES AppServer，部署包验证、JVM参数验证</td><td>3</td><td>智能门户约16个微服务，验证为主，0.2人天/服务；整体JVM参数已有方案</td></tr><tr><td>BES CacheServer 部署验证</td><td>Redis → BES CacheServer，数据结构验证、集群验证</td><td>2</td><td>已有适配方案，验证集群部署 + 缓存key读写验证</td></tr><tr><td>BES Cloud MQ 部署验证</td><td>RabbitMQ → BES Cloud MQ，协议验证、队列配置验证</td><td>2</td><td>已有适配方案，验证队列约15个，0.1人天/队列</td></tr><tr><td>Nacos 2.0 部署验证</td><td>信创环境下配置注册中心部署与服务注册验证</td><td>1</td><td>国产开源，环境部署 + 16个微服务注册验证（与之前方案一致）</td></tr><tr><td><strong>中间件小计</strong></td><td></td><td><strong>10</strong></td><td></td></tr></tbody></table>
+
+<h3>1.5 基础软件适配（搜索引擎 &amp; 文档数据库）</h3>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>EasySearch 部署与适配</td><td>Elasticsearch → EasySearch 基础索引迁移、查询语法验证</td><td>2</td><td>EasySearch 100% API兼容ES，已有适配经验，验证为主</td></tr><tr><td>搜索功能基础联调</td><td>统一搜索基础模块与EasySearch集成测试</td><td>1</td><td>基础版搜索功能约5个场景验证</td></tr><tr><td>SequoiaDB 部署与适配</td><td>MongoDB → SequoiaDB，文档模型映射、索引重建</td><td>5</td><td>已有适配经验，验证文档集合映射与索引</td></tr><tr><td>数据迁移与验证</td><td>历史文档数据迁移、一致性校验</td><td>2</td><td>全量迁移1人天 + 一致性校验1人天</td></tr><tr><td><strong>搜索&amp;文档DB小计</strong></td><td></td><td><strong>10</strong></td><td></td></tr></tbody></table>
+
+<blockquote>⚠️ 注：统一搜索高级功能（文件内容全文检索、敏感词检测）依赖第三方产品，该第三方当前不支持信创，需单独评估或暂不纳入信创适配范围。</blockquote>
+
+<h3>1.6 测试与交付</h3>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>全量功能回归测试</td><td>9大模块 × 信创环境全量回归</td><td>10</td><td>已有适配方案，重点回归验证，约0.06人天/功能点</td></tr><tr><td>性能调优</td><td>全链路性能压测、瓶颈定位与调优</td><td>5</td><td>已有调优基线，压测2人天 + 微调3人天</td></tr><tr><td>联调与问题修复</td><td>与企微私有化/七巧低代码联调、缺陷修复</td><td>5</td><td>预估跨系统联调问题约10个 × 0.5人天/个</td></tr><tr><td>部署与文档交付</td><td>信创环境部署手册、运维文档、验收材料</td><td>3</td><td>标准文档交付3份（部分可复用已有文档）</td></tr><tr><td><strong>测试与交付小计</strong></td><td></td><td><strong>23</strong></td><td></td></tr></tbody></table>
+
+<h3>智能门户系统合计</h3>
+
+<table><thead><tr><th>模块</th><th>人天</th></tr></thead><tbody><tr><td>应用软件适配</td><td>19</td></tr><tr><td>操作系统（银河麒麟 V10）</td><td>7</td></tr><tr><td>数据库（OceanBase）</td><td>23</td></tr><tr><td>中间件（宝兰德 BES）</td><td>10</td></tr><tr><td>搜索引擎（EasySearch）&amp; 文档数据库（SequoiaDB）</td><td>10</td></tr><tr><td>测试与交付</td><td>23</td></tr><tr><td><strong>合计</strong></td><td><strong>92</strong></td></tr></tbody></table>
+
+<hr>
+
+<h2>二、七巧低代码系统（全栈信创适配）</h2>
+
+<blockquote>七巧低代码与智能门户使用<strong>完全一致的技术栈</strong>，部署在独立服务器上。智能门户已完成首轮适配积累，七巧低代码可充分复用已有适配方案、SQL差异点修复记录、中间件配置基线，以测试验证为主，整体工作量显著低于门户首轮适配。</blockquote>
+
+<h3>2.1 应用软件适配（七巧低代码）</h3>
+
+<blockquote>七巧低代码以低代码引擎为核心，功能模块聚焦，信创适配以运行环境迁移验证为主。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>低代码引擎核心</td><td>表单引擎/流程引擎/报表引擎信创验证</td><td>4</td><td>核心引擎3个，已有适配方案，纯测试验证</td></tr><tr><td>应用管理后台</td><td>应用创建/发布/权限/版本管理信创验证</td><td>2</td><td>已有适配方案，纯测试验证</td></tr><tr><td>数据源管理</td><td>数据源连接/SQL编辑器/API接入信创验证</td><td>2</td><td>已有适配方案，重点验证OceanBase数据源兼容性</td></tr><tr><td>门户集成联调</td><td>七巧与智能门户SSO/待办/消息集成验证</td><td>3</td><td>跨系统联调约6个场景 × 0.5人天/场景</td></tr><tr><td>移动端适配验证</td><td>移动端H5/小程序在麒麟V10浏览器兼容验证</td><td>2</td><td>主要功能场景约10个，已有适配方案</td></tr><tr><td>其他微服务验证</td><td>剩余微服务（监控/日志/网关等）信创验证</td><td>2</td><td>23个微服务中其余约8个，已有方案，快速验证</td></tr><tr><td><strong>应用软件小计</strong></td><td></td><td><strong>15</strong></td><td></td></tr></tbody></table>
+
+<h3>2.2 基础软件适配（操作系统）</h3>
+
+<blockquote>参照智能门户已有部署方案，工作量以验证为主，进一步缩减。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>银河麒麟 V10 部署验证</td><td>应用服务器×2 + 中间件服务器×2，系统安装与基础配置验证</td><td>2</td><td>4台服务器 × 0.5人天/台（已有部署方案，高度复用）</td></tr><tr><td>系统参数与安全基线验证</td><td>内核参数、安全基线验证（复用门户已验证方案）</td><td>1</td><td>已有调优方案，直接套用，仅做合规性验证</td></tr><tr><td>GlusterFS &amp; 兼容性验证</td><td>存储卷验证 + 运行时依赖验证</td><td>2</td><td>已有部署方案，验证挂载与运行环境</td></tr><tr><td><strong>操作系统小计</strong></td><td></td><td><strong>5</strong></td><td></td></tr></tbody></table>
+
+<h3>2.3 基础软件适配（数据库）</h3>
+
+<blockquote>智能门户适配已积累SQL差异点修复经验，七巧低代码可直接复用，差异点数量大幅减少。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>OceanBase 集群搭建</td><td>参照门户已有方案，独立租户/资源池配置</td><td>2</td><td>已有部署方案，直接套用</td></tr><tr><td>SQL 兼容性改造</td><td>七巧低代码MySQL → OceanBase差异适配</td><td>6</td><td>门户已积累修复经验，预估差异点约20处，0.3人天/处</td></tr><tr><td>数据迁移</td><td>历史数据全量迁移 + 一致性校验</td><td>2</td><td>全量迁移1人天 + 校验1人天</td></tr><tr><td>Canal 对接验证</td><td>Canal 与 OceanBase 增量同步验证（复用门户方案）</td><td>1</td><td>已有方案，快速验证</td></tr><tr><td>读写分离与性能调优</td><td>参照门户调优方案，验证并微调</td><td>2</td><td>已有调优基线，直接套用</td></tr><tr><td><strong>数据库小计</strong></td><td></td><td><strong>13</strong></td><td></td></tr></tbody></table>
+
+<h3>2.4 基础软件适配（中间件）</h3>
+
+<blockquote>已有客户完成宝兰德中间件适配实施，七巧低代码参照智能门户方案，进一步提升验证效率。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>BES WebServer 部署验证</td><td>代理规则迁移验证、SSL证书配置验证</td><td>1</td><td>高度复用门户方案，验证点约8处 × 0.1人天/处</td></tr><tr><td>BES AppServer 部署验证</td><td>七巧低代码23个微服务部署包验证</td><td>4</td><td>23个微服务，0.15人天/服务（复用门户JVM参数方案）</td></tr><tr><td>BES CacheServer 部署验证</td><td>缓存数据结构验证、集群验证</td><td>1</td><td>复用门户方案，快速验证</td></tr><tr><td>BES Cloud MQ 部署验证</td><td>协议验证、队列配置验证</td><td>1</td><td>复用门户方案，验证队列约10个</td></tr><tr><td>Nacos 2.0 部署验证</td><td>23个微服务注册验证</td><td>1</td><td>复用门户方案，23个微服务注册</td></tr><tr><td><strong>中间件小计</strong></td><td></td><td><strong>8</strong></td><td></td></tr></tbody></table>
+
+<h3>2.5 基础软件适配（搜索引擎 &amp; 文档数据库）</h3>
+
+<blockquote>智能门户已完成EasySearch/SequoiaDB首轮适配，七巧低代码仅需独立集群搭建与联调验证。</blockquote>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>EasySearch 独立集群部署</td><td>七巧低代码独立EasySearch集群搭建与功能验证</td><td>1</td><td>已有部署方案，直接套用</td></tr><tr><td>SequoiaDB 独立集群部署</td><td>七巧低代码独立SequoiaDB集群搭建与文档集合验证</td><td>2</td><td>已有部署与映射方案，重点验证集合结构</td></tr><tr><td>数据迁移与联调</td><td>文档数据迁移 + 搜索功能联调</td><td>2</td><td>迁移1人天 + 联调验证1人天</td></tr><tr><td><strong>搜索&amp;文档DB小计</strong></td><td></td><td><strong>5</strong></td><td></td></tr></tbody></table>
+
+<h3>2.6 测试与交付</h3>
+
+<table><thead><tr><th>工作项</th><th>说明</th><th>人天</th><th>评估依据</th></tr></thead><tbody><tr><td>全量功能回归测试</td><td>七巧低代码核心功能 × 信创环境全量回归</td><td>8</td><td>23个微服务，重点场景回归验证，约0.06人天/功能点</td></tr><tr><td>性能调优</td><td>低代码引擎全链路性能压测、瓶颈定位与调优</td><td>4</td><td>参照门户调优基线，压测2人天 + 微调2人天</td></tr><tr><td>联调与问题修复</td><td>与智能门户/企微私有化联调、缺陷修复</td><td>4</td><td>预估跨系统联调问题约8个 × 0.5人天/个</td></tr><tr><td>部署与文档交付</td><td>信创环境部署手册、运维文档（部分复用门户文档）</td><td>2</td><td>标准文档交付2份（大量复用门户已有文档）</td></tr><tr><td><strong>测试与交付小计</strong></td><td></td><td><strong>18</strong></td><td></td></tr></tbody></table>
+
+<h3>七巧低代码系统合计</h3>
+
+<table><thead><tr><th>模块</th><th>人天</th></tr></thead><tbody><tr><td>应用软件适配</td><td>15</td></tr><tr><td>操作系统（银河麒麟 V10）</td><td>5</td></tr><tr><td>数据库（OceanBase）</td><td>13</td></tr><tr><td>中间件（宝兰德 BES）</td><td>8</td></tr><tr><td>搜索引擎（EasySearch）&amp; 文档数据库（SequoiaDB）</td><td>5</td></tr><tr><td>测试与交付</td><td>18</td></tr><tr><td><strong>合计</strong></td><td><strong>64</strong></td></tr></tbody></table>
+
+<hr>
+
+<h2>三、基础软件采购清单</h2>
+
+<blockquote>说明：以下为智能门户 + 七巧低代码两系统信创适配所需采购的基础软件产品。门户与七巧低代码使用完全一致的技术栈，节点数已合并计算。</blockquote>
+
+<h3>3.1 需要采购的软件</h3>
+
+<table><thead><tr><th>软件名称</th><th>厂商</th><th>替代组件</th><th>门户</th><th>七巧</th><th><strong>合计</strong></th><th>参考单价</th><th>参考总价</th><th>备注</th></tr></thead><tbody><tr><td>银河麒麟 V10</td><td>中标软件</td><td>CentOS 7.5</td><td>5</td><td>5</td><td><strong>10</strong></td><td>¥6,000~8,400/套</td><td><strong>6~8.4万</strong></td><td>央采协议价 ¥5,999；通常含于服务器采购</td></tr><tr><td>OceanBase</td><td>蚂蚁集团</td><td>MySQL 8.0</td><td>2</td><td>2</td><td><strong>4</strong></td><td>—</td><td><strong>已有，无需采购</strong></td><td>客户已采购</td></tr><tr><td>BES WebServer</td><td>宝兰德</td><td>nginx</td><td>2</td><td>2</td><td><strong>4</strong></td><td>待询价</td><td><strong>待商务确认</strong></td><td>未查到公开买断价</td></tr><tr><td>BES AppServer</td><td>宝兰德</td><td>Tomcat</td><td>2</td><td>2</td><td><strong>4</strong></td><td>参考 ¥8万/套</td><td><strong>~32万</strong></td><td>参考历史展台永久授权价，需更新</td></tr><tr><td>BES CacheServer</td><td>宝兰德</td><td>Redis</td><td>3</td><td>3</td><td><strong>6</strong></td><td>待询价</td><td><strong>待商务确认</strong></td><td>华为云订阅 ¥2,700/月/节点</td></tr><tr><td>BES Cloud MQ</td><td>宝兰德</td><td>RabbitMQ</td><td>3</td><td>3</td><td><strong>6</strong></td><td>待询价</td><td><strong>待商务确认</strong></td><td>维保 ¥12,600/年</td></tr><tr><td>SequoiaDB（巨杉数据库）</td><td>巨杉科技</td><td>MongoDB 4.0</td><td>3</td><td>3</td><td><strong>6</strong></td><td>¥10万/节点</td><td><strong>60万</strong></td><td>买断，一次付费</td></tr><tr><td>EasySearch</td><td>极限科技</td><td>Elasticsearch 7.5</td><td>3</td><td>3</td><td><strong>6</strong></td><td>¥4~4.68万/节点/年</td><td><strong>24~28万/年</strong></td><td>按年订阅，官网参考价</td></tr></tbody></table>
+
+<blockquote>📌 <strong>OceanBase 已有，无需采购</strong>，节省约30~38万（2节点企业版估算）。<br>📌 <strong>宝兰德四件套</strong>（WebServer / AppServer / CacheServer / Cloud MQ）买断价需向厂商询价，华为云商店仅有订阅价。<br>📌 银河麒麟 V10 通常含于服务器采购，此处单独列出供参考。</blockquote>
+
+<h3>3.2 无需采购的软件（国产开源）</h3>
+
+<table><thead><tr><th>软件名称</th><th>版本</th><th>门户节点数</th><th>低代码节点数</th><th>用途说明</th></tr></thead><tbody><tr><td>Nacos</td><td>2.0</td><td>3</td><td>3</td><td>配置中心与服务注册（国产开源，免费）</td></tr><tr><td>Canal</td><td>1.1.6</td><td>1</td><td>1</td><td>增量数据同步（阿里国产开源，免费）</td></tr><tr><td>GlusterFS</td><td>5.6</td><td>3</td><td>3</td><td>分布式文件存储（国产开源，免费）</td></tr></tbody></table>
+
+<hr>
+
+<h2>四、二期新增需求</h2>
+
+<blockquote>说明：以下为二期需新增开发的功能需求（含邮件已确认项，已提前启动）。开发人天为纯开发工作量，成本人天 = 开发人天 × 1.5（含项目管理、需求分析、设计、测试、部署及风险预留）。</blockquote>
+
+<h3>4.1 消息中心</h3>
+
+<table><thead><tr><th>需求标题</th><th>需求详情</th><th>优先级</th><th>开发人天</th><th>成本人天</th><th>评估依据</th></tr></thead><tbody><tr><td>统一消息改造</td><td>智能门户统一消息调整为接管企微消息，各应用负责人统一登录管理</td><td>P0</td><td>3</td><td>4.5</td><td>开发评审确认</td></tr><tr><td>改造消息类型</td><td>消息发送类型对齐企微原生：文字、图文、图片、文件等</td><td>P1</td><td>3</td><td>4.5</td><td>开发评审确认</td></tr><tr><td><strong>小计</strong></td><td></td><td></td><td><strong>6</strong></td><td><strong>9</strong></td><td></td></tr></tbody></table>
+
+<h3>4.2 新闻公告</h3>
+
+<table><thead><tr><th>需求标题</th><th>需求详情</th><th>优先级</th><th>开发人天</th><th>成本人天</th><th>评估依据</th></tr></thead><tbody><tr><td>版本控制与回滚</td><td>发布的通知公告增加版本管理，支持快速回滚至上一版</td><td>P0</td><td>5</td><td>7.5</td><td>开发评审确认</td></tr><tr><td>文章审批流</td><td>增加审批流（审批完成才能发布）</td><td>P1</td><td>4</td><td>6</td><td>开发评审确认</td></tr><tr><td>阅读记录</td><td>记录哪些用户点开了文章</td><td>P1</td><td>3</td><td>4.5</td><td>开发评审确认</td></tr><tr><td>限制下载</td><td>部分附件只允许预览，限制用户下载</td><td>P1</td><td>2</td><td>3</td><td>开发评审确认</td></tr><tr><td>微盘对接</td><td>通知公告类附件文档直接存入微盘，点击后直接预览</td><td>P1</td><td>4</td><td>6</td><td>开发评审确认</td></tr><tr><td>定时发布</td><td>通知公告支持定时发布</td><td>P1</td><td>3</td><td>4.5</td><td>开发评审确认</td></tr><tr><td>视频支持</td><td>文章增加视频播放支持</td><td>P1</td><td>4</td><td>6</td><td>开发评审确认</td></tr><tr><td><strong>小计</strong></td><td></td><td></td><td><strong>25</strong></td><td><strong>37.5</strong></td><td></td></tr></tbody></table>
+
+<h3>4.3 帐号体系（📧 邮件已确认，已提前启动 · ⚠️ 需求变更）</h3>
+
+<table><thead><tr><th>需求标题</th><th>需求详情</th><th>优先级</th><th>开发人天</th><th>成本人天</th><th>评估依据</th></tr></thead><tbody><tr><td>对接SSO单点</td><td>实现用户企微登录鉴权、单点认证对接；（新增：考虑旧系统兼容，定制登录页，账号密码同时透传给老SSO和智能门户）</td><td>P0</td><td>15</td><td>15</td><td>邮件确认，含旧系统兼容联调</td></tr><tr><td>组织架构同步</td><td>从HR系统同步人员信息到智能门户，再同步给企微和SSO，支持在门户侧进行人员管理</td><td>P0</td><td>8</td><td>8</td><td>邮件确认，含HR接口对接与企微同步</td></tr><tr><td>门户通讯录同步到SSO</td><td>⚠️ 新增：从门户同步通讯录数据到SSO系统</td><td>P0</td><td><strong>待评估</strong></td><td><strong>待评估</strong></td><td>需求变更，难度增加，待重新评估</td></tr><tr><td>人员信息中台接口</td><td>开发接口将人员信息和组织架构通过接口分发给第三方</td><td>P0</td><td>5</td><td>5</td><td>邮件确认，含接口文档与SDK</td></tr><tr><td><strong>小计</strong></td><td></td><td></td><td><strong>28+</strong></td><td><strong>28+</strong></td><td>含新增需求，工作量待更新</td></tr></tbody></table>
+
+<h3>4.4 历史数据迁移</h3>
+
+<table><thead><tr><th>需求标题</th><th>需求详情</th><th>优先级</th><th>开发人天</th><th>成本人天</th><th>评估依据</th></tr></thead><tbody><tr><td>新闻公告历史数据迁移</td><td>将老OA的历史新闻数据（标题、正文、附件、发布时间）完整迁移至新系统</td><td>P1</td><td>5</td><td>5</td><td>邮件确认，含字段映射与数据清洗</td></tr><tr><td><strong>小计</strong></td><td></td><td></td><td><strong>5</strong></td><td><strong>5</strong></td><td></td></tr></tbody></table>
+
+<h3>4.5 预览对接</h3>
+
+<table><thead><tr><th>需求标题</th><th>需求详情</th><th>优先级</th><th>开发人天</th><th>成本人天</th><th>评估依据</th></tr></thead><tbody><tr><td>对接Zoffice</td><td>新闻公告在线预览对接，支持Word/Excel等文档在门户内直接预览</td><td>P1</td><td>10</td><td>10</td><td>邮件确认，含PC端与移动端双端适配</td></tr><tr><td><strong>小计</strong></td><td></td><td></td><td><strong>10</strong></td><td><strong>10</strong></td><td></td></tr></tbody></table>
+
+<h3>4.6 二期汇总</h3>
+
+<table><thead><tr><th>模块</th><th>开发人天</th><th>成本人天</th></tr></thead><tbody><tr><td>消息中心</td><td>6</td><td>9</td></tr><tr><td>新闻公告</td><td>25</td><td>37.5</td></tr><tr><td>帐号体系 ⚠️</td><td>28+</td><td>28+</td></tr><tr><td>历史数据迁移</td><td>5</td><td>5</td></tr><tr><td>预览对接</td><td>10</td><td>10</td></tr><tr><td>小计</td><td><strong>74+</strong></td><td><strong>89.5+</strong></td></tr><tr><td><strong>二期合计</strong></td><td><strong>74+</strong></td><td><strong>89.5+</strong></td></tr></tbody></table>
+
+<blockquote>📌 帐号体系、历史数据迁移、预览对接为邮件已确认需求，已提前启动。<br>⚠️ 帐号体系需求变更（2026-06-17）：新增"门户同步通讯录到SSO"，同步链路由 <code>HR→门户→企微</code> 扩展为 <code>HR→门户→企微+SSO</code>，工作量待重新评估。</blockquote>
+
+<hr>
+
+<h2>五、信创选型方案</h2>
+
+<table><thead><tr><th>层级</th><th>当前组件</th><th>信创选型</th><th>版本</th></tr></thead><tbody><tr><td>处理器</td><td>Intel CPU</td><td>海光 CPU</td><td>x86指令集</td></tr><tr><td>操作系统</td><td>CentOS</td><td>银河麒麟 V10</td><td>V10</td></tr><tr><td>数据库</td><td>MySQL 8.0</td><td>OceanBase</td><td>V4.2.0</td></tr><tr><td>Web服务器</td><td>nginx</td><td>BES WebServer（宝兰德）</td><td>—</td></tr><tr><td>应用服务器</td><td>Tomcat</td><td>BES AppServer（宝兰德）</td><td>—</td></tr><tr><td>缓存</td><td>Redis</td><td>BES CacheServer（宝兰德）</td><td>—</td></tr><tr><td>消息队列</td><td>RabbitMQ</td><td>BES Cloud MQ（宝兰德）</td><td>—</td></tr><tr><td>搜索引擎</td><td>Elasticsearch</td><td>EasySearch（极限科技）</td><td>1.9.0</td></tr><tr><td>文档数据库</td><td>MongoDB</td><td>SequoiaDB（巨杉）</td><td>DDS 2.1</td></tr><tr><td>配置中心</td><td>Nacos</td><td>Nacos 2.0</td><td>2.0</td></tr><tr><td>数据同步</td><td>Canal</td><td>Canal 1.1.6</td><td>1.1.6</td></tr><tr><td>分布式存储</td><td>GlusterFS</td><td>GlusterFS</td><td>5.6</td></tr></tbody></table>
+
+<hr>
+
+<h2>六、总费用汇总</h2>
+
+<h3>6.1 适配开发工作量</h3>
+
+<table><thead><tr><th>类别</th><th>说明</th></tr></thead><tbody><tr><td>信创适配工作量（智能门户）</td><td>92人天</td></tr><tr><td>信创适配工作量（七巧低代码）</td><td>64人天</td></tr><tr><td>两系统信创适配合计</td><td><strong>156人天</strong></td></tr><tr><td>二期定开新增需求（成本人天）</td><td>89.5+人天（⚠️ 帐号体系需求变更，新增门户同步SSO通讯录，待重新评估）</td></tr><tr><td><strong>开发人天总计</strong></td><td><strong>245.5+人天</strong></td></tr></tbody></table>
+
+<h3>6.2 基础软件采购预算</h3>
+
+<table><thead><tr><th>软件</th><th>数量</th><th>预估金额</th><th>备注</th></tr></thead><tbody><tr><td>银河麒麟 V10</td><td>10套</td><td>6~8.4万</td><td>通常含于服务器采购</td></tr><tr><td>OceanBase</td><td>4节点</td><td>—</td><td>已有，无需采购</td></tr><tr><td>BES AppServer</td><td>4套</td><td>~32万</td><td>参考历史永久授权价，待更新</td></tr><tr><td>BES WebServer</td><td>4套</td><td>待询价</td><td>—</td></tr><tr><td>BES CacheServer</td><td>6套</td><td>待询价</td><td>—</td></tr><tr><td>BES Cloud MQ</td><td>6套</td><td>待询价</td><td>—</td></tr><tr><td>SequoiaDB</td><td>6节点</td><td>60万</td><td>买断</td></tr><tr><td>EasySearch</td><td>6节点</td><td>24~28万/年</td><td>按年订阅</td></tr><tr><td><strong>可估算部分合计</strong></td><td></td><td><strong>约98~100万</strong></td><td>不含宝兰德三件套及 AppServer 精确报价</td></tr></tbody></table>
+
+<blockquote>📌 宝兰德 WebServer / CacheServer / Cloud MQ 缺公开买断价，建议向宝兰德销售询价；AppServer 参考价为历史数据，需更新。<br>📌 EasySearch 为订阅制，首年约28万，后续每年续费。若考虑3年订阅，约72~84万。</blockquote>
+
+<hr>
+
+<h2>七、备注</h2>
+
+<ol><li>本方案基于道一信创 V3.0 选型，各投标厂商技术栈不同，配套基础软件及工作量可能有所差异</li><li>信创适配以运行环境迁移验证为主，不涉及门户功能改造</li><li>统一搜索高级功能（全文检索、敏感词检测）依赖第三方，该第三方不支持信创，暂不纳入本次适配范围</li><li>二期新增需求已含开发评审确认的工作量，成本人天 = 开发人天 × 1.5（含项目管理、需求分析、设计、测试、部署及风险预留）</li><li>实际工作量可能因客户环境差异浮动 ±15%</li><li>七巧低代码与智能门户技术栈完全一致（同一信创方案），两套系统各自独立部署，基础软件采购节点数已合并计算</li><li>基础软件采购参考价为公开渠道搜集，实际价格以商务谈判为准；宝兰德系列建议直接向厂商询价</li></ol>
+
+<hr>
+
+<p><em>编制：王昭</em></p>
+
+</body>
+</html>

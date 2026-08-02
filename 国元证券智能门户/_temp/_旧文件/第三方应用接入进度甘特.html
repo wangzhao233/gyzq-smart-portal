@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第三方应用接入进度甘特图</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+    background: #f5f7fa;
+    padding: 30px;
+    color: #333;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 30px;
+}
+h1 {
+    font-size: 22px;
+    color: #1a73e8;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 10px;
+    margin-bottom: 8px;
+}
+.subtitle {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+/* Timeline header */
+.timeline-header {
+    display: flex;
+    margin-left: 200px;
+    margin-bottom: 10px;
+}
+.month-col {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    padding: 4px 0;
+    background: #f0f5ff;
+    border-radius: 3px;
+    margin: 0 2px;
+}
+.week-row {
+    display: flex;
+    margin-left: 200px;
+    margin-bottom: 16px;
+}
+.week-cell {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: #aaa;
+    padding: 2px 0;
+    margin: 0 1px;
+    border-left: 1px dotted #eee;
+}
+/* Gantt row */
+.gantt-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    min-height: 36px;
+}
+.app-label {
+    width: 200px;
+    padding-right: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.bar-area {
+    flex: 1;
+    position: relative;
+    height: 28px;
+    background: #f9fafb;
+    border-radius: 4px;
+}
+.bar-segment {
+    position: absolute;
+    height: 100%;
+    border-radius: 4px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 500;
+    min-width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+.bar-segment:hover {
+    opacity: 0.85;
+    transform: scaleY(1.15);
+}
+.planned { background: #e8eaed; color: #666; }
+.in-progress { background: linear-gradient(135deg, #4285f4, #1a73e8); }
+.done { background: #34a853; }
+.blocked { background: #ea4335; }
+/* Legend */
+.legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+.legend-dot.planned { background: #e8eaed; }
+.legend-dot.in-progress { background: linear-gradient(135deg, #4285f4, #1a73e8); }
+.legend-dot.done { background: #34a853; }
+.legend-dot.blocked { background: #ea4335; }
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #aaa;
+    text-align: right;
+}
+/* Width helper: 6 weeks each month */
+.month-6cols { display: flex; flex: 6; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>第三方应用接入 — 进度甘特图</h1>
+    <p class="subtitle">国元证券智能门户 · 一期上线配合 · 更新于 2026-06-24</p>
+
+    <!-- Timeline axis -->
+    <div class="timeline-header">
+        <div class="month-col" style="flex:5">6月</div>
+        <div class="month-col" style="flex:5">7月</div>
+        <div class="month-col" style="flex:2">8月</div>
+    </div>
+    <div class="week-row">
+        <span class="week-cell">W23</span>
+        <span class="week-cell">W24</span>
+        <span class="week-cell">W25</span>
+        <span class="week-cell">W26</span>
+        <span class="week-cell">W27</span>
+        <span class="week-cell">W28</span>
+        <span class="week-cell">W29</span>
+        <span class="week-cell">W30</span>
+        <span class="week-cell">W31</span>
+        <span class="week-cell">W32</span>
+        <span class="week-cell">W33</span>
+        <span class="week-cell">W34</span>
+    </div>
+
+    <!-- Gantt rows -->
+    <div id="ganttBody">
+        <!-- Populated by JS or manually -->
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item"><span class="legend-dot planned"></span> 待启动</div>
+        <div class="legend-item"><span class="legend-dot in-progress"></span> 进行中</div>
+        <div class="legend-item"><span class="legend-dot done"></span> 已完成</div>
+        <div class="legend-item"><span class="legend-dot blocked"></span> 阻塞</div>
+    </div>
+
+    <p class="footer">数据来源：第三方应用接入跟进表（2026-06-24更新）· 每格 = 1周 · ⚠️ 待排期应用时间轴为估算</p>
+</div>
+
+<script>
+// 数据结构：{ name, startWeek, duration, status, label }
+// startWeek: W23 为第1格; duration: 周数; status: planned|in-progress|done|blocked
+const apps = [
+    // 已验证应用（3个）
+    { name: "商旅平台", startWeek: 0, duration: 1, status: "done", label: "6/10已验证" },
+    { name: "融汇平台", startWeek: 1, duration: 1, status: "done", label: "6/15已验证" },
+    { name: "数聚驾驶舱", startWeek: 2, duration: 1, status: "done", label: "6/17已验证" },
+    
+    // 已排期待迁移（8个）
+    { name: "资讯中心监控", startWeek: 2, duration: 2, status: "in-progress", label: "6/18计划" },
+    { name: "国元E学", startWeek: 3, duration: 2, status: "in-progress", label: "6/22计划" },
+    { name: "投行综合", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    { name: "智慧投行", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    { name: "管理会计", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    { name: "融和", startWeek: 2, duration: 3, status: "blocked", label: "费用问题" },
+    { name: "审计管理", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    { name: "绩效管理", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    { name: "合同管理", startWeek: 2, duration: 3, status: "in-progress", label: "已排期" },
+    
+    // 待排期应用（示例）
+    { name: "兴趣社团", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "论党的青年工作", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "投教基地", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "国元荣誉", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "每周食谱", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "出差申请", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "国元邮箱", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "旧版投行", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "快递收发", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "洗衣会员卡", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "国元风采", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "诵歌二十大", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "重点工作督办", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "合规智库", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "商务招待申请", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    { name: "网球场地预约", startWeek: 4, duration: 4, status: "planned", label: "待排期" },
+    
+    // 小程序重新扫码绑定（2个）
+    { name: "尽调采集助手", startWeek: 6, duration: 2, status: "planned", label: "待扫码" },
+    { name: "电子名片", startWeek: 6, duration: 2, status: "planned", label: "待扫码" },
+];
+
+const ganttBody = document.getElementById('ganttBody');
+const totalWeeks = 12; // W23 ~ W34
+
+if (apps.length === 0) {
+    ganttBody.innerHTML = `
+        <div class="empty-state">
+            <div class="icon">📋</div>
+            <p>等待客户提供应用列表</p>
+            <p style="font-size:12px;margin-top:4px">接入企微 + 接入待办的应用清单确认后自动生成甘特条</p>
+        </div>`;
+} else {
+    apps.forEach(app => {
+        const row = document.createElement('div');
+        row.className = 'gantt-row';
+
+        const label = document.createElement('div');
+        label.className = 'app-label';
+        label.textContent = app.name;
+        row.appendChild(label);
+
+        const barArea = document.createElement('div');
+        barArea.className = 'bar-area';
+
+        const bar = document.createElement('div');
+        bar.className = `bar-segment ${app.status}`;
+        bar.style.left = `${(app.startWeek / totalWeeks) * 100}%`;
+        bar.style.width = `${(app.duration / totalWeeks) * 100}%`;
+        bar.textContent = app.label;
+        barArea.appendChild(bar);
+
+        row.appendChild(barArea);
+        ganttBody.appendChild(row);
+    });
+}
+</script>
+</body>
+</html>

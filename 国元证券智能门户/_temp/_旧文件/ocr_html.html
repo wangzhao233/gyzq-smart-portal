@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OCR Images</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+<div id="status">Loading...</div>
+<img id="img1" src="word/media/image1.png" style="display:none">
+<img id="img2" src="word/media/image2.png" style="display:none">
+<div id="results"></div>
+<script>
+(async () => {
+  const results = document.getElementById('results');
+  const status = document.getElementById('status');
+  
+  for (let i = 1; i <= 2; i++) {
+    const img = document.getElementById('img' + i);
+    status.textContent = 'OCR image ' + i + '...';
+    
+    const { data: { text } } = await Tesseract.recognize(img, 'chi_sim+eng');
+    results.innerHTML += '<h3>Image ' + i + '</h3><pre>' + text + '</pre><hr>';
+  }
+  status.textContent = 'OCR Complete!';
+})();
+</script>
+</body>
+</html>

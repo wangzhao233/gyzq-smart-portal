@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP备案材料清单与指引_国元证券</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    font-size: 15px; line-height: 1.8; color: #1a1a1a;
+    max-width: 860px; margin: 0 auto; padding: 32px 20px 60px;
+    background: #fff;
+}
+h1 { font-size: 26px; margin: 32px 0 16px; border-bottom: 2px solid #0d2b45; padding-bottom: 8px; color: #0d2b45; }
+h2 { font-size: 21px; margin: 28px 0 12px; color: #0d2b45; }
+h3 { font-size: 17px; margin: 20px 0 8px; color: #333; }
+h4 { font-size: 15px; margin: 16px 0 6px; color: #555; }
+
+strong { color: #0d2b45; }
+
+a { color: #1a6fb5; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+table {
+    width: 100%; border-collapse: collapse; margin: 12px 0 20px;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd; padding: 8px 12px; text-align: left;
+    vertical-align: top;
+}
+th { background: #f0f4f8; font-weight: 600; color: #0d2b45; white-space: nowrap; }
+tr:nth-child(even) td { background: #fafbfc; }
+
+pre {
+    background: #f5f6f8; border: 1px solid #e0e3e8; border-radius: 6px;
+    padding: 14px 18px; overflow-x: auto; font-size: 13px;
+    line-height: 1.6; margin: 12px 0 20px;
+}
+code { font-family: "SF Mono", "Fira Code", "Consolas", monospace; font-size: 13px; }
+:not(pre) > code {
+    background: #f0f2f5; padding: 1px 5px; border-radius: 3px; color: #c7254e;
+}
+
+ul, ol { padding-left: 24px; margin: 8px 0 16px; }
+li { margin: 2px 0; }
+
+blockquote {
+    border-left: 3px solid #c4a44a; padding: 8px 16px; margin: 12px 0 20px;
+    background: #fefdf7; color: #666;
+}
+
+hr { border: none; border-top: 1px solid #e0e3e8; margin: 24px 0; }
+
+.toc { background: #f8f9fb; border: 1px solid #e0e3e8; border-radius: 6px;
+       padding: 16px 20px; margin: 20px 0 28px; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc li { margin: 4px 0; }
+.toc a { font-size: 14px; }
+
+/* Print styles */
+@media print {
+    body { max-width: 100%; padding: 0; }
+    table { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
+}
+
+</style>
+</head>
+<body>
+<h1 id="app">企微私有化定制APP — 备案材料清单与操作指引</h1>
+<blockquote>
+<p><strong>适用对象</strong>：国元证券股份有限公司<br>
+<strong>当前状态</strong>：统一包授权，计划切换为定制托管模式<br>
+<strong>文档版本</strong>：V2.0 | 整理日期：2026-06-02<br>
+<strong>材料来源</strong>：企微私有化团队内部 Wiki + 工信部备案申请指引</p>
+</blockquote>
+<hr>
+<h2 id="_1">一、托管模式概述</h2>
+<p>自 2024 年 7 月起，企业微信私有化全新定制包采用<strong>托管模式</strong>，由企业微信团队统一负责打包与上架。贵司作为客户方，主要配合准备：</p>
+<ol>
+<li><strong>提供应用基础资料</strong>（名称、Logo、主体资质等）</li>
+<li><strong>完成 ICP 备案</strong>（由服务商团队配合）</li>
+<li><strong>签署合作协议</strong>（与腾讯直签，加盖实体印章）</li>
+<li><strong>配合应用市场提审</strong>（提供测试账号、部分平台需申请商用增值服务）</li>
+</ol>
+<p>应用上架涵盖 <strong>iOS（ABM 分发）、安卓（华为/小米/OPPO/VIVO/荣耀 非公开分发）、华为鸿蒙</strong> 三大平台。</p>
+<hr>
+<h2 id="_2">二、资料准备清单与角色分工</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>准备事项</th>
+<th>说明</th>
+<th>负责方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>出包前准备</strong></td>
+<td>应用名称</td>
+<td>使用已购买版权的字体；建议结合本单位特色命名，避免与企微、微信雷同；确认后不再频繁变更</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>Logo 资源</td>
+<td>含 iOS、安卓、鸿蒙、桌面端多端格式</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>ICP 备案</td>
+<td>含 iOS、安卓、鸿蒙渠道；备案包名由企微团队提供</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>注册 iOS 商务平台 &amp; 提供组织 ID</td>
+<td>不使用 iOS 端则不需要</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>营业执照/事业单位法人证书</td>
+<td>备案主体资质证明</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>明确是否需要微信相关能力</td>
+<td>微信登录、微信分享、关联微信小程序</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>明确是否使用第三方 SDK</td>
+<td>需提前声明</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>部署正式环境 &amp; 定制打包服务生效</td>
+<td>部署完毕后方有打包环境</td>
+<td>服务商团队</td>
+</tr>
+<tr>
+<td></td>
+<td>盖章合作协议</td>
+<td>协议内容不可变更；需加盖备案主体实体印章（公章或合同章）；法人签字不强制；单面打印需加盖骑缝章；一式两份，客户先盖章发扫描件核对，再寄送原件</td>
+<td>客户团队 &amp; 腾讯团队</td>
+</tr>
+<tr>
+<td><strong>出包过程</strong></td>
+<td>定义应用包名</td>
+<td>含 iOS、安卓、鸿蒙、桌面端四端</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>检查各端 Logo 资源</td>
+<td>不符合要求则打回重做</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>申请 iOS 打包证书 &amp; 消息推送证书</td>
+<td>—</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>申请鸿蒙打包参数、ACL 权限及白名单</td>
+<td>涉及市场审核，时间不可控</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td><strong>应用首次上架 &amp; 消息推送</strong></td>
+<td>提供 2 个测试账号（如需第三方登录）</td>
+<td>账号需可见可聊，其他权限全部回收；固定"账号+密码"方式登录，禁用动态验证码；使用 iOS 需放开海外 IP 访问（北美地区），允许 iPad 登录</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>iOS 提审 ABM</td>
+<td>涉及市场审核，预留 15-20+ 工作日</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>安卓提审非公开分发</td>
+<td>小米、OPPO、VIVO、荣耀、华为安卓、华为鸿蒙</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>申请各平台消息推送能力</td>
+<td>不含华为高优透传等市场高级权益</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>消息能力到位后提审最终包到市场并发布 CDN</td>
+<td>—</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>提供安卓推送参数供项目组配置</td>
+<td>—</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td><strong>ABM 分发</strong></td>
+<td>管理后台升级至 3.2.0+ &amp; 开启 ABM 兑换码入口</td>
+<td>—</td>
+<td>服务商团队</td>
+</tr>
+<tr>
+<td></td>
+<td>到 iOS 商务平台申请兑换码并导入管理端</td>
+<td>—</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td><strong>配置服务器</strong></td>
+<td>消息推送配置（iOS、安卓、鸿蒙）</td>
+<td>—</td>
+<td>服务商团队</td>
+</tr>
+<tr>
+<td></td>
+<td>其他配置（如 app_name）</td>
+<td>—</td>
+<td>服务商团队</td>
+</tr>
+<tr>
+<td><strong>微信相关能力申请</strong>（可选）</td>
+<td>提供应用运行流程图</td>
+<td>含新用户注册→下载→应用内消息&amp;通讯录&amp;工作台&amp;我的页面截图</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>提供 2 条 ABM 兑换链接（如有 iOS）</td>
+<td>—</td>
+<td>客户团队</td>
+</tr>
+<tr>
+<td></td>
+<td>注册微信开放平台 AppID</td>
+<td>必须在各市场上架成功后才可操作；预留 15-20 工作日</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>申请关联小程序能力（含 iOS、安卓）</td>
+<td>涉及市场二次审核</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td></td>
+<td>打入微信相关定制构建参数 → 出含微信能力的安装包提审</td>
+<td>—</td>
+<td>腾讯团队</td>
+</tr>
+<tr>
+<td><strong>关联小程序</strong>（可选）</td>
+<td>管理端操作绑定小程序 &amp; 客户端验证</td>
+<td>—</td>
+<td>客户团队</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="icp">三、ICP 备案详细指引</h2>
+<h3 id="31-app">3.1 什么是 APP 备案</h3>
+<p>根据《互联网信息服务管理办法》（国务院292号令）及工信部相关规定，国家对经营性互联网信息服务实行许可制度，对非经营性互联网信息服务实行备案制度。所有在中国大陆提供服务的 APP 均需完成 ICP 备案。<strong>未备案的 APP 将无法在应用市场上架，且可能被网络接入服务商停止服务</strong>。</p>
+<p>对私有化企微的具体影响：<br>
+- 无法安装安卓消息推送服务<br>
+- 无法非公开上架各安卓应用市场和苹果 ABM<br>
+- 无法使用微信相关能力（微信登录、微信分享、关联小程序）</p>
+<h3 id="32">3.2 前置条件：域名备案</h3>
+<p>ICP 备案要求提供域名信息，且该域名必须<strong>已先完成 ICP 域名备案</strong>。同时需满足：</p>
+<ul>
+<li>域名需完成<strong>实名认证</strong>，且实名认证完成后需等待约 <strong>3 个工作日</strong>（信息同步至工信部）</li>
+<li>域名在备案期间必须处于<strong>有效期内</strong>（可通过 whois 查询注册时间）</li>
+<li>域名备案主办单位信息需与 APP 备案主办单位信息保持一致</li>
+</ul>
+<h3 id="33">3.3 备案流程（五步走）</h3>
+<pre><code>步骤1：提交申请 → 步骤2：服务商审核 → 步骤3：短信核验 → 步骤4：管局审核 → 步骤5：下发备案号
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作方</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 提交申请</td>
+<td>客户</td>
+<td>通过接入服务商（如腾讯云）或小程序平台提交备案材料</td>
+</tr>
+<tr>
+<td>2. 服务商审核</td>
+<td>接入服务商</td>
+<td>对提交的材料进行初审</td>
+</tr>
+<tr>
+<td>3. 短信核验</td>
+<td>客户</td>
+<td>收到短信后登录工信部备案系统 https://beian.miit.gov.cn/ 完成核验确认</td>
+</tr>
+<tr>
+<td>4. 管局审核</td>
+<td>省通信管理局</td>
+<td>核验通过后，管局进行最终审核，约 <strong>20 个工作日</strong></td>
+</tr>
+<tr>
+<td>5. 下发备案号</td>
+<td>管局</td>
+<td>审核通过后通过短信/邮件通知，可在工信部网站查询备案号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34">3.4 详细填写项目参考</h3>
+<p>以下为 APP 备案系统中各字段的填写说明，以企业微信私有化定制包的典型配置为例：</p>
+<h4 id="341">3.4.1 主办单位信息</h4>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>填写方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单位类型</td>
+<td>选择</td>
+<td>企业（一般选择此项）、事业单位等</td>
+</tr>
+<tr>
+<td>主办单位名称</td>
+<td>自行填写</td>
+<td>与营业执照一致</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>选择</td>
+<td>营业执照（企业）/ 事业单位法人证书</td>
+</tr>
+<tr>
+<td>证件号码</td>
+<td>自行填写</td>
+<td>统一社会信用代码</td>
+</tr>
+<tr>
+<td>法定代表人</td>
+<td>自行填写</td>
+<td>与营业执照一致</td>
+</tr>
+<tr>
+<td>法定代表人证件号码</td>
+<td>自行填写</td>
+<td>身份证号</td>
+</tr>
+</tbody>
+</table>
+<h4 id="342">3.4.2 主体负责人信息</h4>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>填写方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>证件类型</td>
+<td>选择</td>
+<td>身份证</td>
+</tr>
+<tr>
+<td>上传方式</td>
+<td>选择</td>
+<td>拍照上传 / 本地上传</td>
+</tr>
+<tr>
+<td>证件照片</td>
+<td>上传</td>
+<td>正反面</td>
+</tr>
+<tr>
+<td>负责人姓名</td>
+<td>自行填写</td>
+<td></td>
+</tr>
+<tr>
+<td>证件号码</td>
+<td>自行填写</td>
+<td></td>
+</tr>
+<tr>
+<td>证件有效期</td>
+<td>自动识别</td>
+<td></td>
+</tr>
+<tr>
+<td>联系电话</td>
+<td>自行填写</td>
+<td>手机号，需接收验证码</td>
+</tr>
+<tr>
+<td>应急联系电话</td>
+<td>自行填写</td>
+<td></td>
+</tr>
+<tr>
+<td>邮箱</td>
+<td>自行填写</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="343-app">3.4.3 APP 基础信息</h4>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>填写方式</th>
+<th>参考值/说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用服务类型</td>
+<td>选择</td>
+<td>APP 应用服务</td>
+</tr>
+<tr>
+<td>应用名称（APP）</td>
+<td>自行填写</td>
+<td>如"国元证券办公"（安装后在桌面显示的名称）</td>
+</tr>
+<tr>
+<td>应用内容（APP）</td>
+<td>选择（最多5项）</td>
+<td><strong>信息传输、软件和信息技术服务-商务通讯</strong></td>
+</tr>
+<tr>
+<td>是否提供 SDK</td>
+<td>选择</td>
+<td>提供</td>
+</tr>
+<tr>
+<td>使用外部 SDK</td>
+<td>选择</td>
+<td>使用</td>
+</tr>
+<tr>
+<td>SDK 名称/厂商</td>
+<td>多选</td>
+<td>见 §3.4.5 SDK 清单</td>
+</tr>
+<tr>
+<td>服务支持语言</td>
+<td>多选</td>
+<td>简体中文、繁体中文、英文</td>
+</tr>
+<tr>
+<td>备注</td>
+<td>自行填写</td>
+<td>可填"企业微信私有化定制版"</td>
+</tr>
+<tr>
+<td>前置审批项</td>
+<td>多选</td>
+<td>应用不涉及（企微私有化通常不涉及前置审批）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="344-app">3.4.4 APP 特征信息</h4>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>安卓</strong></td>
+<td>包名</td>
+<td>如 <code>com.tencent.weworkenterprise</code></td>
+</tr>
+<tr>
+<td></td>
+<td>公钥</td>
+<td>2048位公钥信息（不含证书信息），约500-600个十六进制字符</td>
+</tr>
+<tr>
+<td></td>
+<td>签名 MD5</td>
+<td>证书指纹 MD5（16进制32位）</td>
+</tr>
+<tr>
+<td></td>
+<td>域名列表</td>
+<td>后台访问域名，如 <code>xxx.gyzq.com</code></td>
+</tr>
+<tr>
+<td><strong>iOS</strong></td>
+<td>Bundle ID</td>
+<td>如 <code>com.tencent.weworkenterprise</code></td>
+</tr>
+<tr>
+<td></td>
+<td>公钥</td>
+<td>证书公钥</td>
+</tr>
+<tr>
+<td></td>
+<td>SHA-1</td>
+<td>证书 SHA-1 值</td>
+</tr>
+<tr>
+<td></td>
+<td>域名列表</td>
+<td>后台访问域名</td>
+</tr>
+<tr>
+<td><strong>鸿蒙</strong></td>
+<td>包名</td>
+<td>鸿蒙包名</td>
+</tr>
+<tr>
+<td></td>
+<td>公钥</td>
+<td>公钥信息</td>
+</tr>
+<tr>
+<td></td>
+<td>MD5</td>
+<td>签名 MD5</td>
+</tr>
+<tr>
+<td></td>
+<td>域名列表</td>
+<td>后台访问域名</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>重要说明</strong>：如果企业使用自己的安卓 keystore 签名，需填写企业自己的公钥和签名 MD5。若使用未签名的定制包，可参考默认值填写。公钥和签名信息由企微团队在打包完成后提供。</p>
+</blockquote>
+<h4 id="345-sdk">3.4.5 SDK 声明清单</h4>
+<p>企微私有化定制包使用的标准 SDK 及厂商如下：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>厂商名称</th>
+<th>SDK 厂商编号</th>
+<th>SDK 用途类型</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>华为技术有限公司</td>
+<td>3</td>
+<td>推送类</td>
+<td>华为手机消息推送</td>
+</tr>
+<tr>
+<td>2</td>
+<td>腾讯云计算（北京）有限责任公司</td>
+<td>49</td>
+<td>人脸识别类</td>
+<td>腾讯云慧眼（人脸识别）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>腾讯云计算（北京）有限责任公司</td>
+<td>49</td>
+<td>实时音视频类</td>
+<td>腾讯云即时通信 IM</td>
+</tr>
+<tr>
+<td>4</td>
+<td>深圳市腾讯计算机系统有限公司</td>
+<td>8</td>
+<td>地图类</td>
+<td>腾讯地图</td>
+</tr>
+<tr>
+<td>5</td>
+<td>深圳市腾讯计算机系统有限公司</td>
+<td>8</td>
+<td>数据统计类</td>
+<td>数据统计</td>
+</tr>
+<tr>
+<td>6</td>
+<td>深圳市腾讯计算机系统有限公司</td>
+<td>8</td>
+<td>Crash 收集类</td>
+<td>应用崩溃日志收集</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OPPO广东移动通信有限公司</td>
+<td>9</td>
+<td>推送类</td>
+<td>OPPO 手机消息推送</td>
+</tr>
+<tr>
+<td>8</td>
+<td>北京小米移动软件有限公司</td>
+<td>13</td>
+<td>推送类</td>
+<td>小米手机消息推送</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>以上为私有化定制包标准 SDK 清单。贵司如有额外引入的第三方 SDK，需在备案时补充声明。</p>
+</blockquote>
+<h4 id="346-app">3.4.6 APP 负责人信息</h4>
+<p>与主体负责人信息格式相同，可填写同一人或不同人。需上传负责人身份证正反面照片及本人视频（部分省份要求）。</p>
+<hr>
+<h2 id="ios-abm">四、iOS ABM 分发说明</h2>
+<h3 id="41-abm">4.1 什么是 ABM</h3>
+<p>ABM（Apple Business Manager）是苹果为企业提供的非公开应用分发方式。私有化企微 iOS 端不通过 App Store 公开上架，而是通过 ABM 渠道分发，用户使用兑换码安装。</p>
+<h3 id="42">4.2 需要准备的材料</h3>
+<ul>
+<li>注册 Apple Business Manager 账号</li>
+<li>提供组织信息（D-U-N-S 编码等）</li>
+<li>提交企业审核</li>
+<li>获取组织 ID</li>
+</ul>
+<h3 id="43">4.3 分发流程</h3>
+<ol>
+<li>企微团队完成 iOS 打包和 ABM 提审</li>
+<li>审核通过后，应用出现在 ABM 后台</li>
+<li>客户团队登录 ABM 后台申请兑换码</li>
+<li>将兑换码导入企业微信管理后台（需 V3.2.0+ 版本）</li>
+<li>终端用户通过企业微信客户端使用兑换码安装</li>
+</ol>
+<hr>
+<h2 id="_3">五、安卓非公开分发说明</h2>
+<h3 id="51">5.1 什么是非公开分发</h3>
+<p>非公开分发指应用在各厂商应用市场以"非公开"/"隐藏搜索"方式上架，用户无法通过搜索找到该应用，只能通过企业微信客户端内唤起应用市场完成下载和静默更新。</p>
+<h3 id="52">5.2 涉及的应用市场</h3>
+<table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>分发方式</th>
+<th>需申请商用增值服务</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>华为（安卓）</td>
+<td>非公开分发</td>
+<td>需要</td>
+<td>需申请商用增值服务权限</td>
+</tr>
+<tr>
+<td>小米</td>
+<td>非公开分发</td>
+<td>需要</td>
+<td>需申请商用增值服务</td>
+</tr>
+<tr>
+<td>OPPO</td>
+<td>非公开分发</td>
+<td>需要</td>
+<td>需申请商用增值服务</td>
+</tr>
+<tr>
+<td>VIVO</td>
+<td>非公开分发</td>
+<td>需要</td>
+<td>需申请商用增值服务</td>
+</tr>
+<tr>
+<td>荣耀</td>
+<td>非公开分发</td>
+<td>需要</td>
+<td>需申请商用增值服务</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>注意</strong>：各厂商商用增值服务需客户方企业账号进行申请，具体流程可联系对应厂商客户经理。</p>
+</blockquote>
+<h3 id="53">5.3 华为鸿蒙说明</h3>
+<p>华为鸿蒙端需额外申请套件验证和 ACL 权限，且鸿蒙非公开分发仅支持移动端。</p>
+<hr>
+<h2 id="logo">六、应用名称与 Logo 规范</h2>
+<h3 id="61">6.1 命名建议</h3>
+<ul>
+<li>使用已购买版权的字体（不可使用未授权字体）</li>
+<li>结合本单位特色命名，避免过于大众化</li>
+<li>避开与企业微信、微信等应用雷同的名称和 Logo</li>
+<li>确认后不可频繁变更（备案后修改成本高）</li>
+</ul>
+<h3 id="62-logo">6.2 Logo 资源要求</h3>
+<ul>
+<li>需提供 <strong>iOS、安卓、鸿蒙、桌面端</strong> 多端适配格式</li>
+<li>各端 Logo 需符合对应平台规格要求</li>
+<li>建议统一使用矢量格式（SVG/AI）源文件，再导出各端所需尺寸</li>
+</ul>
+<h3 id="63">6.3 应用内容分类</h3>
+<p>APP 备案中的"应用内容"需选择不超过 5 个一级类别。企业微信私有化版建议选择：<br>
+- <strong>信息传输、软件和信息技术服务-商务通讯</strong>（必选）</p>
+<p>其他可选辅助类别：工具、企业管理、办公。</p>
+<hr>
+<h2 id="_4">七、时间预估</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>预计耗时</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>域名 ICP 备案</td>
+<td>15-20 工作日</td>
+<td>含实名认证同步（3天）+ 管局审核（约20天）</td>
+</tr>
+<tr>
+<td>APP ICP 备案</td>
+<td>15-25 工作日</td>
+<td>含材料填报、服务商审核、短信核验、管局审核</td>
+</tr>
+<tr>
+<td>出包过程</td>
+<td>7-10 工作日</td>
+<td>含包名定义、Logo 审查、证书申请、鸿蒙 ACL 权限</td>
+</tr>
+<tr>
+<td>应用市场上架</td>
+<td>15-20 工作日</td>
+<td>含各市场审核、消息推送申请等</td>
+</tr>
+<tr>
+<td>微信相关能力申请（可选）</td>
+<td>15-20 工作日</td>
+<td>涉及市场二次审核</td>
+</tr>
+<tr>
+<td><strong>总计（不含微信能力）</strong></td>
+<td><strong>约 40-55 工作日</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>总计（含微信能力）</strong></td>
+<td><strong>约 55-75 工作日</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>以上时间为常规预估，实际进度以各应用市场审核、管局的审核排期和腾讯打包排期为准。</p>
+</blockquote>
+<hr>
+<h2 id="_5">八、贵司待办事项速查</h2>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>待办事项</th>
+<th>紧急程度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>确定应用名称（含简繁体中文、英文）</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>设计并交付 Logo 资源（四端格式）</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>确认是否需要 iOS 端（如需：注册 Apple Business Manager）</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>提供营业执照/法人证书扫描件</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>签署合作协议（加盖实体公章/合同章）</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>完成域名 ICP 备案（如未完成）</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>确认是否需要微信相关能力（登录/分享/小程序）</td>
+<td><strong>中</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>确认是否使用第三方 SDK（如有须提前声明）</td>
+<td><strong>中</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td>各厂商应用市场企业账号准备</td>
+<td><strong>中</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td>部署正式环境（配合服务商团队）</td>
+<td><strong>中</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="a">附录A：整体流程图示</h2>
+<pre><code>                          ┌─────────────────────┐
+                          │    客户端托管上架     │
+                          └──────────┬──────────┘
+                                     │
+           ┌─────────────────────────┼─────────────────────────┐
+           ▼                         ▼                         ▼
+   ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
+   │   注册苹果账号  │       │ APP名称/Logo   │       │  合作协议签署   │
+   │   提供组织信息  │       │ 生产环境部署   │       │ 客户(管理主体) │
+   │   提交企业审核  │       │  ICP备案      │       │     腾讯      │
+   │  (客户团队)    │       │  应用市场     │       │               │
+   └───────┬───────┘       └───────┬───────┘       └───────────────┘
+           │                       │
+           ▼                       │
+   ┌───────────────┐               │
+   │  iOS系列证书   │               ▼
+   │   ABM上架     │       ┌──────────────────────────────────────────┐
+   │              │       │         应 用 市 场                       │
+   └───────┬───────┘       │                                          │
+           │               │  iOS         安卓          华为鸿蒙      │
+           │               │   │           │              │          │
+           │               │   ▼           ▼              ▼          │
+           │               │ ABM上架    非公开上架     非公开上架      │
+           │               │            (申请商用     (套件验证+      │
+           │               │            增值服务)     ACL权限)       │
+           │               └──────────────┬───────────────────────────┘
+           │                              │
+           └──────────────┬───────────────┘
+                          ▼
+                  ┌───────────────┐
+                  │  易用性注册配置  │
+                  │  散版开放平台申请 │
+                  └───────┬───────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │   完成/上架    │
+                  │ (可测试验证)   │
+                  └───────────────┘
+</code></pre>
+<blockquote>
+<p><strong>图例说明</strong>：绿色节点为客户团队负责，蓝色节点为腾讯团队负责，橙色节点为服务商团队负责。</p>
+</blockquote>
+<hr>
+<h2 id="b">附录B：备案参考模板文件说明</h2>
+<p>随本文档附送以下参考模板文件，供贵司备案工作参考使用：</p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>说明</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>工信部APP备案申请指引.docx</code></td>
+<td>工信部官方 APP 备案申请指引文档</td>
+<td><strong>必读</strong>，完整的备案流程、注意事项、常见问题</td>
+</tr>
+<tr>
+<td><code>APP备案填写信息.xlsx</code></td>
+<td>APP 备案信息填写模板（含示例数据）</td>
+<td>参考填写格式，含 SDK 清单、包名、公钥等示例</td>
+</tr>
+<tr>
+<td><code>ICP备案-代备案申请表.xlsx</code></td>
+<td>ICP 备案代申请表格模板（含网站+APP两部分）</td>
+<td>正式备案时填写此表，表中含每个字段的详细说明</td>
+</tr>
+<tr>
+<td><code>附件1-单位法人授权书.doc</code></td>
+<td>单位法人授权书模板</td>
+<td>如需授权他人代办，需盖章提交</td>
+</tr>
+<tr>
+<td><code>附件2-核验单.doc</code></td>
+<td>备案信息核验单</td>
+<td>备案信息核实确认单</td>
+</tr>
+<tr>
+<td><code>附件3-承诺书.doc</code></td>
+<td>承诺书</td>
+<td>承诺备案信息真实有效</td>
+</tr>
+<tr>
+<td><code>附件4-网站备案信息真实性责任告知书.doc</code></td>
+<td>真实性责任告知书</td>
+<td>告知备案信息真实性的法律责任</td>
+</tr>
+<tr>
+<td><code>附件5-网站备案信息真实性承诺书.doc</code></td>
+<td>真实性承诺书</td>
+<td>承诺备案信息真实性</td>
+</tr>
+<tr>
+<td><code>客户端托管上架流程图.png</code></td>
+<td>客户端托管上架整体流程图</td>
+<td>流程参考</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>使用建议</strong>：附件1-5 为工信部标准模板（.doc 格式），贵司需根据实际情况填写、打印、盖章后上传。</p>
+</blockquote>
+<hr>
+<p><em>本材料由企业微信私有化服务团队提供，整理供贵司备案工作使用。如有疑问，请通过项目经理沟通。</em></p>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交接文件_国元证券智能门户</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>国元证券智能门户项目 — 交接文件</h1>
+
+<p><strong>编制人</strong>：王昭</p>
+<p><strong>日期</strong>：2026-07-18</p>
+<p><strong>版本</strong>：V1.0</p>
+
+<hr>
+
+<h2>一、项目概况</h2>
+
+<table><thead><tr><th>属性</th><th>内容</th></tr></thead><tbody><tr><td>客户</td><td>国元证券股份有限公司</td></tr><tr><td>项目</td><td>企业微信私有化 + 智能门户 + 七巧低代码</td></tr><tr><td>合同金额</td><td>¥387万</td></tr><tr><td>当前阶段</td><td>一期收尾 → 二期启动</td></tr><tr><td>今日状态</td><td><strong>PC/安卓/鸿蒙端上线日（2026-07-18）</strong></td></tr></tbody></table>
+
+<hr>
+
+<h2>二、系统部署架构</h2>
+
+<pre><code class="language-">
+用户浏览器/企微
+    ↓
+域名: portal.oa.gyzq.com
+    ↓
+DMZ负载均衡: 172.16.20.253
+    ↓
+DMZ应用服务器(Nginx): 172.16.19.1
+    ↓
+门户应用服务器: 10.0.63.11 (宝兰德 BES, 双网卡)
+    ↓
+后端服务 + OceanBase数据库
+
+企微安全网关: mc.oa.gyzq.com
+老OA(SharePoint): home.oa.gyzq.com
+</code></pre>
+
+<hr>
+
+<h2>三、三系统版本</h2>
+
+<table><thead><tr><th>系统</th><th>版本</th><th>状态</th></tr></thead><tbody><tr><td>智能门户</td><td>V2.1.6</td><td>✅ 已部署</td></tr><tr><td>七巧低代码</td><td>plus-fixbug-private-4.0.1_03_0130</td><td>✅ 已部署</td></tr><tr><td>企业微信私有化</td><td>—</td><td>✅ 已部署</td></tr></tbody></table>
+
+<hr>
+
+<h2>四、核心人员</h2>
+
+<table><thead><tr><th>角色</th><th>姓名</th><th>联系方式</th></tr></thead><tbody><tr><td>我方项目经理</td><td>王昭</td><td>—</td></tr><tr><td>我方领导</td><td>李培灿（灿总）</td><td>—</td></tr><tr><td>我方客户经理</td><td>黄柱（柱哥）</td><td>—</td></tr><tr><td>我方Java工程师</td><td>朱桂秋（秋哥）</td><td>—</td></tr><tr><td>客户业务负责人</td><td>何金钟</td><td>金融科技部领导</td></tr><tr><td>客户运维</td><td>程文斐</td><td>0551-62201332</td></tr><tr><td>客户运维</td><td>葛鹏飞</td><td>0551-62207154</td></tr><tr><td>运维工程师</td><td>赵子健</td><td>技术负责人</td></tr><tr><td>审核人</td><td>丁小建</td><td>道一云项目总监</td></tr></tbody></table>
+
+<hr>
+
+<h2>五、关键文件清单</h2>
+
+<h3>5.1 上线文档（D1-D10，已完成）</h3>
+
+<table><thead><tr><th>编号</th><th>文档</th><th>路径</th></tr></thead><tbody><tr><td>D1</td><td>元信智能门户使用指南</td><td><code>output/上线文档/D1_元信智能门户使用指南.md</code></td></tr><tr><td>D2</td><td>常见问题FAQ</td><td><code>output/上线文档/D2_常见问题FAQ.md</code></td></tr><tr><td>D3</td><td>管理员操作手册</td><td><code>output/上线文档/D3_管理员操作手册.md</code></td></tr><tr><td>D4</td><td>组织架构同步运维指南</td><td><code>output/上线文档/D4_组织架构同步运维指南.md</code></td></tr><tr><td>D5</td><td>消息中心与新闻公告发布指南</td><td><code>output/上线文档/D5_消息中心与新闻公告发布指南.md</code></td></tr><tr><td>D6</td><td>第三方应用接入指南</td><td><code>output/上线文档/D6_第三方应用接入指南.md</code></td></tr><tr><td>D7</td><td>七巧低码平台接入指南</td><td><code>output/上线文档/D7_七巧低码平台接入指南.md</code></td></tr><tr><td>D8</td><td>系统切换公告</td><td><code>output/上线文档/D8_系统切换公告.md</code></td></tr><tr><td>D9</td><td>新旧系统并行使用指引</td><td><code>output/上线文档/D9_新旧系统并行使用指引.md</code></td></tr><tr><td>D10</td><td>系统回退预案</td><td><code>output/上线文档/D10_系统回退预案.md</code></td></tr></tbody></table>
+
+<ul><li>Word版：<code>output/上线文档/Word版/*.docx</code>（10份，已生成）</li><li>目录索引：<code>output/上线文档/README_上线支持文档目录.md</code></li><li>待填写项：D4(10处) + D10(5处)，均为敏感参数/领导电话，需运维单独提供</li></ul>
+
+<h3>5.2 业务文档</h3>
+
+<table><thead><tr><th>文档</th><th>路径</th></tr></thead><tbody><tr><td>新闻数据源配置方案 V2.0</td><td><code>output/新闻数据源配置方案.md</code></td></tr><tr><td>第三方应用接入跟进表</td><td><code>output/第三方应用接入跟进表.md</code></td></tr><tr><td>单周推进表（在线版）</td><td><code>output/国元证券_在线推进表_20260716.md</code></td></tr><tr><td>信创基础软件采购清单 V3.0</td><td><code>output/信创基础软件采购清单_V3.0.md</code></td></tr><tr><td>新闻公告分类栏目ID对照表</td><td><code>00-全局/新闻公告分类栏目ID对照表.md</code></td></tr><tr><td>待办状态汇报</td><td><code>output/国元证券待办状态汇报_20260716.md</code></td></tr><tr><td>上线时间调整记录</td><td><code>output/上线时间调整记录_20260715.md</code></td></tr></tbody></table>
+
+<h3>5.3 部署包</h3>
+
+<table><thead><tr><th>内容</th><th>路径</th></tr></thead><tbody><tr><td>OA新闻代理（Java版）</td><td><code>_deploy/oa-news-proxy-java/</code></td></tr><tr><td>OA新闻代理（Python版）</td><td><code>_deploy/oa-news-proxy/</code></td></tr></tbody></table>
+
+<hr>
+
+<h2>六、待测试事项</h2>
+
+<h3>6.1 新系统功能测试</h3>
+
+<table><thead><tr><th>测试项</th><th>测试内容</th><th>优先级</th></tr></thead><tbody><tr><td>登录</td><td>企微扫码登录 / 手机号登录</td><td>P0</td></tr><tr><td>首页</td><td>新闻公告展示、应用入口</td><td>P0</td></tr><tr><td>消息中心</td><td>消息推送、已读/未读</td><td>P0</td></tr><tr><td>新闻公告</td><td>分类浏览、详情查看（11个分类）</td><td>P0</td></tr><tr><td>第三方应用</td><td>各应用跳转是否正常</td><td>P1</td></tr><tr><td>待办</td><td>待办列表、完成操作</td><td>P1</td></tr><tr><td>通讯录</td><td>组织架构展示</td><td>P1</td></tr><tr><td>搜索</td><td>统一搜索功能</td><td>P2</td></tr></tbody></table>
+
+<h3>6.2 OA新闻同步测试（新功能）</h3>
+
+<table><thead><tr><th>测试项</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>OA代理服务</td><td>Java版是否能正常启动和代理</td><td>待部署</td></tr><tr><td>Cookie认证</td><td>自动登录OA获取Cookie</td><td>待验证</td></tr><tr><td>新闻数据</td><td>8个分类新闻是否正确同步</td><td>待验证</td></tr><tr><td>门户展示</td><td>新闻列表组件渲染效果</td><td>待配置</td></tr></tbody></table>
+
+<p><strong>OA新闻同步测试步骤</strong>：</p>
+<ol><li>编辑 <code>_deploy/oa-news-proxy-java/oa-proxy.properties</code> 填入OA账号密码</li><li><code>bash _deploy/oa-news-proxy-java/build.sh</code> 编译</li><li>部署到门户应用服务器(10.0.63.11)：<code>sudo bash _deploy/oa-news-proxy-java/deploy.sh</code></li><li>验证：<code>bash /opt/oa-news-proxy/verify.sh portal.oa.gyzq.com</code></li><li>门户后台配置HTTP数据源URL</li></ol>
+
+<h3>6.3 多端测试</h3>
+
+<table><thead><tr><th>端</th><th>测试重点</th></tr></thead><tbody><tr><td>PC Web</td><td>全功能测试</td></tr><tr><td>安卓</td><td>安装、登录、基本功能</td></tr><tr><td>鸿蒙</td><td>安装、登录、基本功能</td></tr><tr><td>iOS</td><td>待苹果上架后测试</td></tr></tbody></table>
+
+<hr>
+
+<h2>七、已知问题与风险</h2>
+
+<table><thead><tr><th>#</th><th>问题</th><th>影响</th><th>状态</th></tr></thead><tbody><tr><td>1</td><td>iOS审批延迟，需8月1日上架</td><td>iOS用户暂时无法使用</td><td>🟡 已与客户沟通</td></tr><tr><td>2</td><td>D4/D10部分参数待填写</td><td>运维部署时补充</td><td>🟡 可接受</td></tr><tr><td>3</td><td>OA新闻同步未部署</td><td>新闻数据需手动发布</td><td>🔴 待部署测试</td></tr><tr><td>4</td><td>第三方应用对接进度</td><td>49个应用逐步接入中</td><td>🟡 进行中</td></tr><tr><td>5</td><td>授权下单对齐问题</td><td>需与客户协商</td><td>🟡 待确认</td></tr></tbody></table>
+
+<hr>
+
+<h2>八、新闻公告分类栏目ID</h2>
+
+<table><thead><tr><th>栏目ID</th><th>分类名称</th></tr></thead><tbody><tr><td>F202607090002</td><td>部门简报</td></tr><tr><td>F202607090003</td><td>党建群团</td></tr><tr><td>F202607090004</td><td>风控合规</td></tr><tr><td>F202607090005</td><td>公司动态</td></tr><tr><td>F202607090006</td><td>公司文件</td></tr><tr><td>F202607090007</td><td>规划发展</td></tr><tr><td>F202607090008</td><td>交流论坛</td></tr><tr><td>F202607090009</td><td>全面从严治党</td></tr><tr><td>F202607090010</td><td>数字化转型</td></tr><tr><td>F202607090011</td><td>文化建设</td></tr><tr><td>F202607090012</td><td>子公司及分支机构</td></tr></tbody></table>
+
+<hr>
+
+<h2>九、老OA SharePoint接口</h2>
+
+<p>老OA（<code>home.oa.gyzq.com</code>）提供27个REST API，覆盖8个新闻分类：</p>
+
+<table><thead><tr><th>#</th><th>功能</th><th>接口</th></tr></thead><tbody><tr><td>1-4</td><td>服务台（4子站）</td><td><code>/jdlm/fwt/{子站}/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>5</td><td>公司动态</td><td><code>/gsdt/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>6</td><td>部门简报</td><td><code>/bmjb/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>7</td><td>创新发展</td><td><code>/cxfz/zcdt/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>8</td><td>监管动态</td><td><code>/hggl/jgdt/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>9</td><td>党建群团</td><td><code>/gsdt/djqt/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>10</td><td>子公司及分支机构</td><td><code>/gsdt/zgsfzjg/_api/lists/getbytitle('页面')/items</code></td></tr><tr><td>11</td><td>部门公告（全部）</td><td>Search API聚合</td></tr><tr><td>12</td><td>公司文件</td><td><code>/gswj/_api/lists/getbytitle('文档')/items</code></td></tr><tr><td>26</td><td>党建指南</td><td><code>/jdlm/lxyz/_api/lists/getbytitle('页面')/items</code></td></tr></tbody></table>
+
+<p>完整接口清单：<code>官网SP接口.xlsx</code>（客户提供）</p>
+
+<hr>
+
+<h2>十、沟通节奏</h2>
+
+<ul><li>每周五：正式周报 + 单周推进表</li><li>落款：道一云 项目经理 王昭</li><li>技术支持：程文斐 0551-62201332 / 葛鹏飞 0551-62207154</li></ul>
+
+<hr>
+
+<p><strong>文档版本</strong>：V1.0</p>
+<p><strong>编制日期</strong>：2026-07-18</p>
+<p><strong>编制人员</strong>：王昭</p>
+
+</body>
+</html>

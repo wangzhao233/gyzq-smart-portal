@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="goldCG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c96a"/>
+      <stop offset="50%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#b8912e"/>
+    </linearGradient>
+    <filter id="shadowC" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00000020"/>
+    </filter>
+  </defs>
+
+  <!-- White rounded square base -->
+  <rect x="14" y="14" width="172" height="172" rx="34" ry="34" fill="#ffffff" filter="url(#shadowC)"/>
+
+  <!-- Blue outlined speech bubble - main bubble (slightly larger) -->
+  <g transform="translate(96,100)">
+    <path d="M-62,-42 v-6 a10,10 0 0,1 10,-10 h104 a10,10 0 0,1 10,10 v60 a10,10 0 0,1 -10,10 h-84 l-20,18 v-18 h-10"
+          fill="none" stroke="#1478FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Nested smaller bubble - 言 (speech/words) -->
+    <path d="M-28,-24 v-4 a7,7 0 0,1 7,-7 h42 a7,7 0 0,1 7,7 v28 a7,7 0 0,1 -7,7 h-38 l-10,8 v-8 h-5"
+          fill="none" stroke="#1478FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+
+    <!-- 亻 (person) - a simple standing figure outside-left of bubble -->
+    <g fill="none" stroke="url(#goldCG)" stroke-width="3" stroke-linecap="round">
+      <path d="M-68,-28 v26 c0,5 3,9 5,13"/>
+      <path d="M-75,-16 c-3,-3 -1,-11 0,-14 c1,3 2,11 0,14"/>
+    </g>
+
+    <!-- 言 - stylized speech lines inside main bubble -->
+    <g fill="none" stroke="url(#goldCG)" stroke-width="2.5" stroke-linecap="round">
+      <!-- Wide speech lines -->
+      <line x1="-30" y1="-16" x2="30" y2="-16"/>
+      <line x1="-24" y1="-6" x2="24" y2="-6"/>
+      <line x1="-28" y1="4" x2="18" y2="4"/>
+      <!-- Small speech tail hook -->
+      <line x1="-28" y1="14" x2="-8" y2="14"/>
+    </g>
+  </g>
+
+  <!-- Top-right gold dot -->
+  <circle cx="154" cy="40" r="3.5" fill="url(#goldCG)" opacity="0.8"/>
+</svg>

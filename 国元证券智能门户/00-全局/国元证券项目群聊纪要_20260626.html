@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国元证券项目群聊纪要_20260626</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>国元证券智能门户 — 项目群聊纪要</h1>
+
+<blockquote><strong>日期</strong>: 2026-06-26（含前后相关讨论）<br><strong>来源</strong>: 企业微信群聊<br><strong>编制</strong>: 王昭<br><strong>版本</strong>: V1.0</blockquote>
+
+<hr>
+
+<h2>参与人员</h2>
+
+<table><thead><tr><th>群昵称</th><th>姓名</th><th>角色</th></tr></thead><tbody><tr><td>hackee</td><td>—</td><td>国元证券（客户）</td></tr><tr><td>Michael</td><td>葛鹏飞</td><td>国元证券（客户）</td></tr><tr><td>程文斐</td><td>程文斐</td><td>国元证券（客户）</td></tr><tr><td>zZZ</td><td>张沿</td><td>道一云（技术）</td></tr><tr><td>Y</td><td>—</td><td>道一云（技术）</td></tr><tr><td>浅笑</td><td>赵子健</td><td>道一云（运维）</td></tr><tr><td>道一-王昭</td><td>王昭</td><td>道一云（项目经理）</td></tr></tbody></table>
+
+<hr>
+
+<h2>一、账号初始化与数据保留</h2>
+
+<h3>问题</h3>
+<ul><li><strong>hackee</strong>：账号像是清空了重建新的，老的会话信息都没了。</li></ul>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ（张沿）</strong>：本次是第一次初始化，之前测试账号被清掉后同步重建，后续只做增量。</li></ul>
+
+<h3>状态</h3>
+<ul><li>已确认原因，后续不会再全量重建。</li><li>⚠️ 需关注：首次初始化清空带来的数据丢失风险，后续增量同步需验证。</li></ul>
+
+<hr>
+
+<h2>二、打卡时间取整问题</h2>
+
+<h3>问题</h3>
+<ul><li><strong>程文斐</strong>：SaaS 打卡时间是向下取整的，8:25 和 8:26 刚好差 1 分钟，怕有同事差 1 分钟被算迟到。</li></ul>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ</strong>：我看下。</li></ul>
+
+<h3>状态</h3>
+<ul><li>待确认：本地版打卡时间取整逻辑是否需要调整，建议对齐 SaaS 行为。</li><li><strong>建议</strong>：参考 SaaS 端打卡规则，在本地版做相同处理。</li></ul>
+
+<hr>
+
+<h2>三、人员信息接口调整（yglb / zzzt 字段）</h2>
+
+<h3>需求变更</h3>
+
+<h4>3.1 员工类别（yglb）</h4>
+<ul><li><strong>Michael（葛鹏飞）</strong>：人员信息接口需加 <code>yglb</code>（员工类别）字段，不需要在企微展示。</li><li>字典项：</li></ul>
+
+<table><thead><tr><th>编码</th><th>名称</th></tr></thead><tbody><tr><td>1</td><td>正式员工</td></tr><tr><td>2</td><td>劳务派遣员工（业务辅助岗）</td></tr><tr><td>3</td><td>劳务派遣员工（后勤保障岗）</td></tr><tr><td>4</td><td>经纪人</td></tr><tr><td>5</td><td>L序列理财顾问</td></tr><tr><td>6</td><td>财富顾问</td></tr><tr><td>7</td><td>外部检查人员</td></tr><tr><td>8</td><td>实习生</td></tr><tr><td>9</td><td>应聘人员</td></tr><tr><td>10</td><td>外部企业伙伴账户</td></tr></tbody></table>
+
+<ul><li><strong>Y 确认</strong>：字段是数字类型。</li></ul>
+
+<h4>3.2 在职状态（zzzt）</h4>
+<ul><li><strong>Michael</strong>：再加 <code>zzzt</code>（在职状态）字段。</li><li>字典项：</li></ul>
+
+<table><thead><tr><th>编码</th><th>名称</th></tr></thead><tbody><tr><td>0</td><td>在职</td></tr><tr><td>1</td><td>离职</td></tr><tr><td>2</td><td>内退</td></tr><tr><td>3</td><td>退休</td></tr><tr><td>4</td><td>解聘</td></tr><tr><td>5</td><td>长期病假</td></tr></tbody></table>
+
+<ul><li><strong>Y 确认</strong>：不同步到企微，只存储。</li></ul>
+
+<h3>决议</h3>
+
+<h4>禁用逻辑</h4>
+<ul><li><strong>hackee</strong>：在职后离职/退休的，后台先做禁用，数据不丢。</li><li><strong>Michael</strong>：不在职状态 0/2/5 的可以禁用吗？</li><li><strong>Y</strong>：可以实现。</li><li><strong>hackee</strong>：门户账户也应该有这些状态和对应的禁用逻辑，门户跟企微账户逻辑一致。</li></ul>
+
+<h4>同步规则（最终确认）</h4>
+<ul><li><strong>Michael</strong>：同步到企微的条件：</li><li>员工类别 ∈ {1, 2, 5, 6, 8}</li><li>在职状态 ∈ {0, 2, 5}（即在职/内退/长期病假）</li></ul>
+
+<h4>删除逻辑</h4>
+<ul><li><strong>hackee</strong>：企微账户同步<strong>不要有删除账户的逻辑</strong>，人员历史会话数据需要保留。</li><li>如确实需要删除，由管理员手工操作。</li><li><strong>Y</strong>：没有删除人员的逻辑。</li></ul>
+
+<h4>员工类别同步方式</h4>
+<ul><li><strong>Michael</strong>：员工类别字段可作为<strong>标签</strong>同步到企微（之前开会与王工交流过）。</li></ul>
+
+<hr>
+
+<h2>四、企微 API user/get 缺少 name 字段</h2>
+
+<h3>问题</h3>
+<ul><li><strong>Michael</strong>：调用企微 <code>user/get</code> 接口返回结果缺少 <code>name</code> 字段，与文档不一致。</li><li>返回示例：</li></ul>
+<pre><code class="language-json">
+{
+  "errcode": 0,
+  "errmsg": "ok",
+  "userid": "3563",
+  "department": [],
+  "status": 1,
+  "enable": 1,
+  "hide_mobile": 0,
+  ...
+}
+</code></pre>
+<p>（缺少 <code>name</code>、<code>mobile</code> 等字段）</p>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ（张沿）</strong>：是应用的可信 IP 和可见字段没加，默认只有账号。</li><li><strong>Michael</strong>：是「元心助手」这个应用。</li></ul>
+
+<h3>状态</h3>
+<ul><li>已确认原因：需在元心助手应用配置中加可信 IP + 开启可见字段。</li><li><strong>待办</strong>：葛鹏飞/张沿配置应用可见字段。</li></ul>
+
+<hr>
+
+<h2>五、统一待办报错</h2>
+
+<h3>问题</h3>
+<ul><li><strong>hackee</strong>：点统一待办出现错误，点两下刷新才能进入。</li></ul>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ</strong>：收到，我看下。</li></ul>
+
+<h3>状态</h3>
+<ul><li>待排查。</li></ul>
+
+<hr>
+
+<h2>六、统一待办 vs 统一消息接口区分</h2>
+
+<h3>问题</h3>
+<ul><li><strong>hackee</strong>：</li></ul>
+<ol><li>待办跟消息的接口是同一个吗？</li><li>API 接口文档看不清，消息接口是不是只需创建不需关闭？</li><li>有没有针对消息接口的说明？</li></ol>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ（张沿）</strong>：</li><li>统一待办中心的消息和待办是<strong>绑定的</strong>，待办/待阅都会在系统和企微分别发一条消息卡片。</li><li><strong>单独的消息接口</strong>通过另一个应用发出，不和待办共用。</li><li>待办和消息是<strong>两个独立的接口</strong>。</li></ul>
+
+<h3>确认</h3>
+<ul><li><strong>hackee</strong>：统一待办和统一消息是两个接口 —— 各应用推送消息提醒（不是待办）。</li><li><strong>zZZ</strong>：对的，这个就不是待办了。</li></ul>
+
+<h3>状态</h3>
+<ul><li>消息接口文档待张沿整理后发群。</li></ul>
+
+<hr>
+
+<h2>七、邮箱绑定丢失（同步问题）</h2>
+
+<h3>问题</h3>
+<ul><li><strong>hackee</strong>：昨天绑定的邮箱，今天没有了。是不是同步导致的？</li></ul>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ</strong>：可能是，我问下研发。</li></ul>
+
+<h3>状态</h3>
+<ul><li>待排查：账号同步可能覆盖了用户自行绑定的邮箱信息。</li><li>⚠️ 关键风险：增量同步逻辑可能覆盖用户自主修改的数据。</li></ul>
+
+<hr>
+
+<h2>八、中间登录程序高可用</h2>
+
+<h3>问题</h3>
+<ul><li><strong>Michael（葛鹏飞）</strong>：</li></ul>
+<ol><li>企微和 SSO 中间登录程序部署在打卡服务器，是单节点？</li><li>假如中间程序挂了，以前登录过的用户自动登录会不会受影响？</li></ol>
+
+<h3>回应</h3>
+<ul><li><strong>浅笑（赵子健）</strong>：</li><li>目前只部署在 1 台服务器上。</li><li>可以部署多台。</li><li>中间程序挂了，自动登录<strong>会受影响</strong>。</li></ul>
+
+<h3>决议</h3>
+<ul><li><strong>hackee</strong>：生产环境服务都要部署成<strong>高可用</strong>，另外服务监控也需要。</li><li><strong>浅笑</strong>：还没部署，晚点找时间部署。</li></ul>
+
+<h3>状态</h3>
+<ul><li><strong>待办</strong>：赵子健安排中间登录程序双节点高可用部署 + 服务监控。</li></ul>
+
+<hr>
+
+<h2>九、企微客户端登录过期时间</h2>
+
+<h3>问题</h3>
+<ul><li><strong>hackee</strong>：企微客户端登录后的过期时间可以设置吗？</li></ul>
+
+<h3>回应</h3>
+<ul><li><strong>zZZ（张沿）</strong>：客户端的 TGT 时间可以设置，默认是一个月还是一年，需确认。</li></ul>
+
+<h3>状态</h3>
+<ul><li>待确认具体默认值和可配置范围。</li></ul>
+
+<hr>
+
+<h2>十、待办事项汇总</h2>
+
+<table><thead><tr><th>编号</th><th>事项</th><th>负责人</th><th>优先级</th><th>状态</th></tr></thead><tbody><tr><td>1</td><td>打卡时间取整逻辑确认/调整</td><td>张沿</td><td>中</td><td>待处理</td></tr><tr><td>2</td><td>人员信息接口增加 yglb + zzzt 字段</td><td>Y/张沿</td><td>🔴高</td><td>开发中</td></tr><tr><td>3</td><td>企微同步禁用逻辑实现（zzzt 非 0/2/5 禁用）</td><td>Y/张沿</td><td>🔴高</td><td>待开发</td></tr><tr><td>4</td><td>门户账户同步禁用逻辑（同企微逻辑）</td><td>Y/张沿</td><td>🔴高</td><td>待开发</td></tr><tr><td>5</td><td>员工类别作为标签同步到企微</td><td>Y/张沿</td><td>中</td><td>待开发</td></tr><tr><td>6</td><td>元心助手应用配置可信IP + 可见字段</td><td>葛鹏飞/张沿</td><td>🔴高</td><td>待配置</td></tr><tr><td>7</td><td>统一待办报错排查</td><td>张沿</td><td>高</td><td>排查中</td></tr><tr><td>8</td><td>消息接口文档整理并发送</td><td>张沿</td><td>高</td><td>整理中</td></tr><tr><td>9</td><td>邮箱绑定丢失问题排查（同步覆盖）</td><td>张沿/研发</td><td>🔴高</td><td>排查中</td></tr><tr><td>10</td><td>中间登录程序双节点高可用部署</td><td>赵子健</td><td>🔴高</td><td>待部署</td></tr><tr><td>11</td><td>服务监控部署</td><td>赵子健</td><td>高</td><td>待部署</td></tr><tr><td>12</td><td>企微客户端 TGT 过期时间确认</td><td>张沿</td><td>低</td><td>待确认</td></tr></tbody></table>
+
+<hr>
+
+<h2>十一、风险关注</h2>
+
+<ol><li><strong>首次初始化数据丢失</strong>：测试账号清空重建，需确保后续增量同步不影响生产数据。</li><li><strong>同步覆盖用户数据</strong>：邮箱绑定丢失说明增量同步可能覆盖用户自主修改的数据，需排查同步逻辑。</li><li><strong>单节点风险</strong>：中间登录程序目前单节点，挂了影响自动登录，需尽快完成高可用部署。</li><li><strong>接口文档缺失</strong>：消息接口文档不清，影响第三方应用对接进度。</li></ol>
+
+<hr>
+
+<blockquote>📝 本文档基于 2026-06-26 前后企业微信群聊整理，待昭哥审核修正后定稿。</blockquote>
+
+</body>
+</html>

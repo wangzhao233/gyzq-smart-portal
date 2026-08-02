@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D10_系统回退预案</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>D10 系统回退预案</h1>
+
+<h2>1. 文档说明</h2>
+
+<h3>1.1 适用范围</h3>
+<p>本预案适用于国元证券智能门户项目（元信私有化企微 + 智能门户 + 七巧低码平台）在部署上线、升级迭代或应急处置过程中的系统回退操作。涵盖三套独立部署系统的回退策略、操作流程及验证标准。</p>
+
+<h3>1.2 读者对象</h3>
+<ul><li><strong>运维管理人员</strong>：负责执行系统回退操作的具体实施</li><li><strong>技术负责人</strong>：负责回退决策的审批与技术指导</li><li><strong>业务负责人</strong>：负责业务影响评估与用户通知</li><li><strong>项目管理办公室</strong>：负责回退过程的协调与监督</li></ul>
+
+<h3>1.3 术语说明</h3>
+<table><thead><tr><th>术语</th><th>说明</th></tr></thead><tbody><tr><td><strong>元信</strong></td><td>国元证券私有化部署的企业微信系统</td></tr><tr><td><strong>智能门户</strong></td><td>基于七巧低代码平台构建的统一工作门户</td></tr><tr><td><strong>七巧低码平台</strong></td><td>低代码应用开发平台，支持快速构建业务应用</td></tr><tr><td><strong>RTO</strong></td><td>恢复时间目标（Recovery Time Objective）</td></tr><tr><td><strong>RPO</strong></td><td>恢复点目标（Recovery Point Objective）</td></tr><tr><td><strong>SaaS企微</strong></td><td>腾讯提供的标准企业微信云服务</td></tr><tr><td><strong>基础环境</strong></td><td>国产化技术栈：海光CPU + 银河麒麟 V10 Halberd + MySQL</td></tr></tbody></table>
+
+<h2>2. 回退策略概述</h2>
+
+<h3>2.1 三套系统独立回退原则</h3>
+<p>本项目采用三套系统独立部署架构，回退策略遵循以下原则：</p>
+
+<ol><li><strong>独立性原则</strong>：元信、智能门户、七巧低码平台各自独立回退，互不影响</li><li><strong>最小影响原则</strong>：回退操作选择对业务影响最小的时间段进行</li><li><strong>数据完整性原则</strong>：确保回退过程中零数据丢失</li><li><strong>可验证原则</strong>：每个回退步骤必须包含验证环节</li></ol>
+
+<h3>2.2 并行运行保障</h3>
+<p>在回退期间及过渡阶段，系统采用新旧并行运行策略：</p>
+<ul><li><strong>SaaS企微</strong>：继续作为主要沟通工具，确保即时通讯不中断</li><li><strong>智能门户/低码平台</strong>：与老OA系统并行运行，逐步迁移业务</li><li><strong>切换规则</strong>：明确各系统间的切换条件和回退路径</li></ul>
+
+<h2>3. 回退触发条件</h2>
+
+<h3>3.1 分级回退标准</h3>
+
+<h4>3.1.1 P0级紧急回退（立即执行）</h4>
+<p><strong>触发条件</strong>：</p>
+<ul><li>系统完全不可用，影响超过50%用户</li><li>核心业务功能完全中断</li><li>数据安全事件（数据泄露、恶意攻击）</li><li>生产环境关键服务连续宕机超过15分钟</li></ul>
+
+<p><strong>决策权限</strong>：技术负责人可直接决策，无需审批流程</p>
+
+<h4>3.1.2 P1级计划回退（24小时内执行）</h4>
+<p><strong>触发条件</strong>：</p>
+<ul><li>系统性能严重下降（响应时间超过正常值3倍）</li><li>关键功能异常但部分用户可正常使用</li><li>数据一致性问题（非关键数据丢失或错误）</li><li>安全漏洞需紧急修复但影响范围有限</li></ul>
+
+<p><strong>决策权限</strong>：技术负责人决策，需报项目管理办公室备案</p>
+
+<h4>3.1.3 P2级降级运行（72小时内处理）</h4>
+<p><strong>触发条件</strong>：</p>
+<ul><li>非核心功能异常</li><li>性能下降但仍在可接受范围内</li><li>用户体验问题（如界面显示异常但不影响功能）</li><li>已知问题有明确修复计划</li></ul>
+
+<p><strong>决策权限</strong>：技术负责人评估，确定是否需要回退或等待修复</p>
+
+<h3>3.2 回滚规范四要素</h3>
+<ol><li><strong>回滚触发条件</strong>：明确什么情况必须回滚（如上述分级标准）</li><li><strong>决策责任人</strong>：技术负责人作为主要拍板人，重大回退需项目负责人参与</li><li><strong>执行顺序</strong>：按照系统依赖关系确定回滚顺序（元信→智能门户→七巧平台）</li><li><strong>验证确认</strong>：回滚后必须完成验证清单，确认系统恢复正常</li></ol>
+
+<h2>4. 回退组织与职责</h2>
+
+<blockquote><strong>说明</strong>：本系统详细的应急响应组织架构、角色职责、系统设备信息和应急处理步骤已在《国元元信_应急响应实施操作手册》（文档编号 GYZQ-DLY-T-02，审核人丁小建）中完整定义，以下仅列出核心角色，详细内容请直接参阅该手册。该手册已作为交付件提交客户。</blockquote>
+
+<h3>4.1 回退决策团队</h3>
+<table><thead><tr><th>角色</th><th>职责</th><th>负责人</th></tr></thead><tbody><tr><td><strong>总决策人</strong></td><td>负责回退决策的最终审批</td><td>何金钟</td></tr><tr><td><strong>技术负责人</strong></td><td>负责技术方案的制定与执行指导</td><td>赵子健</td></tr><tr><td><strong>业务负责人</strong></td><td>负责业务影响评估与用户沟通</td><td>何金钟</td></tr><tr><td><strong>运维负责人</strong></td><td>负责回退操作的具体执行</td><td>葛鹏飞 / 程文斐</td></tr></tbody></table>
+
+<h3>4.2 执行团队分工</h3>
+<p><strong>元信系统回退组</strong>：</p>
+<ul><li>负责人：程文斐 / 葛鹏飞</li><li>成员：运维工程师2人，开发工程师1人</li><li>职责：元信私有化企微系统的回退操作</li></ul>
+
+<p><strong>智能门户回退组</strong>：</p>
+<ul><li>负责人：程文斐 / 葛鹏飞</li><li>成员：运维工程师2人，前端工程师1人</li><li>职责：智能门户系统的回退操作</li></ul>
+
+<p><strong>七巧平台回退组</strong>：</p>
+<ul><li>负责人：程文斐 / 葛鹏飞</li><li>成员：运维工程师2人，平台工程师1人</li><li>职责：七巧低码平台的回退操作</li></ul>
+
+<p><strong>数据保障组</strong>：</p>
+<ul><li>负责人：赵子健</li><li>成员：数据库管理员2人，备份工程师1人</li><li>职责：数据备份、恢复与校验</li></ul>
+
+<h3>4.3 沟通机制</h3>
+<p><strong>沟通渠道</strong>：</p>
+<ul><li>紧急情况：电话群组（回退决策群）</li><li>日常沟通：企业微信专用群</li><li>会议机制：每日回退准备会议（如适用）</li></ul>
+
+<p><strong>汇报机制</strong>：</p>
+<ul><li>回退操作开始前：通知所有相关方</li><li>回退过程中：每15分钟汇报进展</li><li>回退完成后：提交回退报告</li></ul>
+
+<h2>5. 元信（私有化企微）回退方案</h2>
+
+<h3>5.1 回退准备</h3>
+<p><strong>前置条件</strong>：</p>
+<ol><li>确认SaaS企微服务正常可用</li><li>完成元信系统完整数据备份</li><li>准备回退操作手册和验证清单</li><li>通知相关用户回退计划</li></ol>
+
+<p><strong>备份要求</strong>：</p>
+<ul><li>数据库全量备份（MySQL）</li><li>配置文件备份</li><li>用户数据与会话记录备份</li><li>备份保留周期：30天</li></ul>
+
+<h3>5.2 回退步骤</h3>
+<ol><li><strong>停止服务</strong>（5分钟）<br>- 停止元信所有服务进程<br>- 确认服务完全停止</li></ol>
+
+<ol><li><strong>数据备份</strong>（10分钟）<br>- 执行数据库最终备份<br>- 备份配置文件和日志<br>- 验证备份完整性</li></ol>
+
+<ol><li><strong>切换DNS</strong>（5分钟）<br>- 将域名指向SaaS企微服务<br>- 验证DNS解析生效</li></ol>
+
+<ol><li><strong>服务验证</strong>（10分钟）<br>- 测试SaaS企微登录<br>- 验证消息收发功能<br>- 检查通讯录同步状态</li></ol>
+
+<ol><li><strong>数据同步</strong>（如需要）<br>- 同步关键用户数据到SaaS企微<br>- 验证数据一致性</li></ol>
+
+<h3>5.3 验证清单</h3>
+<ul><li>[ ] SaaS企微登录正常</li><li>[ ] 消息收发功能正常</li><li>[ ] 通讯录数据完整</li><li>[ ] 应用可用性正常</li><li>[ ] 历史会话记录可访问</li><li>[ ] 管理后台功能正常</li></ul>
+
+<h2>6. 智能门户回退方案</h2>
+
+<h3>6.1 回退准备</h3>
+<p><strong>前置条件</strong>：</p>
+<ol><li>确认老OA系统可用</li><li>完成智能门户数据备份</li><li>准备回退操作手册</li><li>通知业务部门回退计划</li></ol>
+
+<p><strong>备份要求</strong>：</p>
+<ul><li>应用配置备份</li><li>用户权限配置备份</li><li>门户页面配置备份</li><li>备份保留周期：30天</li></ul>
+
+<h3>6.2 回退步骤</h3>
+<ol><li><strong>停止门户服务</strong>（5分钟）<br>- 停止智能门户所有服务<br>- 确认服务完全停止</li></ol>
+
+<ol><li><strong>数据备份</strong>（10分钟）<br>- 备份应用配置数据<br>- 备份用户权限数据<br>- 验证备份完整性</li></ol>
+
+<ol><li><strong>切换访问入口</strong>（5分钟）<br>- 将用户访问重定向到老OA系统<br>- 验证重定向生效</li></ol>
+
+<ol><li><strong>服务验证</strong>（10分钟）<br>- 测试老OA系统登录<br>- 验证核心业务功能<br>- 检查数据同步状态</li></ol>
+
+<h3>6.3 验证清单</h3>
+<ul><li>[ ] 老OA系统登录正常</li><li>[ ] 核心业务流程可正常操作</li><li>[ ] 用户权限配置正确</li><li>[ ] 数据同步状态正常</li><li>[ ] 报表功能可用</li><li>[ ] 移动端访问正常</li></ul>
+
+<h2>7. 七巧低码平台回退方案</h2>
+
+<h3>7.1 回退准备</h3>
+<p><strong>前置条件</strong>：</p>
+<ol><li>确认备用低码平台或传统开发环境可用</li><li>完成平台数据备份</li><li>准备应用迁移方案</li><li>通知开发团队回退计划</li></ol>
+
+<p><strong>备份要求</strong>：</p>
+<ul><li>应用源码备份</li><li>数据库结构备份</li><li>平台配置备份</li><li>备份保留周期：90天</li></ul>
+
+<h3>7.2 回退步骤</h3>
+<ol><li><strong>停止平台服务</strong>（5分钟）<br>- 停止七巧低码平台所有服务<br>- 确认服务完全停止</li></ol>
+
+<ol><li><strong>数据备份</strong>（15分钟）<br>- 备份应用源码和配置<br>- 备份数据库结构和数据<br>- 验证备份完整性</li></ol>
+
+<ol><li><strong>应用迁移</strong>（按需）<br>- 将关键应用迁移到备用平台<br>- 验证应用功能<br>- 更新应用访问地址</li></ol>
+
+<ol><li><strong>服务验证</strong>（10分钟）<br>- 测试备用平台访问<br>- 验证应用功能正常<br>- 检查数据一致性</li></ol>
+
+<h3>7.3 验证清单</h3>
+<ul><li>[ ] 备用平台访问正常</li><li>[ ] 迁移应用功能正常</li><li>[ ] 数据一致性验证通过</li><li>[ ] 开发环境可用</li><li>[ ] 应用部署功能正常</li><li>[ ] 监控告警正常</li></ul>
+
+<h2>8. 数据备份与恢复方案</h2>
+
+<h3>8.1 备份策略</h3>
+
+<h4>8.1.1 备份频率</h4>
+<table><thead><tr><th>系统</th><th>全量备份</th><th>增量备份</th><th>日志备份</th></tr></thead><tbody><tr><td>元信</td><td>每日2次</td><td>每小时</td><td>实时</td></tr><tr><td>智能门户</td><td>每日1次</td><td>每4小时</td><td>每小时</td></tr><tr><td>七巧平台</td><td>每日1次</td><td>每6小时</td><td>每2小时</td></tr></tbody></table>
+
+<h4>8.1.2 备份保留周期</h4>
+<ul><li><strong>全量备份</strong>：保留30天</li><li><strong>增量备份</strong>：保留7天</li><li><strong>日志备份</strong>：保留14天</li><li><strong>特殊备份</strong>：重大操作前备份保留90天</li></ul>
+
+<h4>8.1.3 RTO/RPO要求</h4>
+<ul><li><strong>RTO（恢复时间目标）</strong>：30分钟内恢复服务</li><li><strong>RPO（恢复点目标）</strong>：零数据丢失（实时同步）</li></ul>
+
+<h3>8.2 恢复步骤</h3>
+<ol><li><strong>评估损失</strong>（5分钟）<br>- 确定数据丢失范围和时间点<br>- 选择正确的备份集</li></ol>
+
+<ol><li><strong>停止相关服务</strong>（5分钟）<br>- 停止受影响的服务<br>- 防止数据进一步损坏</li></ol>
+
+<ol><li><strong>数据恢复</strong>（15分钟）<br>- 恢复数据库备份<br>- 恢复配置文件<br>- 恢复应用数据</li></ol>
+
+<ol><li><strong>数据校验</strong>（5分钟）<br>- 验证数据完整性<br>- 检查数据一致性<br>- 确认业务数据正确</li></ol>
+
+<h3>8.3 数据校验标准</h3>
+<ul><li><strong>完整性校验</strong>：所有备份文件必须通过MD5/SHA256校验</li><li><strong>一致性校验</strong>：数据库备份必须通过一致性检查</li><li><strong>可恢复性校验</strong>：定期执行恢复演练，验证备份可用性</li><li><strong>业务校验</strong>：关键业务数据必须人工抽样验证</li></ul>
+
+<h2>9. 回退通知流程</h2>
+
+<h3>9.1 内部通知</h3>
+<p><strong>通知对象</strong>：</p>
+<ul><li>项目管理团队</li><li>技术团队</li><li>业务部门负责人</li><li>客户服务团队</li></ul>
+
+<p><strong>通知内容</strong>：</p>
+<ol><li>回退原因和影响范围</li><li>回退计划时间表</li><li>预计恢复时间</li><li>需要配合的事项</li></ol>
+
+<p><strong>通知方式</strong>：</p>
+<ul><li>紧急情况：电话 + 企业微信</li><li>一般情况：企业微信 + 邮件</li><li>会议通知：提前1小时召开紧急会议</li></ul>
+
+<h3>9.2 用户通知模板</h3>
+<p><strong>回退前通知</strong>：</p>
+<pre><code class="language-">
+【国元证券智能门户】系统维护通知
+尊敬的用户：
+为确保系统稳定运行，我们将于[时间]进行系统维护，预计维护时间[时长]。维护期间，[系统名称]将暂停服务，请使用[备用方案]。
+给您带来不便，敬请谅解。
+技术支持：[联系方式]
+</code></pre>
+
+<p><strong>回退后通知</strong>：</p>
+<pre><code class="language-">
+【国元证券智能门户】系统恢复通知
+尊敬的用户：
+系统维护已完成，[系统名称]已恢复正常运行。感谢您的理解与支持。
+如遇问题，请联系技术支持：[联系方式]
+</code></pre>
+
+<h2>10. 回退后验证清单</h2>
+
+<h3>10.1 功能验证</h3>
+<p><strong>基础功能</strong>：</p>
+<ul><li>[ ] 用户登录/登出正常</li><li>[ ] 核心业务流程可正常操作</li><li>[ ] 数据查询和展示正常</li><li>[ ] 报表生成功能正常</li><li>[ ] 移动端访问正常</li></ul>
+
+<p><strong>高级功能</strong>：</p>
+<ul><li>[ ] 消息通知功能正常</li><li>[ ] 文件上传下载正常</li><li>[ ] 第三方应用集成正常</li><li>[ ] 审批流程功能正常</li><li>[ ] 数据分析功能正常</li></ul>
+
+<h3>10.2 数据验证</h3>
+<p><strong>数据完整性</strong>：</p>
+<ul><li>[ ] 用户数据完整无丢失</li><li>[ ] 业务数据完整无丢失</li><li>[ ] 配置数据完整无丢失</li><li>[ ] 日志数据完整无丢失</li></ul>
+
+<p><strong>数据一致性</strong>：</p>
+<ul><li>[ ] 数据库主从同步正常</li><li>[ ] 缓存与数据库数据一致</li><li>[ ] 文件存储与数据库记录一致</li><li>[ ] 跨系统数据同步正常</li></ul>
+
+<h3>10.3 性能验证</h3>
+<p><strong>响应时间</strong>：</p>
+<ul><li>[ ] 页面加载时间 ≤ 3秒</li><li>[ ] API响应时间 ≤ 1秒</li><li>[ ] 数据库查询时间 ≤ 0.5秒</li><li>[ ] 文件上传下载速度正常</li></ul>
+
+<p><strong>资源使用</strong>：</p>
+<ul><li>[ ] CPU使用率 ≤ 80%</li><li>[ ] 内存使用率 ≤ 85%</li><li>[ ] 磁盘空间充足</li><li>[ ] 网络带宽正常</li></ul>
+
+<p><strong>并发能力</strong>：</p>
+<ul><li>[ ] 支持1000用户同时在线</li><li>[ ] 支持100用户并发操作</li><li>[ ] 系统稳定性测试通过</li><li>[ ] 压力测试通过</li></ul>
+
+<h2>11. 并行运行期间切换策略</h2>
+
+<h3>11.1 SaaS企微与元信切换规则</h3>
+<p><strong>切换条件</strong>：</p>
+<ol><li><strong>功能完整性</strong>：元信功能覆盖率达到SaaS企微的95%以上</li><li><strong>稳定性</strong>：元信系统连续运行7天无重大故障</li><li><strong>用户接受度</strong>：80%用户完成培训并接受新系统</li><li><strong>业务连续性</strong>：关键业务流程在新系统中完全可执行</li></ol>
+
+<p><strong>切换策略</strong>：</p>
+<ul><li><strong>阶段一</strong>：双系统并行，用户自由选择（1-2周）</li><li><strong>阶段二</strong>：主要业务迁移，保留SaaS企微作为备用（2-4周）</li><li><strong>阶段三</strong>：完全切换，SaaS企微仅作为应急备用</li></ul>
+
+<p><strong>回退条件</strong>：</p>
+<ul><li>元信系统出现P0级故障</li><li>用户投诉率超过20%</li><li>关键业务功能不可用</li><li>数据安全事件发生</li></ul>
+
+<h3>11.2 老OA与智能门户并行规则</h3>
+<p><strong>并行期间</strong>：</p>
+<ul><li>业务流程双轨运行，数据双向同步</li><li>用户可自由选择使用老OA或智能门户</li><li>新业务优先在智能门户创建</li></ul>
+
+<p><strong>切换时间表</strong>：</p>
+<ol><li><strong>第一阶段</strong>（1-2周）：新业务在智能门户创建，老OA只读</li><li><strong>第二阶段</strong>（2-4周）：主要业务迁移，老OA保留查询功能</li><li><strong>第三阶段</strong>（4-8周）：完全切换，老OA仅作历史数据查询</li></ol>
+
+<p><strong>回退机制</strong>：</p>
+<ul><li>智能门户出现故障时，业务自动回退到老OA</li><li>数据同步失败时，以老OA数据为准</li><li>用户反馈问题时，提供老OA临时访问权限</li></ul>
+
+<h2>12. 附录</h2>
+
+<h3>12.1 回退操作Checklist</h3>
+<p><strong>回退前检查</strong>：</p>
+<ul><li>[ ] 确认回退触发条件满足</li><li>[ ] 获得回退决策人批准</li><li>[ ] 通知所有相关方</li><li>[ ] 准备回退操作手册</li><li>[ ] 完成数据备份</li><li>[ ] 确认备用系统可用</li></ul>
+
+<p><strong>回退中检查</strong>：</p>
+<ul><li>[ ] 按步骤执行回退操作</li><li>[ ] 每步骤完成后验证结果</li><li>[ ] 记录操作日志</li><li>[ ] 定期汇报进展</li></ul>
+
+<p><strong>回退后检查</strong>：</p>
+<ul><li>[ ] 完成验证清单</li><li>[ ] 确认系统恢复正常</li><li>[ ] 通知用户系统已恢复</li><li>[ ] 提交回退报告</li><li>[ ] 召开回退总结会议</li></ul>
+
+<h3>12.2 联系人列表</h3>
+
+<blockquote>完整联系人名单（含应急总指挥、技术负责人、系统管理员、数据库管理员、网络安全管理员、应用负责人、业务联系人等7个岗位的姓名和电话）详见《国元元信_应急响应实施操作手册》第2章"应急执行小组成员"。以下仅列出关键回退角色：</blockquote>
+
+<p><strong>回退决策团队</strong>：</p>
+<ul><li>总决策人：何金钟 - 电话：[待填写]</li><li>技术负责人：赵子健 - 电话：13780590178</li><li>业务负责人：何金钟 - 电话：[待填写]</li><li>运维负责人：葛鹏飞 / 程文斐 - 电话：0551-62207154 / 0551-62201332</li></ul>
+
+<p><strong>技术执行团队</strong>：详见《国元元信_应急响应实施操作手册》第2章</p>
+
+<p><strong>外部支持</strong>：详见《国元元信_应急响应实施操作手册》第3章"系统设备信息"</p>
+
+<h3>12.3 附录表格</h3>
+<p><strong>回退时间记录表</strong>：</p>
+<table><thead><tr><th>时间点</th><th>操作内容</th><th>执行人</th><th>验证结果</th><th>备注</th></tr></thead><tbody><tr><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td></tr></tbody></table>
+
+<p><strong>数据备份记录表</strong>：</p>
+<table><thead><tr><th>备份时间</th><th>备份类型</th><th>备份大小</th><th>保留周期</th><th>验证状态</th></tr></thead><tbody><tr><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td></tr></tbody></table>
+
+<p><strong>回退验证记录表</strong>：</p>
+<table><thead><tr><th>验证项目</th><th>验证标准</th><th>实际结果</th><th>验证人</th><th>备注</th></tr></thead><tbody><tr><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td><td>[待填写]</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档版本</strong>：V1.0  </p>
+<p><strong>编制日期</strong>：2026年7月3日  </p>
+<p><strong>编制人员</strong>：王昭  </p>
+<p><strong>审核人员</strong>：丁小建  </p>
+<p><strong>批准人员</strong>：何金钟  </p>
+
+<p><strong>更新记录</strong>：</p>
+<table><thead><tr><th>版本</th><th>日期</th><th>修改内容</th><th>修改人</th></tr></thead><tbody><tr><td>V1.0</td><td>2026-07-03</td><td>初始版本</td><td>王昭</td></tr></tbody></table>
+
+</body>
+</html>

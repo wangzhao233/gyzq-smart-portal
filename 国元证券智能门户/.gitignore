@@ -1,0 +1,19 @@
+# Node dependencies
+node_modules/
+package-lock.json
+
+# Hermes & WorkBuddy internal files
+.hermes.md
+.workbuddy/
+
+# Playwright MCP logs (temporary)
+.playwright-mcp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~

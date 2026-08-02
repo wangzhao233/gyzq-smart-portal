@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D1_元信智能门户使用指南</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>元信 &amp; 智能门户使用指南</h1>
+
+<p><strong>文档编号</strong>：D1  </p>
+<p><strong>编制人员</strong>：王昭  </p>
+<p><strong>编制日期</strong>：2026年7月3日  </p>
+<p><strong>适用版本</strong>：V1.0  </p>
+
+<hr>
+
+<h2>1. 文档说明</h2>
+
+<h3>1.1 适用范围</h3>
+
+<p>本指南适用于国元证券股份有限公司全体员工，用于指导您如何使用元信客户端、智能门户及七巧低码平台完成日常工作。</p>
+
+<p>本指南涵盖以下内容：</p>
+
+<ul><li>元信客户端的下载、安装与登录</li><li>智能门户首页各功能模块的使用方法</li><li>消息中心、新闻公告、待办中心、日程中心的操作说明</li><li>个人设置与常见问题解答</li></ul>
+
+<h3>1.2 读者对象</h3>
+
+<p>本指南面向以下人员：</p>
+
+<table><thead><tr><th>读者类型</th><th>说明</th></tr></thead><tbody><tr><td>普通员工</td><td>日常使用门户查阅公告、处理待办、查看日程等</td></tr><tr><td>部门管理员</td><td>除日常功能外，还负责部门级别的信息管理</td></tr><tr><td>全体用户</td><td>需要首次登录并完成初始设置的所有人员</td></tr></tbody></table>
+
+<h3>1.3 术语说明</h3>
+
+<table><thead><tr><th>术语</th><th>说明</th></tr></thead><tbody><tr><td>元信</td><td>国元证券私有化部署的企业即时通讯工具，基于企业微信定制开发</td></tr><tr><td>智能门户</td><td>国元证券内部办公门户平台，集成公告、待办、日程等功能</td></tr><tr><td>七巧低码</td><td>低代码开发平台，支持快速搭建业务应用</td></tr><tr><td>SSO</td><td>单点登录（Single Sign-On），使用一套账号密码即可访问多个系统</td></tr><tr><td>工作台</td><td>元信客户端内的应用入口页面，可在此访问门户和七巧</td></tr><tr><td>消息中心</td><td>门户内的统一消息管理模块，汇总各类通知消息</td></tr><tr><td>HR系统</td><td>人力资源管理系统，负责组织架构和人员信息的维护</td></tr></tbody></table>
+
+<hr>
+
+<h2>2. 系统概述</h2>
+
+<h3>2.1 元信简介</h3>
+
+<p>元信是国元证券私有化部署的企业即时通讯工具，您可以通过它进行同事间沟通、接收工作通知、访问内部应用。</p>
+
+<p><strong>主要功能</strong>：</p>
+
+<ul><li><strong>即时通讯</strong>：与同事进行文字、语音、视频沟通</li><li><strong>工作台</strong>：集中访问门户、七巧等内部应用</li><li><strong>消息通知</strong>：接收来自各业务系统的推送通知</li><li><strong>通讯录</strong>：查看公司组织架构和同事联系方式</li></ul>
+
+<h3>2.2 智能门户简介</h3>
+
+<p>智能门户是国元证券的内部办公平台，您可以通过它完成日常办公的大部分操作。</p>
+
+<p><strong>主要功能</strong>：</p>
+
+<ul><li><strong>新闻公告</strong>：查看公司发布的各类通知和公告</li><li><strong>待办中心</strong>：集中查看和处理各类待办事项</li><li><strong>日程中心</strong>：管理个人日程和会议安排</li><li><strong>消息中心</strong>：查看系统推送的各类消息通知</li></ul>
+
+<h3>2.3 七巧低码简介</h3>
+
+<p>七巧低码是低代码开发平台，支持快速搭建业务应用，无需编写代码即可完成表单、流程、报表等功能的配置。</p>
+
+<p><strong>主要功能</strong>：</p>
+
+<ul><li><strong>表单设计</strong>：通过拖拽方式快速创建业务表单</li><li><strong>流程配置</strong>：可视化配置审批流程</li><li><strong>报表生成</strong>：自动生成数据统计报表</li><li><strong>应用搭建</strong>：快速构建完整的业务应用</li></ul>
+
+<h3>2.4 系统架构说明</h3>
+
+<p>三个系统之间的关系如下：</p>
+
+<pre><code class="language-">
+HR系统 → 智能门户 → 元信
+</code></pre>
+
+<p>人员信息的同步方向为：HR系统每天晚上12点将最新组织架构和人员信息同步到门户，门户再同步到元信。</p>
+
+<hr>
+
+<h2>3. 首次登录</h2>
+
+<h3>3.1 登录方式说明</h3>
+
+<p>国元证券智能门户采用SSO单点登录方式，您使用原有的SSO账号密码即可登录，无需重新注册。</p>
+
+<p><strong>登录信息</strong>：</p>
+
+<table><thead><tr><th>项目</th><th>说明</th></tr></thead><tbody><tr><td>账号</td><td>您的工号或SSO账号</td></tr><tr><td>密码</td><td>您的SSO密码</td></tr><tr><td>登录入口</td><td>门户和七巧都在企微工作台上通过统一认证直接使用</td></tr></tbody></table>
+
+<h3>3.2 元信客户端下载与安装</h3>
+
+<h4>3.2.1 下载客户端</h4>
+
+<p>元信客户端支持多种平台，请根据您的设备类型选择对应的下载方式。</p>
+
+<p><strong>📱 移动端下载</strong></p>
+
+<table><thead><tr><th>平台</th><th>下载方式</th><th>说明</th></tr></thead><tbody><tr><td><strong>鸿蒙端</strong></td><td>华为应用市场搜索"国元元信"（正式版链接待发布后更新）</td><td>纯血鸿蒙设备</td></tr><tr><td><strong>安卓端</strong></td><td>访问内部下载页面：<a href="https://mc.oa.gyzq.com/">https://mc.oa.gyzq.com/</a></td><td>获取最新安装包</td></tr></tbody></table>
+
+<blockquote><strong>说明</strong>：各平台正式版安装包下载链接待发布后更新，当前可先通过内部下载页面获取测试版本。</blockquote>
+
+<p><strong>💻 桌面端下载</strong></p>
+
+<table><thead><tr><th>平台</th><th>下载方式</th><th>适用系统</th></tr></thead><tbody><tr><td><strong>Windows 32位</strong></td><td>访问内部下载页面：<a href="https://mc.oa.gyzq.com/">https://mc.oa.gyzq.com/</a></td><td>Windows 7/10/11 32位</td></tr><tr><td><strong>Windows 64位</strong></td><td>同上</td><td>Windows 7/10/11 64位</td></tr><tr><td><strong>Mac Intel芯片</strong></td><td>同上</td><td>Intel芯片Mac</td></tr><tr><td><strong>Mac Apple芯片</strong></td><td>同上</td><td>Apple Silicon（M1/M2/M3/M4）</td></tr><tr><td><strong>Linux X86架构</strong></td><td>同上</td><td>银河麒麟、统信UOS等</td></tr><tr><td><strong>Linux ARM架构</strong></td><td>同上</td><td>ARM架构Linux系统</td></tr><tr><td><strong>Linux龙芯架构</strong></td><td>同上</td><td>龙芯架构Linux系统</td></tr></tbody></table>
+
+<blockquote><strong>提示</strong>：各平台正式版安装包下载链接待发布后补充至本文档，届时将以表格形式列出各平台直链。</blockquote>
+
+<h4>3.2.2 安装客户端</h4>
+
+<p><strong>Windows系统安装步骤</strong>：</p>
+
+<ol><li>双击下载的安装包文件（<code>.exe</code>格式）</li><li>在弹出的安全提示中点击"是"</li><li>选择安装路径，建议使用默认路径</li><li>点击"安装"，等待安装完成</li><li>点击"完成"，启动元信客户端</li></ol>
+
+<p><strong>Mac系统安装步骤</strong>：</p>
+
+<ol><li>双击下载的<code>.dmg</code>文件</li><li>将元信图标拖拽到"应用程序"文件夹</li><li>在"应用程序"中找到并双击元信图标启动</li><li>如遇安全提示，前往"系统设置→隐私与安全性"允许运行</li></ol>
+
+<p><strong>Linux系统安装步骤</strong>：</p>
+
+<p>根据您的Linux发行版选择对应安装包格式：</p>
+<ul><li><strong>Debian/Ubuntu/统信UOS</strong>：双击<code>.deb</code>包安装，或使用命令 <code>sudo dpkg -i 包名.deb</code></li><li><strong>Red Hat/CentOS/银河麒麟</strong>：使用命令 <code>sudo rpm -ivh 包名.rpm</code></li><li><strong>通用格式</strong>：下载<code>.AppImage</code>文件，赋予执行权限后双击运行</li></ul>
+
+<h4>3.2.3 移动端安装</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li><strong>鸿蒙端</strong>：打开纯血鸿蒙手机浏览器，访问 <code>https://appgallery.huawei.com/app/detail?id=com.gyzq.wecom.hmos</code>，跳转至华为应用市场下载安装</li><li><strong>安卓端</strong>：打开手机浏览器访问内部下载页面 <code>https://mc.oa.gyzq.com/</code>，下载APK安装包后点击安装</li><li>首次打开时允许必要的权限（通知、网络等）</li></ol>
+
+<h3>3.3 首次登录流程</h3>
+
+<h4>3.3.1 移动端登录流程</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>打开元信客户端App</li><li>在登录页面输入组织机构域：<strong>000728</strong></li><li>点击"开始使用"</li><li>选择"账号密码登录"</li><li>输入您的账号和密码（账号密码需找企微平台管理员获取）</li><li>点击"登录"按钮</li><li>系统验证通过后，进入元信主界面</li><li>首次登录会提示您完善个人信息（如头像、手机号等），请根据提示完成设置</li></ol>
+
+<h4>3.3.2 PC端登录流程</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>打开元信PC客户端</li><li>在登录界面点击右上角的齿轮按钮进入设置界面</li><li>设置服务器：选择"手动设置"</li><li>输入内网服务器地址：<strong>mc.oa.gyzq.com</strong>，端口：<strong>443</strong></li><li>确认设置后返回登录页面</li><li>输入您的账号和密码（账号密码需找企微平台管理员获取）</li><li>点击"登录"按钮</li><li>系统验证通过后，进入元信主界面</li></ol>
+
+<h4>3.3.3 PC端快捷入口</h4>
+
+<p>登录PC端元信后，您可以通过以下方式访问管理后台：</p>
+
+<ol><li>点击PC端左上角的任务头像</li><li>选择"快捷入口"</li><li>点击"登录管理台"</li></ol>
+
+<h4>3.3.4 注意事项</h4>
+
+<ul><li>如果忘记密码，请联系IT服务台重置</li><li>首次登录后建议立即修改初始密码</li><li>如遇登录异常，请检查网络连接或联系技术支持</li></ul>
+
+<h3>3.5 访问智能门户和七巧</h3>
+
+<p>登录元信后，您可以通过工作台访问智能门户和七巧低码平台。系统采用前端H5单点登录方式，实现无缝认证。</p>
+
+<h4>3.5.1 单点登录说明</h4>
+
+<table><thead><tr><th>平台</th><th>登录方式</th><th>说明</th></tr></thead><tbody><tr><td>移动端</td><td>通过企微工作台应用入口</td><td>自动携带code参数，无需手动输入凭证</td></tr><tr><td>PC端</td><td>通过企微工作台应用入口</td><td>自动跳转并完成认证</td></tr></tbody></table>
+
+<h4>3.5.2 操作步骤</h4>
+
+<p><strong>移动端访问</strong>：</p>
+
+<ol><li>在元信移动端底部导航栏点击"工作台"</li><li>在工作台页面找到"智能门户"或"七巧低码"图标</li><li>点击图标，系统将自动完成单点登录并跳转到对应应用</li><li>无需再次输入账号密码</li></ol>
+
+<p><strong>PC端访问</strong>：</p>
+
+<ol><li>在元信PC端底部导航栏点击"工作台"</li><li>在工作台页面找到"智能门户"或"七巧低码"图标</li><li>点击图标，系统将自动跳转并完成单点登录</li><li>无需再次输入账号密码</li></ol>
+
+<h3>3.6 Web浏览器访问方式</h3>
+
+<p>除了通过元信客户端访问智能门户外，您还可以直接通过Web浏览器访问。</p>
+
+<h4>3.6.1 访问地址</h4>
+
+<p>智能门户Web访问地址：https://portal.oa.gyzq.com/</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>打开浏览器（推荐使用Chrome、Edge等现代浏览器）</li><li>在地址栏输入智能门户访问地址</li><li>系统将跳转至SSO登录页面</li><li>输入您的工号和SSO密码</li><li>点击"登录"按钮，即可进入智能门户</li></ol>
+
+<h4>3.6.2 忘记密码功能</h4>
+
+<p>如果忘记密码，可通过以下方式重置：</p>
+
+<ol><li>在登录页面点击"忘记密码"链接</li><li>输入您的手机号码</li><li>点击"获取验证码"按钮</li><li>输入收到的短信验证码</li><li>设置新密码并确认</li><li>点击"确定"按钮，密码重置成功</li></ol>
+
+<p><strong>注意事项</strong>：</p>
+<ul><li>手机号需为HR系统中登记的手机号码</li><li>验证码有效期为5分钟</li><li>新密码需满足密码复杂度要求</li></ul>
+
+<h4>3.6.3 修改密码功能</h4>
+
+<p>登录后可通过以下方式修改密码：</p>
+
+<ol><li>在门户顶部导航栏点击您的头像</li><li>选择"个人设置"</li><li>在"账号安全"或"密码管理"中点击"修改密码"</li><li>输入当前密码（验证身份）</li><li>输入新密码并确认</li><li>点击"保存"按钮</li></ol>
+
+<hr>
+
+<h2>4. 门户首页功能导航</h2>
+
+<h3>4.1 首页布局说明</h3>
+
+<p>智能门户首页采用模块化布局，主要分为以下区域：</p>
+
+<table><thead><tr><th>区域</th><th>位置</th><th>功能说明</th></tr></thead><tbody><tr><td>顶部导航栏</td><td>页面最上方</td><td>显示用户信息、消息通知、个人设置入口</td></tr><tr><td>功能入口区</td><td>首页中部</td><td>提供各功能模块的快捷入口</td></tr><tr><td>新闻公告区</td><td>首页左侧或中部</td><td>展示最新发布的新闻和公告</td></tr><tr><td>待办提醒区</td><td>首页右侧</td><td>显示待办事项</td></tr><tr><td>日程提醒区</td><td>首页右侧</td><td>显示今日和近期的日程安排</td></tr></tbody></table>
+
+<h3>4.2 各功能模块入口</h3>
+
+<table><thead><tr><th>模块名称</th><th>入口位置</th><th>功能说明</th></tr></thead><tbody><tr><td>消息中心</td><td>顶部导航栏/功能区</td><td>查看所有系统消息和通知</td></tr><tr><td>新闻公告</td><td>功能入口区</td><td>查看公司发布的新闻和公告</td></tr><tr><td>待办中心</td><td>功能入口区</td><td>查看和处理待办事项</td></tr><tr><td>日程中心</td><td>功能入口区</td><td>管理个人日程和会议</td></tr><tr><td>个人设置</td><td>顶部导航栏用户头像</td><td>修改个人信息、密码、通知设置</td></tr></tbody></table>
+
+<h3>4.3 快速访问功能</h3>
+
+<p><strong>常用功能快捷方式</strong>：</p>
+
+<ol><li><strong>消息图标</strong>：位于顶部导航栏右侧，显示未读消息数量，点击进入消息中心</li><li><strong>待办提醒</strong>：首页右侧的待办卡片，显示待办数量，点击可直接进入待办中心</li><li><strong>日程卡片</strong>：首页右侧的日程卡片，显示今日日程，点击可查看详情</li></ol>
+
+<h3>4.4 工作台组件自定义操作</h3>
+
+<p>智能门户支持对首页工作台组件进行个性化配置，满足不同用户的使用习惯。</p>
+
+<p><strong>适用平台</strong>：移动端、PC端均支持自定义操作。</p>
+
+<p><strong>自定义操作说明</strong>：</p>
+
+<table><thead><tr><th>操作</th><th>说明</th><th>操作方式</th></tr></thead><tbody><tr><td>自由排序</td><td>调整各功能模块在首页的显示顺序</td><td>长按或拖拽组件标题栏进行排序</td></tr><tr><td>隐藏/显示</td><td>隐藏不常用的模块，显示常用模块</td><td>点击组件右上角设置图标，选择隐藏或显示</td></tr><tr><td>调整大小</td><td>调整组件在首页的显示大小</td><td>拖拽组件边缘调整尺寸（PC端支持）</td></tr></tbody></table>
+
+<p><strong>多工作台切换</strong>：</p>
+
+<p>如果您的账号被分配了多个工作台（如部门工作台、项目工作台等），可以通过以下方式切换：</p>
+
+<ol><li>在门户首页顶部或侧边栏找到工作台切换入口</li><li>点击工作台名称，展开工作台列表</li><li>选择需要切换的工作台，页面将自动刷新显示对应内容</li></ol>
+
+<hr>
+
+<h2>5. 消息中心使用</h2>
+
+<h3>5.1 消息中心概述</h3>
+
+<p>消息中心是您接收各类系统通知的统一入口，支持以下双通道推送：</p>
+
+<table><thead><tr><th>推送通道</th><th>说明</th></tr></thead><tbody><tr><td>门户（PORTAL）</td><td>通过智能门户内部推送，登录门户后可查看</td></tr><tr><td>企微（QW）</td><td>通过元信客户端推送，可实时接收通知</td></tr></tbody></table>
+
+<p><strong>特别说明</strong>：消息中心不提供已读追踪功能，即系统不会记录您是否已阅读某条消息。</p>
+
+<h3>5.2 查看消息</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在门户首页点击"消息中心"入口，或点击顶部导航栏的消息图标</li><li>进入消息列表页面，消息按时间倒序排列</li><li>点击任意消息可查看详情内容</li><li>未读消息会以蓝色圆点或加粗字体标识</li></ol>
+
+<h3>5.3 消息分类</h3>
+
+<p>消息中心的消息按类型分为以下几类：</p>
+
+<table><thead><tr><th>消息类型</th><th>图标</th><th>说明</th></tr></thead><tbody><tr><td>系统通知</td><td>🔔</td><td>系统维护、功能更新等通知</td></tr><tr><td>待办提醒</td><td>✅</td><td>待办事项的提醒通知</td></tr><tr><td>公告通知</td><td>📢</td><td>新发布的公告提醒</td></tr><tr><td>日程提醒</td><td>📅</td><td>即将开始的日程提醒</td></tr><tr><td>审批通知</td><td>📋</td><td>审批流程相关的通知</td></tr></tbody></table>
+
+<h3>5.4 消息筛选与搜索</h3>
+
+<p><strong>按类型筛选</strong>：</p>
+
+<ol><li>在消息中心页面顶部，找到筛选栏</li><li>点击消息类型标签（如"系统通知""待办提醒"等）</li><li>列表将只显示对应类型的消息</li></ol>
+
+<p><strong>搜索消息</strong>：</p>
+
+<ol><li>在消息中心页面顶部的搜索框中输入关键词</li><li>按回车键或点击搜索按钮</li><li>系统将显示包含关键词的消息列表</li></ol>
+
+<h3>5.5 消息管理</h3>
+
+<p><strong>批量操作</strong>：</p>
+
+<ol><li>勾选需要操作的消息（支持多选）</li><li>点击"全部已读"按钮，将选中消息标记为已读状态</li><li>点击"删除"按钮，删除选中的消息</li></ol>
+
+<p><strong>单条操作</strong>：</p>
+
+<ol><li>将鼠标悬停在消息右侧</li><li>点击"已读"按钮标记为已读</li><li>点击"删除"按钮删除该消息</li></ol>
+
+<hr>
+
+<h2>6. 新闻公告</h2>
+
+<h3>6.1 查看公告</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在门户首页点击"新闻公告"入口</li><li>进入公告列表页面，公告按发布时间倒序排列</li><li>点击公告标题可查看公告详情</li><li>公告详情页包含标题、发布时间、发布部门、正文内容等信息</li></ol>
+
+<h3>6.2 公告分类</h3>
+
+<p>新闻公告按类型分为以下几类：</p>
+
+<table><thead><tr><th>公告类型</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td>公司通知</td><td>公司级重要通知</td><td>年度工作安排、放假通知</td></tr><tr><td>部门通知</td><td>部门级通知</td><td>部门会议通知、工作安排</td></tr><tr><td>人事公告</td><td>人事相关公告</td><td>人员调动、任职公告</td></tr><tr><td>行政公告</td><td>行政事务公告</td><td>办公环境变更、设施维护</td></tr><tr><td>IT公告</td><td>信息技术相关公告</td><td>系统维护通知、功能更新</td></tr></tbody></table>
+
+<h3>6.3 公告筛选</h3>
+
+<p><strong>按分类筛选</strong>：</p>
+
+<ol><li>在公告列表页面左侧或顶部找到分类标签</li><li>点击需要查看的分类（如"公司通知""人事公告"等）</li><li>列表将只显示对应分类的公告</li></ol>
+
+<p><strong>按时间筛选</strong>：</p>
+
+<ol><li>在公告列表页面找到时间筛选区域</li><li>选择时间范围（如"最近一周""最近一月"等）</li><li>列表将只显示指定时间范围内的公告</li></ol>
+
+<h3>6.4 公告搜索</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在公告列表页面顶部的搜索框中输入关键词</li><li>按回车键或点击搜索按钮</li><li>系统将显示标题或正文包含关键词的公告</li></ol>
+
+<p><strong>搜索技巧</strong>：</p>
+
+<ul><li>使用精确关键词可提高搜索准确性</li><li>可组合使用分类筛选和关键词搜索</li></ul>
+
+<hr>
+
+<h2>7. 待办中心</h2>
+
+<h3>7.1 查看待办</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在门户首页点击"待办中心"入口，或点击首页右侧的待办提醒卡片</li><li>进入待办列表页面，待办事项按紧急程度和时间排序</li><li>列表中显示待办标题、来源系统、发起时间、截止时间等信息</li><li>点击待办标题可查看待办详情</li></ol>
+
+<h3>7.2 待办状态说明</h3>
+
+<table><thead><tr><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>待办</td><td>需要您处理的待办事项</td></tr><tr><td>待阅</td><td>需要您查看的待阅事项</td></tr><tr><td>已办</td><td>已处理完成的待办事项</td></tr><tr><td>超期提醒</td><td>超过截止时间仍未处理的待办</td></tr></tbody></table>
+
+<h3>7.3 处理待办</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在待办列表中点击需要处理的待办标题</li><li>查看待办详情，了解具体要求和所需材料</li><li>根据待办类型进行相应操作：<br>- <strong>审批类待办</strong>：查看申请内容，点击"同意"或"驳回"<br>- <strong>任务类待办</strong>：完成指定任务后点击"提交"或"完成"<br>- <strong>确认类待办</strong>：确认内容后点击"已确认"</li><li>处理完成后，待办状态自动更新为"已办"</li></ol>
+
+<h3>7.4 待办筛选</h3>
+
+<p><strong>按状态筛选</strong>：</p>
+
+<ol><li>在待办列表页面顶部找到状态筛选标签</li><li>点击"待办""待阅""已办"等标签</li><li>列表将只显示对应状态的待办</li></ol>
+
+<p><strong>按来源筛选</strong>：</p>
+
+<ol><li>在待办列表页面找到来源筛选区域</li><li>选择来源系统（如"OA系统""HR系统"等）</li><li>列表将只显示来自该系统的待办</li></ol>
+
+<h3>7.5 待办提醒设置</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>进入"个人设置"页面</li><li>找到"通知设置"或"待办提醒"选项</li><li>设置提前提醒时间（如提前15分钟、1小时、1天等）</li><li>选择提醒方式（门户提醒、元信推送等）</li><li>保存设置</li></ol>
+
+<hr>
+
+<h2>8. 日程中心</h2>
+
+<h3>8.1 查看日程</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在门户首页点击"日程中心"入口</li><li>进入日程页面，默认显示今日日程</li><li>日程以时间轴形式展示，显示日程标题、时间、地点等信息</li><li>点击日程可查看详情</li></ol>
+
+<h3>8.2 日程视图切换</h3>
+
+<p>日程中心支持以下视图模式：</p>
+
+<table><thead><tr><th>视图模式</th><th>说明</th></tr></thead><tbody><tr><td>日视图</td><td>显示某一天的所有日程</td></tr><tr><td>周视图</td><td>显示一周七天的日程安排</td></tr><tr><td>月视图</td><td>显示整月的日程概览</td></tr><tr><td>列表视图</td><td>以列表形式显示所有日程</td></tr></tbody></table>
+
+<p><strong>切换视图</strong>：</p>
+
+<ol><li>在日程页面顶部找到视图切换按钮</li><li>点击"日""周""月""列表"等按钮</li><li>页面将切换到对应的视图模式</li></ol>
+
+<h3>8.3 创建日程</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在日程中心页面点击"新建日程"或"+"按钮</li><li>在弹出的日程编辑页面填写以下信息：<br>- <strong>日程标题</strong>：输入日程名称（必填）<br>- <strong>开始时间</strong>：选择日程开始的日期和时间（必填）<br>- <strong>结束时间</strong>：选择日程结束的日期和时间（必填）<br>- <strong>地点</strong>：输入日程地点（选填）<br>- <strong>描述</strong>：输入日程的详细说明（选填）<br>- <strong>提醒</strong>：设置提前提醒时间（选填）<br>- <strong>参与人</strong>：添加参与此日程的同事（选填）</li><li>点击"保存"按钮，日程创建成功</li></ol>
+
+<h3>8.4 编辑日程</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在日程页面点击需要编辑的日程</li><li>在日程详情页点击"编辑"按钮</li><li>修改日程信息（标题、时间、地点等）</li><li>点击"保存"按钮，日程更新成功</li></ol>
+
+<h3>8.5 删除日程</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在日程页面点击需要删除的日程</li><li>在日程详情页点击"删除"按钮</li><li>在确认对话框中点击"确定"</li><li>日程删除成功</li></ol>
+
+<p><strong>注意事项</strong>：</p>
+
+<ul><li>如果您是日程的创建者，可以删除该日程</li><li>如果日程有其他参与人，删除后会通知参与人</li><li>已过期的日程会自动归档，不会显示在默认视图中</li></ul>
+
+<h3>8.6 日程共享与协作</h3>
+
+<p><strong>邀请参与人</strong>：</p>
+
+<ol><li>创建或编辑日程时，在"参与人"字段输入同事姓名</li><li>从搜索结果中选择参与人</li><li>保存日程后，参与人将收到日程邀请通知</li></ol>
+
+<p><strong>查看团队日程</strong>：</p>
+
+<ol><li>在日程中心找到"团队日程"或"共享日程"入口</li><li>选择需要查看的团队或部门</li><li>系统将显示该团队成员共享的日程安排</li></ol>
+
+<hr>
+
+<h2>9. 个人设置</h2>
+
+<h3>9.1 个人信息管理</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>在门户顶部导航栏点击您的头像或用户名</li><li>在下拉菜单中选择"个人设置"或"个人信息"</li><li>在个人信息页面可以查看和修改以下信息：</li></ol>
+
+<table><thead><tr><th>信息项</th><th>是否可修改</th><th>说明</th></tr></thead><tbody><tr><td>姓名</td><td>不可修改</td><td>从HR系统同步，需联系HR修改</td></tr><tr><td>工号</td><td>不可修改</td><td>从HR系统同步</td></tr><tr><td>部门</td><td>不可修改</td><td>从HR系统同步，需联系HR修改</td></tr><tr><td>职位</td><td>不可修改</td><td>从HR系统同步</td></tr><tr><td>手机号</td><td>可修改</td><td>用于接收验证码和通知</td></tr><tr><td>邮箱</td><td>可修改</td><td>用于接收系统邮件通知</td></tr><tr><td>头像</td><td>可修改</td><td>上传个人头像照片</td></tr><tr><td>个性签名</td><td>可修改</td><td>设置个人签名信息</td></tr></tbody></table>
+
+<p><strong>修改个人信息</strong>：</p>
+
+<ol><li>点击需要修改的信息项旁边的"编辑"按钮</li><li>输入新的信息内容</li><li>点击"保存"按钮</li><li>部分信息修改需要通过手机验证码验证身份</li></ol>
+
+<h3>9.2 密码修改</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>进入"个人设置"页面</li><li>找到"账号安全"或"密码管理"选项</li><li>点击"修改密码"</li><li>输入当前密码（验证身份）</li><li>输入新密码（需满足密码复杂度要求）</li><li>再次输入新密码（确认）</li><li>点击"确定"按钮，密码修改成功</li></ol>
+
+<p><strong>密码复杂度要求</strong>：</p>
+
+<table><thead><tr><th>要求</th><th>说明</th></tr></thead><tbody><tr><td>长度</td><td>不少于8位</td></tr><tr><td>组成</td><td>至少包含大写字母、小写字母、数字、特殊字符中的三种</td></tr><tr><td>有效期</td><td>90天更换一次</td></tr><tr><td>历史记录</td><td>不能与最近5次密码相同</td></tr></tbody></table>
+
+<p><strong>注意事项</strong>：</p>
+
+<ul><li>密码修改后，所有已登录的设备需要重新登录</li><li>如忘记密码，请联系IT服务台进行密码重置</li><li>建议定期更换密码，确保账号安全</li></ul>
+
+<h3>9.3 通知设置</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>进入"个人设置"页面</li><li>找到"通知设置"选项</li><li>根据个人需求设置以下通知选项：</li></ol>
+
+<table><thead><tr><th>通知类型</th><th>设置选项</th><th>说明</th></tr></thead><tbody><tr><td>消息通知</td><td>开启/关闭</td><td>是否接收系统消息推送</td></tr><tr><td>待办提醒</td><td>开启/关闭、提醒时间</td><td>待办事项的提醒设置</td></tr><tr><td>日程提醒</td><td>开启/关闭、提醒时间</td><td>日程的提醒设置</td></tr><tr><td>公告通知</td><td>开启/关闭</td><td>新公告发布时的通知</td></tr><tr><td>推送通道</td><td>门户/元信/两者</td><td>选择接收通知的渠道</td></tr></tbody></table>
+
+<p><strong>设置提醒时间</strong>：</p>
+
+<ol><li>在对应通知类型下找到"提醒时间"选项</li><li>选择提前提醒的时间（如5分钟、15分钟、30分钟、1小时等）</li><li>点击"保存"按钮</li></ol>
+
+<h3>9.4 界面设置</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>进入"个人设置"页面</li><li>找到"界面设置"或"显示设置"选项</li><li>可以设置以下选项：</li></ol>
+
+<table><thead><tr><th>设置项</th><th>选项</th><th>说明</th></tr></thead><tbody><tr><td>主题模式</td><td>浅色/深色/跟随系统</td><td>选择界面显示主题</td></tr><tr><td>字体大小</td><td>小/中/大</td><td>调整界面字体大小</td></tr><tr><td>语言</td><td>中文/英文</td><td>选择界面显示语言</td></tr><tr><td>首页布局</td><td>自定义模块显示</td><td>选择首页显示哪些功能模块</td></tr></tbody></table>
+
+<hr>
+
+<h2>10. 常见操作FAQ</h2>
+
+<h3>10.1 登录相关</h3>
+
+<p><strong>Q1：忘记密码怎么办？</strong></p>
+
+<p>A：请联系IT服务台（程文斐：0551-62201332 / 葛鹏飞：0551-62207154）进行密码重置。重置后会发送临时密码到您的手机或邮箱。</p>
+
+<p><strong>Q2：登录时提示"账号或密码错误"？</strong></p>
+
+<p>A：请检查以下几点：</p>
+<ol><li>确认输入的账号是否正确（工号或SSO账号）</li><li>确认密码是否输入正确，注意大小写</li><li>尝试使用"忘记密码"功能重置密码</li><li>如多次失败，请联系IT服务台</li></ol>
+
+<p><strong>Q3：登录时提示"账号被锁定"？</strong></p>
+
+<p>A：连续输入错误密码5次后账号会被临时锁定，请等待30分钟后重试，或联系IT服务台解锁。</p>
+
+<p><strong>Q4：如何在多台设备上登录？</strong></p>
+
+<p>A：元信客户端支持在手机和电脑上同时登录。在新设备上安装元信后，使用同一账号密码登录即可。</p>
+
+<h3>10.2 消息相关</h3>
+
+<p><strong>Q5：为什么收不到消息通知？</strong></p>
+
+<p>A：请检查以下设置：</p>
+<ol><li>确认元信客户端是否在前台运行</li><li>检查手机或电脑的通知权限是否开启</li><li>检查个人设置中的通知开关是否开启</li><li>确认网络连接是否正常</li></ol>
+
+<p><strong>Q6：消息太多如何管理？</strong></p>
+
+<p>A：建议您：</p>
+<ol><li>使用消息分类筛选功能，按类型查看消息</li><li>及时将已读消息标记为已读</li><li>删除不需要保留的消息</li><li>设置合理的通知频率，避免过多打扰</li></ol>
+
+<p><strong>Q7：为什么没有已读回执功能？</strong></p>
+
+<p>A：当前系统不提供已读追踪功能，即系统不会记录消息是否被阅读。这是系统设计的特性，不影响消息的正常接收和查看。</p>
+
+<h3>10.3 待办相关</h3>
+
+<p><strong>Q8：待办事项处理后状态没有更新？</strong></p>
+
+<p>A：请检查以下几点：</p>
+<ol><li>确认是否点击了"提交"或"完成"按钮</li><li>刷新页面查看最新状态</li><li>如仍无更新，请联系系统管理员</li></ol>
+
+<p><strong>Q9：如何查看已处理的待办？</strong></p>
+
+<p>A：在待办中心页面，点击"已办"标签，即可查看所有已处理的待办事项。</p>
+
+<p><strong>Q10：待办截止时间已过，还能处理吗？</strong></p>
+
+<p>A：可以处理。超期待办会显示"超期提醒"标识，但仍可正常处理。建议尽快处理超期待办，避免影响工作进度。</p>
+
+<h3>10.4 日程相关</h3>
+
+<p><strong>Q11：如何取消已创建的日程？</strong></p>
+
+<p>A：进入日程详情页，点击"删除"按钮即可取消日程。如果日程有其他参与人，删除后会通知参与人。</p>
+
+<p><strong>Q12：日程提醒没有收到？</strong></p>
+
+<p>A：请检查以下设置：</p>
+<ol><li>确认个人设置中的日程提醒是否开启</li><li>确认提醒时间设置是否合理</li><li>检查通知权限是否开启</li><li>确认网络连接是否正常</li></ol>
+
+<h3>10.5 系统相关</h3>
+
+<p><strong>Q13：系统访问速度慢怎么办？</strong></p>
+
+<p>A：请尝试以下方法：</p>
+<ol><li>检查网络连接是否稳定</li><li>清除浏览器缓存（如通过浏览器访问）</li><li>关闭不必要的应用程序，释放系统资源</li><li>如持续缓慢，请联系IT服务台</li></ol>
+
+<p><strong>Q14：如何反馈系统问题或建议？</strong></p>
+
+<p>A：您可以通过以下方式反馈：</p>
+<ol><li>在门户首页找到"意见反馈"入口提交</li><li>联系IT服务台（程文斐：0551-62201332 / 葛鹏飞：0551-62207154）</li><li>发送邮件至chengwenfei@gyzq.com.cn 或 gepengfei@gyzq.com.cn</li></ol>
+
+<p><strong>Q15：系统维护时间是什么时候？</strong></p>
+
+<p>A：系统维护通知会提前通过消息中心和公告发布。一般维护安排在非工作时间（如周末或夜间），具体时间以通知为准。</p>
+
+<hr>
+
+<h2>附录</h2>
+
+<h3>A. 联系方式</h3>
+
+<table><thead><tr><th>联系类型</th><th>联系方式</th><th>服务时间</th></tr></thead><tbody><tr><td>IT服务台</td><td>程文斐：0551-62201332 / 葛鹏飞：0551-62207154</td><td>工作日 9:00-18:00</td></tr><tr><td>技术支持</td><td>chengwenfei@gyzq.com.cn / gepengfei@gyzq.com.cn</td><td>工作日 9:00-18:00</td></tr><tr><td>紧急故障</td><td>程文斐：17318580215 / 葛鹏飞：13956088068</td><td>7×24小时</td></tr></tbody></table>
+
+<h3>B. 相关文档</h3>
+
+<table><thead><tr><th>文档编号</th><th>文档名称</th><th>说明</th></tr></thead><tbody><tr><td>D2</td><td>常见问题FAQ</td><td>系统常见问题解答</td></tr><tr><td>D3</td><td>管理员操作手册</td><td>管理员专用操作指南</td></tr><tr><td>D4</td><td>组织架构同步运维指南</td><td>组织架构同步的运维说明</td></tr></tbody></table>
+
+<h3>C. 版本记录</h3>
+
+<table><thead><tr><th>版本</th><th>日期</th><th>修改人</th><th>修改说明</th></tr></thead><tbody><tr><td>V1.0</td><td>2026年7月3日</td><td>王昭</td><td>初始版本</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>编制</strong>：王昭  </p>
+<p><strong>审核</strong>：丁小建  </p>
+<p><strong>批准</strong>：何金钟</p>
+</body>
+</html>

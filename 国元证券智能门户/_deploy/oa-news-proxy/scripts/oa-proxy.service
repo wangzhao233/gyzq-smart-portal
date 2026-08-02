@@ -1,0 +1,33 @@
+[Unit]
+Description=OA News Proxy - SharePoint新闻数据代理服务
+Documentation=/opt/oa-news-proxy/README.md
+After=network.target nginx.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/oa-news-proxy
+ExecStart=/usr/bin/python3 /opt/oa-news-proxy/oa_proxy.py
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StartLimitInterval=300
+StartLimitBurst=5
+
+# 安全限制
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/log/oa-proxy /opt/oa-news-proxy
+
+# 环境
+Environment=PYTHONUNBUFFERED=1
+
+# 日志
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=oa-proxy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打卡规则梳理报告</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>打卡规则梳理报告</h1>
+
+<p><strong>来源文档</strong>: <code>C:/Users/11039/Downloads/打卡整理.docx</code>  </p>
+<p><strong>梳理日期</strong>: 2026-06-25  </p>
+<p><strong>整理者</strong>: WorkBuddy (Research Agent)</p>
+
+<hr>
+
+<h2>一、文档概述</h2>
+
+<p>该文档以"需求确认清单"形式呈现，共 <strong>12 个问题</strong>，核心目的是理清企业微信打卡模块的现有能力，评估是否能满足国元证券的打卡需求。文档配有两张截图说明现有打卡规则配置。</p>
+
+<hr>
+
+<h2>二、现有打卡规则（来自图片 OCR）</h2>
+
+<h3>2.1 打卡模式</h3>
+
+<p>企业微信支持三种打卡模式（图片1）：</p>
+
+<table><thead><tr><th>模式</th><th>说明</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>固定时间上下班</strong> ✅（当前使用）</td><td>所有人按照相同时间打卡</td><td>办公室坐班，朝九晚五</td></tr><tr><td>按排班上下班</td><td>按排班结果或可选班次打卡</td><td>门店/流水线，三班倒</td></tr><tr><td>自由上下班</td><td>不固定时间，随时打卡，只统计旷工</td><td>销售、计时工种</td></tr></tbody></table>
+
+<blockquote><strong>现状</strong>: 目前默认使用「固定时间上下班」模式。</blockquote>
+
+<h3>2.2 具体时间设置（图片2）</h3>
+
+<p>当前配置为 <strong>一天四次卡</strong>，工作日为周一至周五：</p>
+
+<table><thead><tr><th>时段</th><th>上班时间</th><th>下班时间</th><th>需打卡</th></tr></thead><tbody><tr><td>工作时段1（上午）</td><td><strong>08:30</strong></td><td><strong>11:30</strong></td><td>✅ 是</td></tr><tr><td>工作时段2（下午）</td><td><strong>13:00</strong></td><td><strong>17:00</strong></td><td>✅ 是</td></tr></tbody></table>
+
+<p><strong>其他设置</strong>：</p>
+<ul><li>可打卡时段: 00:00 - 23:59</li><li>弹性打卡: 允许晚到早走</li><li>上班可晚到: <strong>5 分钟</strong></li><li>下班可早走: <strong>0 分钟</strong></li></ul>
+
+<hr>
+
+<h2>三、待确认的12项需求问题</h2>
+
+<table><thead><tr><th>#</th><th>问题</th><th>涉及能力域</th></tr></thead><tbody><tr><td>1</td><td>是否支持「按排班上下班」「自由上下班」两种模式？</td><td>打卡模式</td></tr><tr><td>2</td><td>一天四次卡设置是否如图配置？</td><td>时段配置</td></tr><tr><td>3</td><td>支持「必须打卡日期」「无需打卡日期」「法定节假日不打卡」？</td><td>特殊日期处理</td></tr><tr><td>4</td><td>支持手机、考勤机、手机+考勤机？</td><td>打卡设备</td></tr><tr><td>5</td><td>一条打卡规则支持多个打卡地点？</td><td>多地点</td></tr><tr><td>6</td><td>支持 WiFi 打卡？</td><td>WiFi打卡</td></tr><tr><td>7</td><td>可设置「加班规则」？</td><td>加班规则</td></tr><tr><td>8</td><td>补卡申请是否支持审批？审批如何设置？</td><td>补卡审批</td></tr><tr><td>9</td><td>支持手机提醒？</td><td>打卡提醒</td></tr><tr><td>10</td><td>支持外出打卡？</td><td>外勤打卡</td></tr><tr><td>11</td><td>支持「无需打卡人员」「汇报对象」「协助管理对象」？</td><td>人员管理</td></tr><tr><td>12</td><td>打卡数据如何导出？</td><td>数据导出</td></tr></tbody></table>
+
+<hr>
+
+<h2>四、知识库补充</h2>
+
+<p>根据知识库检索，相关参考文档：</p>
+
+<ul><li><strong>[概念-七巧企微打卡接口]</strong> — 企微打卡 API 共 <strong>12 个接口</strong>，覆盖打卡规则、排班、记录查询、补卡全流程</li><li><strong>[中车浦镇-移动考勤定制改造实施方案]</strong> — 中车浦镇类似项目参考，一期 38 人天，含跨天排班、双模式打卡、代打卡检测、断网缓存等</li><li><strong>[中车浦镇-考勤现有功能满足度分析]</strong> — 24 项需求中仅 4 项（17%）标准产品可直接满足，10 项需定制开发</li></ul>
+
+<hr>
+
+<h2>五、初步判断</h2>
+
+<p>基于 OCR 识别结果和知识库：</p>
+
+<ol><li><strong>打卡模式</strong>: 企微支持三种模式，"按排班上下班"和"自由上下班"为<strong>标准功能</strong>，可直接切换</li><li><strong>一天四次卡</strong>: 截图显示的 08:30/11:30/13:00/17:00 配置<strong>标准产品支持</strong></li><li><strong>特殊日期</strong>: 法定节假日不打卡为<strong>标准功能</strong>；必须打卡/无需打卡日期需确认</li><li><strong>多地点/WiFi/考勤机</strong>: 需确认企微本地版是否支持</li><li><strong>加班规则</strong>: 企微标准版支持，本地版需确认</li><li><strong>补卡审批</strong>: 需确认是否走企微审批流还是自建审批</li><li><strong>数据导出</strong>: API 支持打卡记录查询和导出</li></ol>
+
+<blockquote>⚠️ <strong>注意</strong>: OCR 识别存在一定误差，关键时间数据建议对照原图二次确认。</blockquote>
+
+</body>
+</html>

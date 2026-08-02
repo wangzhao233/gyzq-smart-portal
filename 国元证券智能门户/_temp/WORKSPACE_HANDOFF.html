@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WORKSPACE_HANDOFF</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>工作空间交接文件 — 国元证券智能门户</h1>
+
+<p><strong>交接人</strong>: 王昭（昭哥） | <strong>日期</strong>: 2026-07-20 | <strong>接收方</strong>: 新应用的AI/开发者</p>
+
+<hr>
+
+<h2>一、这是什么项目</h2>
+
+<p>国元证券智能门户项目（合同金额 ¥387万），为客户部署企业微信私有化 + 智能门户 V2.1.6 + 七巧低代码。</p>
+
+<p><strong>当前阶段</strong>: 一期已上线（PC/安卓/鸿蒙 7/18上线，iOS待8/1），二期信创适配+定制需求进行中。老OA（SharePoint）与门户长期并行。</p>
+
+<hr>
+
+<h2>二、工作空间结构</h2>
+
+<pre><code class="language-">
+国元证券智能门户/
+├── CONTEXT.md              ← 项目上下文（每次任务前读这个）
+├── PROJECT.md              ← 项目概览
+├── output/                 ← 所有交付物、报告、文档
+│   ├── 上线文档/           ← D1-D10上线文档（含Word版）
+│   ├── 新闻数据源配置方案.md  ← OA新闻同步方案 V3.0
+│   ├── 任务交接_老OA新闻同步.md ← OA新闻专题交接
+│   └── ...
+├── _deploy/                ← 生产部署包
+│   ├── oa-news-proxy-java/ ← Java版新闻代理（推荐）
+│   └── oa-news-proxy/      ← Python版新闻代理
+├── 00-全局/                ← 全项目共享资源
+├── .workbuddy/
+│   ├── memory/             ← 记忆系统
+│   │   ├── MEMORY.md       ← 项目长期记忆（项目事实）
+│   │   └── YYYY-MM-DD.md   ← 每日工作日志
+│   ├── skills/             ← 项目级技能
+│   └── memory/MEMORY.md    ← 项目长期记忆
+└── _临时/                  ← 临时文件
+</code></pre>
+
+<hr>
+
+<h2>三、记忆系统规则（P0 强制）</h2>
+
+<h3>3.1 两套记忆的分工</h3>
+
+<table><thead><tr><th>记忆层</th><th>路径</th><th>存什么</th></tr></thead><tbody><tr><td><strong>全局记忆</strong></td><td><code>~/.workbuddy/MEMORY.md</code></td><td>规则、角色、方法论、全局路径（跨项目通用）</td></tr><tr><td><strong>项目记忆</strong></td><td><code>.workbuddy/memory/MEMORY.md</code></td><td>项目事实、历史、文件路径、项目约定</td></tr></tbody></table>
+
+<h3>3.2 每日日志规则</h3>
+
+<ol><li>每天工作完成后，<strong>必须</strong>在 <code>.workbuddy/memory/YYYY-MM-DD.md</code> 写日志</li><li>日志末尾<strong>必须</strong>追加 <code>## 今日模型使用</code> 表格（原子操作，不可分开）</li><li>格式：</li></ol>
+<pre><code class="language-markdown">
+## 今日模型使用
+| 模型 | 次数 | 任务 |
+|------|:---:|------|
+| Pro | N | 任务描述 |
+| Flash | N | 任务描述 |
+</code></pre>
+
+<h3>3.3 开工流程</h3>
+
+<ol><li>读 <code>CONTEXT.md</code></li><li>读 <code>.workbuddy/memory/MEMORY.md</code></li><li>读最近几天的 <code>.workbuddy/memory/YYYY-MM-DD.md</code></li><li>开始工作</li></ol>
+
+<hr>
+
+<h2>四、当前进行中的任务</h2>
+
+<h3>🎯 主任务：老OA新闻同步到智能门户</h3>
+
+<p><strong>目标</strong>: 将老OA（SharePoint <code>home.oa.gyzq.com</code>）的新闻数据通过门户数据源展示到智能门户首页。</p>
+
+<p><strong>状态</strong>: 方案V3.0已完成，代理代码V2.0已就绪，<strong>待部署测试</strong>。</p>
+
+<p><strong>技术方案（关键！已踩过的坑）</strong>:</p>
+
+<ol><li>❌ 不能直接在前端调OA API → 跨域+Cookie跨域问题</li><li>❌ SSO不能替代代理 → SSO给JWT Token，SharePoint API只认Cookie</li><li>❌ 不能简单透传 → 门户主动拉取是<strong>POST请求</strong>，且要求<strong>特定JSON格式</strong></li><li>✅ 正确方案：代理服务 + 格式转换</li></ol>
+
+<pre><code class="language-">
+门户后端(POST) → http://10.0.63.11:8899/api/news
+                      ↓
+              OaProxyServer V2.0
+                 ├─ 接收: typeId/maxCount/currentPage
+                 ├─ 映射typeId→SharePoint站点路径
+                 ├─ 注入Cookie → GET SharePoint REST API
+                 ├─ 转换: OData JSON → 门户消息列表JSON
+                 └─ 返回门户格式JSON
+</code></pre>
+
+<p><strong>部署目标</strong>: 门户应用服务器 <code>10.0.63.11</code>（双网卡，可访问内网OA）</p>
+
+<p><strong>部署包位置</strong>: <code>_deploy/oa-news-proxy-java/</code></p>
+<ul><li><code>src/OaProxyServer.java</code> — Java代理源码（零外部依赖）</li><li><code>oa-proxy.properties</code> — 填OA账号密码</li><li><code>build.sh</code> — 编译</li><li><code>deploy.sh</code> — 一键部署</li></ul>
+
+<p><strong>待办</strong>:</p>
+<ol><li>编译部署到10.0.63.11</li><li>门户后台创建8个主动拉取数据源（每个新闻分类一个，typeId映射见方案文档）</li><li>门户首页绑定消息列表组件 → 验证 → 发布</li></ol>
+
+<p><strong>参考文档</strong>:</p>
+<ul><li><code>output/新闻数据源配置方案.md</code>（完整V3.0技术方案）</li><li><code>output/任务交接_老OA新闻同步.md</code>（专题交接，含部署步骤）</li><li><code>output/WORKSPACE_HANDOFF.md</code>（本文档）</li></ul>
+
+<hr>
+
+<h2>五、关键文件索引</h2>
+
+<h3>项目文档</h3>
+<table><thead><tr><th>文件</th><th>说明</th></tr></thead><tbody><tr><td><code>CONTEXT.md</code></td><td>项目上下文（部署架构、技术栈、人员）</td></tr><tr><td><code>PROJECT.md</code></td><td>项目概览</td></tr><tr><td><code>output/新闻公告分类栏目ID对照表.md</code></td><td>11个分类栏目ID（F202607090002~0012）</td></tr><tr><td><code>output/第三方应用接入跟进表.md</code></td><td>49个应用对接进度</td></tr></tbody></table>
+
+<h3>OA新闻同步相关</h3>
+<table><thead><tr><th>文件</th><th>说明</th></tr></thead><tbody><tr><td><code>output/新闻数据源配置方案.md</code></td><td>技术方案 V3.0</td></tr><tr><td><code>output/任务交接_老OA新闻同步.md</code></td><td>专题交接</td></tr><tr><td><code>_deploy/oa-news-proxy-java/</code></td><td>Java部署包</td></tr><tr><td><code>_deploy/oa-news-proxy/</code></td><td>Python部署包</td></tr></tbody></table>
+
+<h3>上线文档</h3>
+<table><thead><tr><th>文件</th><th>说明</th></tr></thead><tbody><tr><td><code>output/上线文档/README_上线支持文档目录.md</code></td><td>文档索引</td></tr><tr><td><code>output/上线文档/D1~D10/*.md</code></td><td>10份Markdown文档</td></tr><tr><td><code>output/上线文档/Word版/*.docx</code></td><td>10份Word文档</td></tr></tbody></table>
+
+<h3>服务器资源</h3>
+<table><thead><tr><th>文档</th><th>来源</th></tr></thead><tbody><tr><td>企微在线表格 <code>AXQAlQbEAL8CNpcOVT1wSRuqM1X5N</code></td><td>生产环境资源配置（服务器IP、密码、网络策略）</td></tr><tr><td><code>官网SP接口.xlsx</code></td><td>客户提供，27个SharePoint REST API</td></tr></tbody></table>
+
+<hr>
+
+<h2>六、部署架构（关键IP）</h2>
+
+<pre><code class="language-">
+用户 → portal.oa.gyzq.com
+         ↓
+    DMZ负载均衡 172.16.20.253
+         ↓
+    DMZ应用服务器(Nginx) 172.16.19.1
+         ↓
+    门户应用服务器 10.0.63.11 (BES, 双网卡)
+         ↓
+    中间件集群 10.0.63.13~15
+</code></pre>
+
+<ul><li><strong>OA新闻代理部署目标</strong>: 10.0.63.11</li><li><strong>老OA</strong>: home.oa.gyzq.com (SharePoint on-premises)</li><li><strong>SSO</strong>: login.oa.gyzq.com (Keycloak)</li></ul>
+
+<hr>
+
+<h2>七、协作约定</h2>
+
+<ol><li><strong>滴答清单单一入口</strong>: 昭哥所有待办操作仅在滴答清单，自动化自动检测变化</li><li><strong>企微MCP</strong>: 在线文档/表格通过 <code>企业微信文档</code> streamable-http MCP 读取</li><li><strong>文档双文件</strong>: 所有文档同时维护 <code>.md</code> + <code>.html</code></li><li><strong>绝对路径</strong>: 所有路径必须使用绝对路径，禁止 <code>~/</code> 缩写</li><li><strong>模型记录</strong>: 每日日志末尾必须追加模型使用表</li></ol>
+
+<hr>
+
+<p><strong>文档版本</strong>: V1.0 | <strong>编制人</strong>: 王昭 | <strong>日期</strong>: 2026-07-20</p>
+
+</body>
+</html>

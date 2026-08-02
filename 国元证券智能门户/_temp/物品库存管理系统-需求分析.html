@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物品库存管理系统-需求分析</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>物品库存管理系统 — 需求分析文档</h1>
+
+<blockquote><strong>版本</strong>：V1.0<br><strong>日期</strong>：2026年7月29日<br><strong>编制人</strong>：王昭<br><strong>平台</strong>：七巧Plus低代码平台</blockquote>
+
+<hr>
+
+<h2>一、项目概述</h2>
+
+<h3>1.1 项目背景</h3>
+
+<p>为满足企业内部物品库存管理需求，基于七巧Plus低代码平台搭建一套物品库存管理系统。系统需覆盖物品信息管理、出入库操作、库存动态更新、数据报表分析等核心功能，支持多角色权限控制和审批流程。</p>
+
+<h3>1.2 建设目标</h3>
+
+<table><thead><tr><th>序号</th><th>目标</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>物品信息管理</td><td>建立物品分类体系和物品档案，支持增删改查</td></tr><tr><td>2</td><td>出入库流程管控</td><td>通过审批流程规范出入库操作，自动更新库存</td></tr><tr><td>3</td><td>库存实时监控</td><td>聚合计算当前库存，安全库存预警</td></tr><tr><td>4</td><td>数据可视化</td><td>报表图表展示库存分布和使用情况</td></tr><tr><td>5</td><td>权限分级管理</td><td>管理员/仓库员/普通用户三级权限控制</td></tr></tbody></table>
+
+<hr>
+
+<h2>二、用户角色</h2>
+
+<table><thead><tr><th>角色</th><th>使用场景</th><th>核心权限</th></tr></thead><tbody><tr><td><strong>管理员</strong></td><td>系统管理、数据维护</td><td>全部权限（增删改查、审批、配置）</td></tr><tr><td><strong>仓库员</strong></td><td>日常出入库操作</td><td>物品增删改查、出入库操作、库存管理</td></tr><tr><td><strong>普通用户</strong></td><td>物品领用、查看</td><td>仅查看物品信息和库存</td></tr></tbody></table>
+
+<hr>
+
+<h2>三、功能需求</h2>
+
+<h3>3.1 物品分类管理</h3>
+
+<p>建立物品分类体系，为物品提供分类维度。</p>
+
+<table><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>分类名称</td><td>单行文本</td><td>✅</td><td>如"办公用品""电子设备"</td></tr><tr><td>分类编码</td><td>单行文本</td><td>✅</td><td>如"BGYP""DZSB"</td></tr><tr><td>排序号</td><td>数字</td><td>❌</td><td>控制显示顺序</td></tr></tbody></table>
+
+<h3>3.2 物品信息管理</h3>
+
+<table><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>物品名称</td><td>单行文本</td><td>✅</td><td></td></tr><tr><td>物品分类</td><td>外键选择（关联分类表）</td><td>✅</td><td></td></tr><tr><td>规格型号</td><td>单行文本</td><td>✅</td><td></td></tr><tr><td>单位</td><td>下拉单选</td><td>✅</td><td>个/箱/台/套/件/支/本</td></tr><tr><td>初始库存</td><td>数字</td><td>✅</td><td>首次录入数量</td></tr><tr><td>当前库存</td><td>数字（聚合字段）</td><td>-</td><td>自动计算 = 初始库存 + 总入库 - 总出库 - 总使用</td></tr><tr><td>安全库存</td><td>数字</td><td>❌</td><td>低库存预警线</td></tr><tr><td>物品图片</td><td>图片上传</td><td>❌</td><td></td></tr></tbody></table>
+
+<p><strong>列表功能</strong>：</p>
+<ul><li>支持按物品分类、库存状态（正常/预警/缺货）双维度筛选</li><li>支持导入导出Excel</li><li>列表中可发起出入库流程</li><li>支持新增、编辑、查看详情</li></ul>
+
+<h3>3.3 出入库管理</h3>
+
+<table><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>物品</td><td>外键选择（关联物品表）</td><td>✅</td><td></td></tr><tr><td>操作类型</td><td>单选</td><td>✅</td><td>入库 / 出库</td></tr><tr><td>数量</td><td>数字</td><td>✅</td><td>最小值为1</td></tr><tr><td>操作人</td><td>人员单选</td><td>✅</td><td></td></tr><tr><td>操作时间</td><td>日期时间</td><td>✅</td><td>默认当前时间</td></tr><tr><td>备注</td><td>多行文本</td><td>❌</td><td></td></tr></tbody></table>
+
+<p><strong>核心逻辑</strong>：</p>
+<ul><li>提交后自动更新物品表的当前库存字段</li><li>出库时校验库存是否充足（库存不足则阻止操作并提示）</li><li>库存低于安全库存时自动发送预警通知</li><li>列表页支持仅查看权限（普通用户）</li></ul>
+
+<h3>3.4 物品使用记录</h3>
+
+<table><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>物品</td><td>外键选择（关联物品表）</td><td>✅</td><td></td></tr><tr><td>使用人</td><td>人员单选</td><td>✅</td><td></td></tr><tr><td>使用数量</td><td>数字</td><td>✅</td><td>最小值为1</td></tr><tr><td>使用时间</td><td>日期时间</td><td>✅</td><td>默认当前时间</td></tr><tr><td>用途说明</td><td>多行文本</td><td>❌</td><td></td></tr></tbody></table>
+
+<p><strong>核心逻辑</strong>：提交后自动扣减物品库存</p>
+
+<h3>3.5 审批流程</h3>
+
+<p>物品出入库需经过审批流程：</p>
+
+<pre><code class="language-">
+申请人提交 → 部门负责人审批 → 指定审批人确认
+</code></pre>
+
+<ul><li>支持处理人任意指定/转交</li><li>审批通过后自动执行库存更新脚本</li></ul>
+
+<h3>3.6 首页仪表盘</h3>
+
+<table><thead><tr><th>组件</th><th>说明</th></tr></thead><tbody><tr><td>物品总数</td><td>统计卡片，点击跳转物品列表</td></tr><tr><td>库存预警数</td><td>统计卡片，条件：当前库存 ≤ 安全库存</td></tr><tr><td>今日出入库</td><td>统计卡片，条件：操作时间=今天</td></tr><tr><td>使用排行榜</td><td>Top10使用人排名，统计近30天使用次数</td></tr></tbody></table>
+
+<h3>3.7 报表中心</h3>
+
+<table><thead><tr><th>组件</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>库存分布图</td><td>饼图</td><td>维度=物品分类，指标=物品计数</td></tr><tr><td>出入库趋势图</td><td>折线图</td><td>维度=操作时间（按月），指标=SUM(数量)</td></tr><tr><td>报表卡片×4</td><td>统计卡片</td><td>物品总数/库存预警/本月入库/本月出库</td></tr></tbody></table>
+
+<h3>3.8 聚合表</h3>
+
+<p>基于出入库记录和使用记录，聚合计算物品的实时库存：</p>
+
+<table><thead><tr><th>配置项</th><th>说明</th></tr></thead><tbody><tr><td>主表</td><td>物品信息</td></tr><tr><td>数据源</td><td>出入库记录（关联物品）、使用记录（关联物品）</td></tr><tr><td>入库总量</td><td>SUM(数量) WHERE 操作类型=入库</td></tr><tr><td>出库总量</td><td>SUM(数量) WHERE 操作类型=出库</td></tr><tr><td>使用总量</td><td>SUM(使用数量)</td></tr><tr><td>当前库存</td><td>初始库存 + 入库总量 - 出库总量 - 使用总量</td></tr><tr><td>校验规则</td><td>当前库存 ≥ 0</td></tr></tbody></table>
+
+<hr>
+
+<h2>四、非功能需求</h2>
+
+<h3>4.1 权限控制</h3>
+
+<table><thead><tr><th>控制维度</th><th>说明</th></tr></thead><tbody><tr><td>角色权限</td><td>管理员/仓库员/普通用户三级</td></tr><tr><td>字段权限</td><td>初始库存、安全库存仅管理员可见可编辑</td></tr><tr><td>按钮可见条件</td><td>"新增库存"按钮仅管理员/仓库员可见</td></tr><tr><td>列表权限</td><td>普通用户仅查看，不可新增/编辑/删除</td></tr></tbody></table>
+
+<h3>4.2 导航设计</h3>
+
+<table><thead><tr><th>导航项</th><th>图标</th><th>跳转页面</th></tr></thead><tbody><tr><td>首页</td><td>🏠</td><td>仪表盘</td></tr><tr><td>物品管理</td><td>📦</td><td>物品列表</td></tr><tr><td>报表中心</td><td>📊</td><td>报表页</td></tr></tbody></table>
+
+<h3>4.3 界面要求</h3>
+
+<ul><li>主题色：蓝色系</li><li>卡片统一样式（圆角+阴影）</li><li>表格隔行换色</li><li>整体界面简洁美观</li></ul>
+
+<hr>
+
+<h2>五、页面清单</h2>
+
+<table><thead><tr><th>序号</th><th>页面名称</th><th>页面类型</th><th>主要内容</th></tr></thead><tbody><tr><td>P1</td><td>首页仪表盘</td><td>自定义页面</td><td>统计卡片×3 + 使用排行榜 + 导航</td></tr><tr><td>P2</td><td>报表中心</td><td>自定义页面</td><td>饼图 + 折线图 + 4个统计卡片</td></tr><tr><td>P3</td><td>物品列表</td><td>列表页</td><td>物品数据 + 双维度筛选 + 导入导出 + 行操作</td></tr><tr><td>P4</td><td>物品表单</td><td>表单页</td><td>8字段 + 审批流程 + 字段权限</td></tr><tr><td>P5</td><td>库存管理</td><td>列表页</td><td>物品列表 + "新增库存"按钮（可见条件）</td></tr><tr><td>P6</td><td>出入库记录</td><td>列表页</td><td>出入库数据 + 新增 + 仅查看权限</td></tr><tr><td>P7</td><td>物品库存详情</td><td>详情页</td><td>物品信息 + 聚合库存字段 + 出入库子表</td></tr></tbody></table>
+
+<hr>
+
+<h2>六、数据模型</h2>
+
+<pre><code class="language-">
+┌──────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  物品分类     │     │    物品信息       │     │   出入库记录      │
+│  (实体表)     │◄────│   (实体表)       │────►│   (中间表)       │
+│              │     │                  │     │                  │
+│ 分类名称     │     │ 物品名称         │     │ 物品(外键)       │
+│ 分类编码     │     │ 物品分类(外键)   │     │ 操作类型         │
+│ 排序号       │     │ 规格型号         │     │ 数量             │
+│              │     │ 单位             │     │ 操作人           │
+│              │     │ 初始库存         │     │ 操作时间         │
+│              │     │ 当前库存(聚合)   │     │ 备注             │
+│              │     │ 安全库存         │     │                  │
+│              │     │ 物品图片         │     │                  │
+└──────────────┘     └────────┬─────────┘     └──────────────────┘
+                              │
+                              │
+                    ┌─────────▼─────────┐
+                    │    使用记录        │
+                    │   (实体表)        │
+                    │                  │
+                    │ 物品(外键)       │
+                    │ 使用人           │
+                    │ 使用数量         │
+                    │ 使用时间         │
+                    │ 用途说明         │
+                    └──────────────────┘
+</code></pre>
+
+<hr>
+
+<h2>七、关键脚本逻辑</h2>
+
+<h3>7.1 出入库提交后更新库存</h3>
+
+<pre><code class="language-">
+1. 获取当前表单的"物品""操作类型""数量"字段值
+2. 根据物品ID查询物品表中的当前库存
+3. 如果是入库 → 当前库存 += 数量
+4. 如果是出库 → 判断库存是否充足
+   - 充足 → 当前库存 -= 数量
+   - 不足 → 阻止操作，提示用户
+5. 保存更新后的库存到物品表
+6. 检查是否低于安全库存 → 低于则发送预警通知
+</code></pre>
+
+<h3>7.2 使用记录提交后更新库存</h3>
+
+<pre><code class="language-">
+1. 获取"物品""使用数量"
+2. 查询物品当前库存
+3. 判断库存是否充足 → 充足则扣减，不足则阻止
+4. 保存更新
+</code></pre>
+
+<h3>7.3 提交前校验</h3>
+
+<pre><code class="language-">
+1. 校验数量 &gt; 0
+2. 出库时校验库存 &gt;= 出库数量
+3. 不满足条件则阻止提交并提示
+</code></pre>
+
+<hr>
+
+<h2>八、得分覆盖（自评）</h2>
+
+<table><thead><tr><th>评分项</th><th>分值</th><th>覆盖情况</th></tr></thead><tbody><tr><td>列表查看+双维筛选+流程+导入导出+2报表图</td><td>13</td><td>P3列表 + P2报表</td></tr><tr><td>表单8字段+审批+权限</td><td>10</td><td>表2 + P4流程</td></tr><tr><td>库存按钮+可见条件+仅查看</td><td>4</td><td>P5</td></tr><tr><td>聚合表完整配置</td><td>6</td><td>第3步聚合表</td></tr><tr><td>提交触发更新库存</td><td>4</td><td>脚本1+2</td></tr><tr><td>主表3字段+中间表</td><td>5.5</td><td>表1+表3</td></tr><tr><td>排行榜+导航+指标+美观</td><td>13</td><td>P1+P2+全局</td></tr><tr><td>7页面</td><td>10</td><td>P1~P7</td></tr><tr><td>其他（校验/权限/4报表等）</td><td>4.5</td><td>各环节</td></tr><tr><td><strong>合计</strong></td><td><strong>~72</strong></td><td></td></tr></tbody></table>
+
+<hr>
+
+<h2>九、实施计划</h2>
+
+<table><thead><tr><th>阶段</th><th>内容</th><th>预估时间</th></tr></thead><tbody><tr><td>1</td><td>创建4张表单并配置字段</td><td>20分钟</td></tr><tr><td>2</td><td>搭建7个页面</td><td>30分钟</td></tr><tr><td>3</td><td>配置聚合表</td><td>10分钟</td></tr><tr><td>4</td><td>编写并配置3个脚本</td><td>10分钟</td></tr><tr><td>5</td><td>配置报表图表</td><td>10分钟</td></tr><tr><td>6</td><td>配置权限+导航+美化</td><td>15分钟</td></tr><tr><td><strong>合计</strong></td><td></td><td><strong>约1.5小时</strong></td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档结束</strong></p>
+
+</body>
+</html>

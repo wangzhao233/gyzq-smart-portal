@@ -1,0 +1,19 @@
+{
+  "name": "download-portal",
+  "version": "1.0.0",
+  "description": "国元元信统一下载门户",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node scripts/init-db.js",
+    "setup": "node scripts/init-db.js && node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "dotenv": "^16.4.0",
+    "ejs": "^3.1.10",
+    "express": "^4.19.0",
+    "express-basic-auth": "^1.2.1",
+    "qrcode": "^1.5.4"
+  }
+}

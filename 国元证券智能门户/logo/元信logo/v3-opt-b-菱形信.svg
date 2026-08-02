@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="gdB1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0d87a"/>
+      <stop offset="40%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#a07820"/>
+    </linearGradient>
+    <filter id="sdB1">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#00000018"/>
+    </filter>
+  </defs>
+
+  <rect x="14" y="14" width="172" height="172" rx="34" ry="34" fill="#ffffff" filter="url(#sdB1)"/>
+
+  <g transform="translate(100,92)">
+    <!-- Blue outline bubble -->
+    <path d="M-58,-42 v-6 a9,9 0 0,1 9,-9 h98 a9,9 0 0,1 9,9 v68 a9,9 0 0,1 -9,9 h-78 l-20,18 v-18 h-8"
+          fill="none" stroke="#1478FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Gold diamond (国元DNA) as centerpiece -->
+    <!-- Outer diamond -->
+    <polygon points="0,-20 16,0 0,20 -16,0" fill="url(#gdB1)" stroke="#b8912e" stroke-width="0.8"/>
+
+    <!-- Inner white "信" symbol cut into diamond -->
+    <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <!-- 人: standing figure -->
+      <path d="M-5,-8 L-5,4"/>
+      <path d="M-9,-4 L-5,-1 L-1,-4"/>
+      <!-- 言: speech bars -->
+      <line x1="-2" y1="-2" x2="8" y2="-2"/>
+      <line x1="-2" y1="2" x2="6" y2="2"/>
+      <line x1="-2" y1="5" x2="5" y2="5"/>
+    </g>
+  </g>
+</svg>

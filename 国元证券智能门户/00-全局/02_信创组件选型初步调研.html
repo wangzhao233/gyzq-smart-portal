@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国元证券二期 - 信创组件选型与执行方案 V3.0</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --primary-light: #e8f0fe;
+    --text: #202124;
+    --text-secondary: #5f6368;
+    --border: #dadce0;
+    --bg: #ffffff;
+    --bg-zebra: #f8f9fa;
+    --tag-pass: #34a853;
+    --tag-fail: #ea4335;
+    --tag-warn: #fbbc04;
+    --shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    padding: 40px 24px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .doc-header {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1565c0 100%);
+    color: #fff;
+    padding: 48px 40px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    box-shadow: 0 4px 20px rgba(26,35,126,0.3);
+  }
+  .doc-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 20px; }
+  .doc-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .doc-meta-item { font-size: 14px; opacity: 0.9; }
+  .doc-meta-item strong { opacity: 1; }
+
+  /* Section */
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 22px; font-weight: 700; color: var(--primary);
+    padding-bottom: 10px; margin-bottom: 20px;
+    border-bottom: 3px solid var(--primary);
+  }
+  .sub-title {
+    font-size: 17px; font-weight: 600; color: var(--text);
+    margin: 24px 0 12px; padding-left: 12px;
+    border-left: 4px solid var(--primary);
+  }
+  .sub-title-sm {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    margin: 20px 0 10px;
+  }
+
+  /* Table */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 12px 0 20px; font-size: 14px;
+    box-shadow: var(--shadow); border-radius: 8px; overflow: hidden;
+  }
+  thead { background: #f1f3f4; }
+  th {
+    padding: 12px 14px; text-align: left; font-weight: 600;
+    color: var(--text-secondary); font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.5px; border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:hover { background: var(--primary-light); }
+  tbody tr:nth-child(even) { background: var(--bg-zebra); }
+  tbody tr:nth-child(even):hover { background: var(--primary-light); }
+
+  /* Blockquote */
+  blockquote {
+    background: #fff8e1; border-left: 4px solid #f9a825;
+    padding: 14px 20px; margin: 16px 0; border-radius: 0 8px 8px 0;
+    font-size: 14px; color: #5d4037;
+  }
+  blockquote strong { color: #e65100; }
+
+  /* Lists */
+  ul, ol { padding-left: 24px; margin: 10px 0 16px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+
+  /* Tags */
+  .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 12px; font-weight: 600; vertical-align: middle;
+  }
+  .tag-pass { background: #e6f4ea; color: var(--tag-pass); }
+  .tag-fail { background: #fce8e6; color: var(--tag-fail); }
+  .tag-warn { background: #fef7e0; color: #b06000; }
+
+  /* Architecture diagram */
+  .arch-wrapper {
+    margin: 16px 0 24px;
+  }
+  .arch-title-bar {
+    background: linear-gradient(135deg, #1a237e, #1565c0);
+    color: #fff; text-align: center; padding: 12px 20px;
+    border-radius: 10px 10px 0 0; font-size: 16px; font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .arch-layers {
+    border: 2px solid var(--border); border-top: none;
+    border-radius: 0 0 10px 10px; overflow: hidden;
+  }
+  .arch-layer {
+    padding: 14px 24px; border-bottom: 1px dashed var(--border);
+  }
+  .arch-layer:last-child { border-bottom: none; }
+  .arch-layer-label {
+    display: inline-block; background: #e8f0fe; color: #1a73e8;
+    font-size: 12px; font-weight: 700; padding: 2px 10px;
+    border-radius: 4px; margin-right: 10px; min-width: 80px; text-align: center;
+  }
+  .arch-layer-items {
+    display: inline; font-size: 14px; vertical-align: middle;
+  }
+  .arch-item {
+    display: inline-block; background: #fff; border: 1px solid var(--border);
+    padding: 4px 12px; border-radius: 6px; margin: 3px 4px;
+    font-size: 13px; line-height: 1.5;
+  }
+  .arch-item strong { color: var(--primary); }
+  .arch-item .keep {
+    color: #34a853; font-weight: 600;
+  }
+  .arch-item .sub {
+    font-size: 11px; color: var(--text-secondary); margin-left: 4px;
+  }
+  .arch-note {
+    font-size: 12px; color: var(--text-secondary); margin-top: 4px;
+    padding-left: 92px;
+  }
+
+  /* Milestone */
+  .milestone { text-align: center; }
+  .milestone td { text-align: center; }
+
+  /* Risk table */
+  .risk-high td:first-child { color: #c62828; font-weight: 700; }
+  .risk-mid td:first-child { color: #e65100; font-weight: 700; }
+  .risk-low td:first-child { color: #2e7d32; font-weight: 700; }
+
+  /* Footer */
+  .doc-footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary); font-size: 13px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+
+  /* Decision blocks */
+  .decision { margin: 12px 0; padding: 10px 16px; border-radius: 6px; font-size: 14px; }
+  .decision-pass { background: #e6f4ea; border-left: 4px solid var(--tag-pass); }
+  .decision-fail { background: #fce8e6; border-left: 4px solid var(--tag-fail); }
+
+  /* Print */
+  @media print {
+    body { padding: 20px; }
+    .doc-header { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { box-shadow: none; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <h1>国元证券二期 - 信创组件选型与执行方案</h1>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>版本：</strong>V3.0</div>
+      <div class="doc-meta-item"><strong>日期：</strong>2026年5月6日</div>
+      <div class="doc-meta-item"><strong>文档编号：</strong>GYZQ-XC-002</div>
+    </div>
+  </div>
+
+  <!-- 一、目标与范围 -->
+  <div class="section">
+    <h2 class="section-title">一、目标与范围</h2>
+    <p>为国元证券二期项目确定全栈信创技术方案并制定执行计划，涉及<strong>智能门户</strong>与<strong>七巧低代码平台</strong>两套系统，覆盖：</p>
+    <ul>
+      <li>硬件层：海光CPU（已确定）</li>
+      <li>系统层：银河麒麟V10（已确定）</li>
+      <li>数据层：OceanBase（已确定）+ 人大金仓（备选）</li>
+      <li>中间件层：宝兰德全栈（WebServer/AppServer/CacheServer/MQ）</li>
+      <li>扩展组件：巨杉SequoiaDB（替代MongoDB）、EasySearch（替代Elasticsearch/ELK）</li>
+      <li>保留组件：Nacos（国产开源）、Canal（阿里国产开源）、GlusterFS（需信创环境部署验证）</li>
+    </ul>
+  </div>
+
+  <!-- 二、系统组件现状与信创替换方案 -->
+  <div class="section">
+    <h2 class="section-title">二、系统组件现状与信创替换方案</h2>
+    <p>本项目涉及两个核心系统：<strong>智能门户</strong> 与 <strong>七巧低代码平台</strong>。两套系统各自独立部署，组件替换方案如下：</p>
+    <blockquote>
+      <strong>说明</strong>：两套系统独立部署、独立运行，但信创组件替换方案一致。执行过程中两套系统的适配工作可并行推进。
+    </blockquote>
+
+    <!-- 2.1 智能门户 -->
+    <h3 class="sub-title">2.1 智能门户</h3>
+    <table>
+      <thead>
+        <tr><th>层级</th><th>当前组件</th><th>信创替换方案</th><th>用途</th><th>替换说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>硬件</td><td>Intel CPU</td><td><strong>海光 CPU</strong></td><td>服务器芯片</td><td>x86指令集兼容，需完成全量功能回归测试</td></tr>
+        <tr><td>系统</td><td>CentOS</td><td><strong>银河麒麟 V10</strong></td><td>操作系统</td><td>需完成系统调用接口验证（文件系统、网络、权限）</td></tr>
+        <tr><td>数据</td><td>MySQL 8.0</td><td><strong>OceanBase</strong>（主选）/ 人大金仓（备选）</td><td>关系型数据库</td><td>需完成SQL兼容性排查、存储过程迁移、性能基线测试</td></tr>
+        <tr><td>Web服务</td><td>nginx</td><td><strong>BES WebServer</strong></td><td>Web服务器/反向代理</td><td>需完成代理规则迁移、SSL配置、负载均衡适配</td></tr>
+        <tr><td>应用容器</td><td>Tomcat</td><td><strong>BES AppServer</strong></td><td>应用服务器</td><td>需完成部署包适配、JVM调优、类加载机制验证</td></tr>
+        <tr><td>缓存</td><td>Redis 4.0.12</td><td><strong>BES CacheServer</strong></td><td>缓存服务</td><td>需完成数据结构迁移、序列化协议适配、集群部署调优</td></tr>
+        <tr><td>消息队列</td><td>RabbitMQ 3.7.12</td><td><strong>BES Cloud MQ</strong></td><td>消息队列</td><td>需完成协议转换、队列配置迁移、持久化机制适配</td></tr>
+        <tr><td>文档存储</td><td>MongoDB 4.0.23</td><td><strong>巨杉 SequoiaDB</strong></td><td>文档型数据库</td><td>需完成文档模型映射、索引重建、副本集一致性验证</td></tr>
+        <tr><td>搜索引擎</td><td>Elasticsearch / ELK</td><td><strong>EasySearch</strong></td><td>全文检索/日志</td><td>需完成索引迁移、搜索DSL验证、ELK日志链路适配</td></tr>
+        <tr><td>配置注册</td><td>Nacos 2.0</td><td><strong>Nacos</strong></td><td>配置注册中心</td><td>国产开源组件，无需替换，需在信创环境完成部署验证</td></tr>
+        <tr><td>数据同步</td><td>Canal 1.1.6</td><td><strong>Canal</strong></td><td>增量数据同步</td>
+        <td>国产开源组件，无需替换，需完成与OceanBase的对接验证</td></tr>
+        <tr><td>共享存储</td><td>GlusterFS 5.6</td><td><strong>GlusterFS</strong></td><td>分布式文件存储</td>
+        <td>国产开源组件，无需替换，需在麒麟V10下完成存储卷重建与性能压测</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 2.2 七巧低代码平台 -->
+    <h3 class="sub-title">2.2 七巧低代码平台</h3>
+    <table>
+      <thead>
+        <tr><th>层级</th><th>当前组件</th><th>信创替换方案</th><th>用途</th><th>替换说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>硬件</td><td>Intel CPU</td><td><strong>海光 CPU</strong></td><td>服务器芯片</td><td>x86指令集兼容，需完成全量功能回归测试</td></tr>
+        <tr><td>系统</td><td>CentOS</td><td><strong>银河麒麟 V10</strong></td><td>操作系统</td><td>需完成系统调用接口验证（文件系统、网络、权限）</td></tr>
+        <tr><td>数据</td><td>MySQL</td><td><strong>OceanBase</strong>（主选）/ 人大金仓（备选）</td><td>关系型数据库</td><td>需完成SQL兼容性排查、存储过程迁移、性能基线测试</td></tr>
+        <tr><td>Web服务</td><td>nginx</td><td><strong>BES WebServer</strong></td><td>Web服务器/反向代理</td><td>需完成代理规则迁移、SSL配置、负载均衡适配</td></tr>
+        <tr><td>应用容器</td><td>Tomcat</td><td><strong>BES AppServer</strong></td><td>应用服务器</td><td>需完成部署包适配、JVM调优、类加载机制验证</td></tr>
+        <tr><td>缓存</td><td>Redis</td><td><strong>BES CacheServer</strong></td><td>缓存服务</td><td>需完成数据结构迁移、序列化协议适配、集群部署调优</td></tr>
+        <tr><td>消息队列</td><td>RabbitMQ</td><td><strong>BES Cloud MQ</strong></td><td>消息队列</td><td>需完成协议转换、队列配置迁移、持久化机制适配</td></tr>
+        <tr><td>文档存储</td><td>MongoDB</td><td><strong>巨杉 SequoiaDB</strong></td><td>文档型数据库</td><td>需完成文档模型映射、索引重建、副本集一致性验证</td></tr>
+        <tr><td>搜索引擎</td><td>Elasticsearch</td><td><strong>EasySearch</strong></td><td>全文检索</td><td>需完成索引迁移、搜索DSL验证（已获信通院认证，100% API兼容ES）</td></tr>
+        <tr><td>配置注册</td><td>Nacos</td><td><strong>Nacos</strong></td><td>配置注册中心</td><td>国产开源组件，无需替换，需在信创环境完成部署验证</td></tr>
+        <tr><td>数据同步</td><td>Canal</td><td><strong>Canal</strong></td><td>增量数据同步</td>
+        <td>国产开源组件，无需替换，需完成与OceanBase的对接验证</td></tr>
+        <tr><td>共享存储</td><td>GlusterFS</td><td><strong>GlusterFS</strong></td><td>分布式文件存储</td>
+        <td>国产开源组件，无需替换，需在麒麟V10下完成存储卷重建与性能压测</td></tr>
+      </tbody>
+    </table>
+
+    <blockquote>
+      <strong>差异说明</strong>：智能门户与七巧低代码平台的信创组件替换方案一致，但两套系统各自独立部署、独立运行。
+    </blockquote>
+
+    <!-- 2.3 架构总览 -->
+    <h3 class="sub-title">2.3 信创技术架构总览</h3>
+    <div class="arch-wrapper">
+      <div class="arch-title-bar">国元证券二期信创技术架构</div>
+      <div class="arch-layers">
+        <div class="arch-layer">
+          <span class="arch-layer-label">应用层</span>
+          <span class="arch-layer-items">
+            <span class="arch-item"><strong>智能门户</strong><span class="sub">信创定制版</span></span>
+            <span class="arch-item"><strong>七巧低代码</strong><span class="sub">信创定制版</span></span>
+          </span>
+        </div>
+        <div class="arch-layer">
+          <span class="arch-layer-label">中间件层</span>
+          <span class="arch-layer-items">
+            <span class="arch-item"><strong>BES WebServer</strong><span class="sub">替代nginx</span></span>
+            <span class="arch-item"><strong>BES AppServer</strong><span class="sub">替代Tomcat</span></span>
+            <span class="arch-item"><strong>BES CacheServer</strong><span class="sub">替代Redis</span></span>
+            <span class="arch-item"><strong>BES Cloud MQ</strong><span class="sub">替代RabbitMQ</span></span>
+            <span class="arch-item"><strong>巨杉 SequoiaDB</strong><span class="sub">替代MongoDB</span></span>
+            <span class="arch-item"><strong>EasySearch</strong><span class="sub">替代ES/ELK</span></span>
+            <span class="arch-item"><span class="keep">Nacos</span><span class="sub">国产开源·保留</span></span>
+            <span class="arch-item"><span class="keep">Canal</span><span class="sub">阿里开源·保留</span></span>
+            <span class="arch-item"><span class="keep">GlusterFS</span><span class="sub">需部署验证</span></span>
+          </span>
+          <div class="arch-note">两套系统各自独立部署，替换方案一致</div>
+        </div>
+        <div class="arch-layer">
+          <span class="arch-layer-label">数据层</span>
+          <span class="arch-layer-items">
+            <span class="arch-item"><strong>OceanBase</strong><span class="sub">主选·分布式</span></span>
+            <span class="arch-item"><strong>人大金仓</strong><span class="sub">备选（POC不通过时回退）</span></span>
+          </span>
+          <div class="arch-note">各自独立部署</div>
+        </div>
+        <div class="arch-layer">
+          <span class="arch-layer-label">系统层</span>
+          <span class="arch-layer-items">
+            <span class="arch-item"><strong>银河麒麟 V10</strong><span class="sub">x86版本 ✅ 已确定</span></span>
+          </span>
+        </div>
+        <div class="arch-layer">
+          <span class="arch-layer-label">硬件层</span>
+          <span class="arch-layer-items">
+            <span class="arch-item"><strong>海光 CPU</strong><span class="sub">x86指令集 ✅ 已确定</span></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三、数据库方案 -->
+  <div class="section">
+    <h2 class="section-title">三、数据库方案</h2>
+
+    <h3 class="sub-title">3.1 主选：OceanBase</h3>
+    <table>
+      <thead><tr><th>维度</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><strong>选型依据</strong></td><td>国元指定要求</td></tr>
+        <tr><td><strong>部署形态</strong></td><td>分布式集群，金融级高可用</td></tr>
+        <tr><td><strong>适配状态</strong></td><td>道一产品支持，但需POC验证</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-title">3.2 备选：人大金仓</h3>
+    <table>
+      <thead><tr><th>维度</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><strong>触发条件</strong></td><td>OceanBase POC验证不通过</td></tr>
+        <tr><td><strong>版本</strong></td><td>V008R006C008B0014</td></tr>
+        <tr><td><strong>适配成熟度</strong></td><td>道一已有完整适配包</td></tr>
+        <tr><td><strong>部署模式</strong></td><td>一主一从，共享型部署</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 四、执行计划 -->
+  <div class="section">
+    <h2 class="section-title">四、执行计划</h2>
+    <blockquote>
+      <strong>执行策略</strong>：智能门户与七巧低代码两个系统各自独立部署，信创替换方案一致。两套系统的适配工作采用<strong>并行推进</strong>模式，各系统独立完成代码适配与测试。以下计划已将两个系统的工作同步纳入各阶段。
+    </blockquote>
+
+    <h3 class="sub-title">4.1 项目阶段划分</h3>
+    <table>
+      <thead><tr><th>阶段</th><th>周期</th><th>关键交付物</th><th>负责方</th></tr></thead>
+      <tbody>
+        <tr><td><strong>第一阶段：准备与确认</strong></td><td>1周</td><td>适配包确认函、POC测试方案</td><td>国元/道一</td></tr>
+        <tr><td><strong>第二阶段：POC验证</strong></td><td>2周</td><td>POC测试报告（含智能门户+七巧）</td><td>国元主导</td></tr>
+        <tr><td><strong>第三阶段：正式适配</strong></td><td>3-4周</td><td>两套系统信创定制版软件包、部署文档</td><td>道一实施</td></tr>
+        <tr><td><strong>第四阶段：上线部署</strong></td><td>1-2周</td><td>生产环境部署、验收报告</td><td>联合实施</td></tr>
+        <tr style="font-weight:700;background:#e8f0fe;"><td>总计</td><td>7-9周</td><td>-</td><td>-</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 第一阶段 -->
+    <h3 class="sub-title-sm">第一阶段：准备与确认（第1周）</h3>
+    <table>
+      <thead><tr><th style="width:50px">序号</th><th>任务</th><th>输出</th><th>负责</th><th style="width:50px">时长</th></tr></thead>
+      <tbody>
+        <tr><td>1.1</td><td>确认两套系统宝兰德全栈适配开发需求</td><td>需求确认书（智能门户+七巧）</td><td>国元</td><td>2天</td></tr>
+        <tr><td>1.2</td><td>确认OceanBase版本及部署规格</td><td>数据库规格书</td><td>国元</td><td>1天</td></tr>
+        <tr><td>1.3</td><td>制定POC测试方案（含智能门户+七巧测试用例及通过标准）</td><td>POC测试方案</td><td>国元</td><td>2天</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 第二阶段 -->
+    <h3 class="sub-title-sm">第二阶段：POC验证（第2-3周）</h3>
+    <table>
+      <thead><tr><th style="width:50px">序号</th><th>任务</th><th>输出</th><th>负责</th><th style="width:50px">时长</th></tr></thead>
+      <tbody>
+        <tr><td>2.1</td><td>搭建POC环境（海光+麒麟+OceanBase+宝兰德+SequoiaDB+EasySearch）</td><td>POC环境</td><td>国元</td><td>3天</td></tr>
+        <tr><td>2.2</td><td>道一部署智能门户信创版</td><td>部署完成确认</td><td>道一</td><td>2天</td></tr>
+        <tr><td>2.3</td><td>道一部署七巧低代码信创版</td><td>部署完成确认</td><td>道一</td><td>2天</td></tr>
+        <tr><td>2.4</td><td>执行功能测试+性能测试+稳定性测试（两套系统）</td><td>测试记录</td><td>联合</td><td>3天</td></tr>
+        <tr><td>2.5</td><td>出具POC测试报告及结论</td><td>POC测试报告</td><td>国元</td><td>2天</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-weight:600;margin-top:12px;">POC通过标准：</p>
+    <ul>
+      <li>功能测试通过率 ≥ 95%（智能门户+七巧分别统计）</li>
+      <li>核心业务流程无阻塞性缺陷（两套系统）</li>
+      <li>性能指标不低于非信创版本80%</li>
+      <li>72小时稳定性测试无异常</li>
+    </ul>
+
+    <p style="font-weight:600;margin-top:16px;">POC结果决策：</p>
+    <div class="decision decision-pass">✅ 通过 → 进入第三阶段（OceanBase方案）</div>
+    <div class="decision decision-fail">❌ 不通过 → 切换人大金仓方案，重新POC（1周）</div>
+
+    <!-- 第三阶段 -->
+    <h3 class="sub-title-sm">第三阶段：正式适配（第4-7周）</h3>
+    <table>
+      <thead><tr><th style="width:50px">序号</th><th>任务</th><th>输出</th><th>负责</th><th style="width:50px">时长</th></tr></thead>
+      <tbody>
+        <tr><td>3.1</td><td>智能门户：代码合并与信创中间件适配</td><td>适配代码分支</td><td>道一</td><td>5天</td></tr>
+        <tr><td>3.2</td><td>七巧低代码：代码合并与信创中间件适配（含SequoiaDB+EasySearch）</td><td>适配代码分支</td><td>道一</td><td>5天</td></tr>
+        <tr><td>3.3</td><td>智能门户：全量功能测试</td><td>测试报告</td><td>道一</td><td>5天</td></tr>
+        <tr><td>3.4</td><td>七巧低代码：全量功能测试</td><td>测试报告</td><td>道一</td><td>5天</td></tr>
+        <tr><td>3.5</td><td>性能调优（两套系统）</td><td>调优报告</td><td>道一</td><td>3天</td></tr>
+        <tr><td>3.6</td><td>打包与交付（两套系统信创定制版）</td><td>软件包</td><td>道一</td><td>2天</td></tr>
+        <tr><td>3.7</td><td>编写部署文档与运维手册（含智能门户+七巧）</td><td>技术文档</td><td>道一</td><td>3天</td></tr>
+      </tbody>
+    </table>
+    <blockquote>
+      <strong>并行说明</strong>：3.1与3.2可并行执行；3.3与3.4可并行执行。实际周期取决于开发与测试资源投入。
+    </blockquote>
+
+    <!-- 第四阶段 -->
+    <h3 class="sub-title-sm">第四阶段：上线部署（第8-9周）</h3>
+    <table>
+      <thead><tr><th style="width:50px">序号</th><th>任务</th><th>输出</th><th>负责</th><th style="width:50px">时长</th></tr></thead>
+      <tbody>
+        <tr><td>4.1</td><td>生产环境部署（智能门户+七巧）</td><td>部署完成确认</td><td>联合</td><td>3天</td></tr>
+        <tr><td>4.2</td><td>数据迁移与验证</td><td>迁移验证报告</td><td>国元</td><td>2天</td></tr>
+        <tr><td>4.3</td><td>用户验收测试UAT（两套系统）</td><td>UAT报告</td><td>国元</td><td>3天</td></tr>
+        <tr><td>4.4</td><td>正式上线与验收</td><td>验收报告</td><td>联合</td><td>2天</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 五、工作量估算 -->
+  <div class="section">
+    <h2 class="section-title">五、工作量估算</h2>
+    <blockquote>
+      <strong>待定</strong>：需与道一完成技术对接后，根据适配开发范围进一步确认工作量，后续更新。
+    </blockquote>
+  </div>
+
+  <!-- 六、风险评估与应对 -->
+  <div class="section">
+    <h2 class="section-title">六、风险评估与应对</h2>
+    <table>
+      <thead>
+        <tr><th style="width:80px">风险等级</th><th>风险项</th><th>风险描述</th><th style="width:80px">影响范围</th><th>应对措施</th></tr>
+      </thead>
+      <tbody>
+        <tr class="risk-high">
+          <td>高</td>
+          <td>OceanBase适配稳定性</td>
+          <td>与道一产品适配案例较少，稳定性待验证</td>
+          <td>门户+低码系统</td>
+          <td><strong>POC先行</strong>，验证通过后实施；不通过则切换人大金仓</td>
+        </tr>
+        <tr class="risk-mid">
+          <td>中</td>
+          <td>宝兰德全栈兼容性</td>
+          <td>需验证WebServer/AppServer/CacheServer/MQ协同工作</td>
+          <td>门户+低码系统</td>
+          <td>POC阶段全覆盖测试，厂商技术支持</td>
+        </tr>
+        <tr class="risk-mid">
+          <td>中</td>
+          <td>巨杉SequoiaDB兼容性</td>
+          <td>替代MongoDB，需验证文档存储功能完整性</td>
+          <td>门户+低码系统</td>
+          <td>POC阶段重点验证文档读写、索引、副本集功能</td>
+        </tr>
+        <tr class="risk-mid">
+          <td>中</td>
+          <td>EasySearch兼容性</td>
+          <td>替代Elasticsearch，需验证搜索接口兼容性</td>
+          <td>门户+低码系统</td>
+          <td>POC阶段验证搜索精度、性能、API兼容性（EasySearch已获信通院认证，100% API兼容ES）</td>
+        </tr>
+        <tr class="risk-low">
+          <td>低</td>
+          <td>海光CPU稳定性</td>
+          <td>x86架构兼容性好，已有多案例验证</td>
+          <td>门户+低码系统</td>
+          <td>使用麒麟V10官方镜像</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 七、关键里程碑 -->
+  <div class="section">
+    <h2 class="section-title">七、关键里程碑</h2>
+    <table class="milestone">
+      <thead><tr><th>里程碑</th><th>计划时间</th><th>交付物</th><th>决策点</th></tr></thead>
+      <tbody>
+        <tr><td>M1：开发需求确认</td><td>第1周末</td><td>需求确认书（智能门户+七巧）</td><td>明确两套系统适配范围与工作量</td></tr>
+        <tr><td>M2：POC完成</td><td>第3周末</td><td>POC测试报告（含两套系统）</td><td>通过→继续；不通过→切换人大金仓</td></tr>
+        <tr><td>M3：适配完成</td><td>第7周末</td><td>信创定制版软件包（智能门户+七巧）</td><td>进入上线部署阶段</td></tr>
+        <tr><td>M4：正式上线</td><td>第9周末</td><td>验收报告</td><td>项目结项</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 八、附录 -->
+  <div class="section">
+    <h2 class="section-title">八、附录</h2>
+
+    <h3 class="sub-title">8.1 参考资料</h3>
+    <table>
+      <thead><tr><th>文档名称</th><th>版本/日期</th></tr></thead>
+      <tbody>
+        <tr><td>《产品国产化信创适配说明》</td><td>V1.0，2026年</td></tr>
+        <tr><td>《道一自研产品信创V1》</td><td>V1.0，2026年3月23日</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-title">8.2 术语表</h3>
+    <table>
+      <thead><tr><th>术语</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>POC</td><td>Proof of Concept，概念验证</td></tr>
+        <tr><td>UAT</td><td>User Acceptance Test，用户验收测试</td></tr>
+        <tr><td>人天</td><td>工作量单位，1人天=1人工作8小时</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>
+</body>
+</html>

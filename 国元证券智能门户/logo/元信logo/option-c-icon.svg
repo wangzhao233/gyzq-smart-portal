@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bgRadialC" cx="0.5" cy="0.4" r="0.7">
+      <stop offset="0%" stop-color="#1a3560"/>
+      <stop offset="100%" stop-color="#0a1f33"/>
+    </radialGradient>
+    <linearGradient id="goldC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0d87a"/>
+      <stop offset="30%" stop-color="#d4a843"/>
+      <stop offset="70%" stop-color="#c49a38"/>
+      <stop offset="100%" stop-color="#a07820"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect x="10" y="10" width="180" height="180" rx="32" ry="32" fill="url(#bgRadialC)"/>
+
+  <!-- Hexagonal shield (安全/可信) -->
+  <g transform="translate(100,97)">
+    <!-- Shield outer glow -->
+    <polygon points="0,-55 48,-28 48,28 0,55 -48,28 -48,-28" 
+             fill="none" stroke="rgba(212,168,67,0.08)" stroke-width="8"/>
+
+    <!-- Shield body -->
+    <polygon points="0,-50 44,-25 44,25 0,50 -44,25 -44,-25" 
+             fill="rgba(13,43,69,0.85)" stroke="url(#goldC)" stroke-width="2"/>
+
+    <!-- Shield inner border -->
+    <polygon points="0,-40 36,-21 36,21 0,40 -36,21 -36,-21" 
+             fill="none" stroke="rgba(212,168,67,0.2)" stroke-width="0.8"/>
+
+    <!-- 信 character - centerpiece -->
+    <g transform="translate(0,0)" fill="none" stroke="url(#goldC)" stroke-width="3.2" 
+       stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+      <!-- 人 -->
+      <path d="M-14,-26 v24 c0,6 4,12 8,16"/>
+      <path d="M-22,-14 c-3,-3 -2,-13 0,-17 c2,3 3,13 0,17"/>
+      <!-- 言 -->
+      <line x1="-4" y1="-28" x2="24" y2="-28"/>
+      <line x1="-9" y1="-17" x2="26" y2="-17"/>
+      <line x1="-6" y1="-7" x2="24" y2="-7"/>
+      <rect x="-3" y="5" width="22" height="18" rx="3"/>
+    </g>
+  </g>
+
+  <!-- Corner accents -->
+  <g fill="url(#goldC)" opacity="0.3">
+    <rect x="32" y="28" width="2" height="14" rx="1"/>
+    <rect x="32" y="28" width="14" height="2" rx="1"/>
+    
+    <rect x="166" y="28" width="2" height="14" rx="1"/>
+    <rect x="154" y="28" width="14" height="2" rx="1"/>
+    
+    <rect x="32" y="158" width="2" height="14" rx="1"/>
+    <rect x="32" y="170" width="14" height="2" rx="1"/>
+    
+    <rect x="166" y="158" width="2" height="14" rx="1"/>
+    <rect x="154" y="170" width="14" height="2" rx="1"/>
+  </g>
+</svg>

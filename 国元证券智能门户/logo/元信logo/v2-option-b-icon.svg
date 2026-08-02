@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="goldBG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c96a"/>
+      <stop offset="50%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#b8912e"/>
+    </linearGradient>
+    <linearGradient id="goldBGLight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0dc8a"/>
+      <stop offset="100%" stop-color="#d4a843"/>
+    </linearGradient>
+    <filter id="shadowB" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00000020"/>
+    </filter>
+  </defs>
+
+  <!-- White rounded square base -->
+  <rect x="14" y="14" width="172" height="172" rx="34" ry="34" fill="#ffffff" filter="url(#shadowB)"/>
+
+  <!-- Blue outlined speech bubble -->
+  <g transform="translate(100,93)">
+    <path d="M-60,-44 v-6 a10,10 0 0,1 10,-10 h100 a10,10 0 0,1 10,10 v70 a10,10 0 0,1 -10,10 h-80 l-22,20 v-20 h-8" 
+          fill="none" stroke="#1478FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Gold diamond (Guoyuan DNA) as centerpiece -->
+    <polygon points="0,-24 18,0 0,24 -18,0" fill="url(#goldBG)" stroke="#b8912e" stroke-width="1"/>
+
+    <!-- Inner white 信-like pattern inside diamond -->
+    <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Simplified 人 inside diamond -->
+      <path d="M-4,-8 v8"/>
+      <path d="M-7,-4 L-4,-1 L-1,-4"/>
+      <!-- Simplified 言 -->
+      <line x1="-3" y1="-2" x2="7" y2="-2"/>
+      <line x1="-3" y1="2" x2="5" y2="2"/>
+    </g>
+  </g>
+
+  <!-- Top-right gold diamond accent -->
+  <polygon points="152,36 160,44 152,52 144,44" fill="url(#goldBGLight)" opacity="0.7"/>
+</svg>

@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D6_第三方应用接入指南</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>D6 第三方应用接入指南</h1>
+
+<h2>1. 文档说明</h2>
+
+<h3>1.1 适用范围</h3>
+<p>本指南适用于国元证券智能门户系统（元信私有化企微 + 智能门户 + 七巧低码平台）的第三方应用接入开发。主要面向以下场景：</p>
+<ul><li>企业内部应用集成智能门户待办中心、消息中心、日程中心</li><li>第三方数据源接入智能门户数据展示</li><li>基于基础环境（海光CPU + 银河麒麟 V10 Halberd + MySQL）的开发与部署</li></ul>
+
+<h3>1.2 读者对象</h3>
+<ul><li>应用开发工程师</li><li>系统集成工程师</li><li>项目经理</li><li>技术架构师</li></ul>
+
+<h3>1.3 术语说明</h3>
+<table><thead><tr><th>术语</th><th>说明</th></tr></thead><tbody><tr><td>SSO</td><td>Single Sign-On，单点登录，本项目基于原有SSO账号密码登录</td></tr><tr><td>AppID</td><td>应用唯一标识，用于API调用身份识别</td></tr><tr><td>AppSecret</td><td>应用密钥，用于签名计算，需严格保密</td></tr><tr><td>HMAC</td><td>Hash-based Message Authentication Code，基于哈希的消息认证码</td></tr><tr><td>SHA256</td><td>Secure Hash Algorithm 256-bit，安全哈希算法256位</td></tr><tr><td>MD5</td><td>Message-Digest Algorithm 5，消息摘要算法第5版</td></tr><tr><td>REST</td><td>Representational State Transfer，表述性状态转移</td></tr><tr><td>门户(PORTAL)</td><td>国元证券智能门户前端应用</td></tr><tr><td>企微(QW)</td><td>元信私有化企业微信应用</td></tr></tbody></table>
+
+<h2>2. 接入概述</h2>
+
+<h3>2.1 1+2+N 模式</h3>
+<p>国元证券智能门户采用"1+2+N"应用接入架构：</p>
+<ul><li><strong>1个核心平台</strong>：智能门户基础平台，提供统一的身份认证、权限管理、消息分发等基础能力</li><li><strong>2个终端入口</strong>：智能门户Web端（PORTAL）和元信企业微信移动端（QW）</li><li><strong>N个业务应用</strong>：已识别18个需接入的业务应用，包括微盘扩容、新闻公告、七巧plus、云办公系列等</li></ul>
+
+<h3>2.2 接入场景总览</h3>
+<p>第三方应用接入智能门户主要涉及以下四种场景：</p>
+
+<table><thead><tr><th>场景</th><th>说明</th><th>典型应用</th><th>工时估算</th></tr></thead><tbody><tr><td>待办中心接入</td><td>将业务应用的待办事项集成到门户待办中心</td><td>OA审批、流程待办</td><td>3-5人天/应用</td></tr><tr><td>消息中心接入</td><td>通过门户消息中心发送应用通知、提醒</td><td>系统告警、审批提醒</td><td>2-3人天/应用</td></tr><tr><td>日程中心接入</td><td>将业务日程集成到门户日程中心</td><td>会议安排、活动日程</td><td>2-3人天/应用</td></tr><tr><td>数据源接入</td><td>将业务数据接入门户数据展示</td><td>报表数据、监控数据</td><td>1-2人天/数据源</td></tr></tbody></table>
+
+<h2>3. 接入准备</h2>
+
+<h3>3.1 申请AppID/AppSecret</h3>
+<ol><li><strong>申请流程</strong>：<br>- 登录智能门户管理控制台<br>- 进入"应用管理" → "第三方应用接入"<br>- 填写应用基本信息（应用名称、应用类型、负责人等）<br>- 提交申请，等待管理员审批<br>- 审批通过后，系统自动生成AppID和AppSecret</li></ol>
+
+<ol><li><strong>密钥管理</strong>：<br>- AppSecret在生成时仅显示一次，请务必妥善保存<br>- 如密钥泄露，应立即在管理控制台重置<br>- 不同环境（开发、测试、生产）使用不同的AppID/AppSecret</li></ol>
+
+<h3>3.2 环境信息</h3>
+<table><thead><tr><th>环境</th><th>域名</th><th>端口</th><th>协议</th><th>说明</th></tr></thead><tbody><tr><td>开发环境</td><td>dev-gateway.gyzq.com</td><td>443</td><td>HTTPS</td><td>开发调试使用</td></tr><tr><td>测试环境</td><td>test-gateway.gyzq.com</td><td>443</td><td>HTTPS</td><td>测试验证使用</td></tr><tr><td>生产环境</td><td>gateway.gyzq.com</td><td>443</td><td>HTTPS</td><td>生产环境使用</td></tr></tbody></table>
+
+<h3>3.3 应用配置流程</h3>
+<p>在接入第三方应用前，需在企业微信管理后台完成应用的创建与配置：</p>
+
+<h4>3.3.1 添加应用</h4>
+<ol><li>登录企业微信管理后台</li><li>进入"应用与小程序" tab</li><li>点击"添加应用"</li><li>填写应用信息：<br>- <strong>应用Logo</strong>：建议尺寸750×750像素<br>- <strong>应用名称</strong>：应用显示名称<br>- <strong>应用介绍</strong>：应用功能描述</li><li>设置可见范围（可选择部门或人员）</li><li>提交创建</li></ol>
+
+<h4>3.3.2 获取应用凭证</h4>
+<p>应用创建成功后，进入应用详情页可获取以下关键信息：</p>
+
+<table><thead><tr><th>参数</th><th>说明</th><th>获取方式</th></tr></thead><tbody><tr><td>agentid</td><td>应用唯一标识</td><td>应用详情页 → 开发者功能</td></tr><tr><td>secret</td><td>应用密钥</td><td>应用详情页 → 开发者功能（需在客户端接收）</td></tr></tbody></table>
+
+<blockquote><strong>注意</strong>：secret仅在创建时显示一次，请务必妥善保存。如密钥泄露，应立即重置。</blockquote>
+
+<h4>3.3.3 应用功能配置</h4>
+<p>在应用详情页可配置以下功能：</p>
+<ul><li><strong>收发消息设置</strong>：配置应用的消息接收和发送能力</li><li><strong>应用展示</strong>：配置应用在移动端和PC端的展示样式</li><li><strong>开发者功能</strong>：配置应用的接口权限和回调地址</li></ul>
+
+<h4>3.3.4 可见范围管理</h4>
+<p>应用可见范围决定了哪些用户可以使用该应用：</p>
+<ul><li>支持按部门、标签、人员进行精细控制</li><li>可在应用详情页随时调整</li><li>建议根据业务需求设置最小必要范围</li></ul>
+
+<h3>3.4 网络要求</h3>
+<ol><li><strong>网络连通性</strong>：<br>- 应用服务器需能访问智能门户网关域名<br>- 建议使用专线或VPN确保网络稳定性<br>- 防火墙需放行443端口（HTTPS）</li></ol>
+
+<ol><li><strong>IP白名单</strong>：<br>- 生产环境需申请IP白名单<br>- 通过管理控制台提交服务器公网IP<br>- 白名单生效时间：提交后1个工作日内</li></ol>
+
+<h2>4. OAuth2.0 单点登录</h2>
+
+<h3>4.1 授权登录概述</h3>
+<p>智能门户支持基于OAuth2.0协议的单点登录，用户可通过企业微信账号直接登录第三方应用，无需重复输入账号密码。</p>
+
+<h3>4.2 授权登录流程</h3>
+<ol><li>用户访问第三方应用</li><li>应用重定向到企业微信授权页面</li><li>用户确认授权</li><li>企业微信回调应用指定地址，携带授权码（code）</li><li>应用使用授权码获取用户信息</li><li>完成登录</li></ol>
+
+<h3>4.3 授权URL格式</h3>
+<pre><code class="language-">
+https://域名:端口/connect/oauth2/authorize?appid=CORPID&amp;redirect_uri=REDIRECT_URI&amp;response_type=code&amp;scope=SCOPE&amp;agentid=AGENTID&amp;state=STATE#wechat_redirect
+</code></pre>
+
+<h3>4.4 参数说明</h3>
+<table><thead><tr><th>参数名</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>appid</td><td>是</td><td>企业ID（CORPID）</td></tr><tr><td>redirect_uri</td><td>是</td><td>授权后重定向的回调链接地址，需进行urlencode编码</td></tr><tr><td>response_type</td><td>是</td><td>固定值：code</td></tr><tr><td>scope</td><td>是</td><td>授权作用域：snsapi_base（静默授权）或 snsapi_userinfo（手动授权）</td></tr><tr><td>agentid</td><td>是</td><td>应用的agentId</td></tr><tr><td>state</td><td>否</td><td>用于保持请求和回调的状态参数，原样带回</td></tr><tr><td>#wechat_redirect</td><td>是</td><td>固定后缀，标识企业微信跳转</td></tr></tbody></table>
+
+<h3>4.5 授权作用域说明</h3>
+<table><thead><tr><th>作用域</th><th>说明</th><th>适用场景</th></tr></thead><tbody><tr><td>snsapi_base</td><td>静默授权，用户无感知</td><td>仅需获取用户身份标识（userid）</td></tr><tr><td>snsapi_userinfo</td><td>手动授权，需用户确认</td><td>需要获取用户详细信息（姓名、头像等）</td></tr></tbody></table>
+
+<h3>4.6 回调处理</h3>
+<p>授权成功后，企业微信会携带code参数回调redirect_uri：</p>
+<pre><code class="language-">
+https://应用回调地址?code=AUTH_CODE&amp;state=STATE
+</code></pre>
+
+<p>应用需使用code换取用户信息：</p>
+<pre><code class="language-python">
+import requests
+
+def get_user_info(code):
+    # 1. 使用code换取access_token
+    token_url = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={CORPID}&amp;corpsecret={SECRET}"
+    token_resp = requests.get(token_url).json()
+    access_token = token_resp['access_token']
+    
+    # 2. 使用access_token获取用户信息
+    user_url = f"https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token={access_token}&amp;code={code}"
+    user_resp = requests.get(user_url).json()
+    
+    return user_resp
+</code></pre>
+
+<h3>4.7 安全注意事项</h3>
+<ol><li><strong>redirect_uri白名单</strong>：需在企业微信管理后台配置可信域名</li><li><strong>state参数</strong>：建议使用随机字符串防止CSRF攻击</li><li><strong>code有效期</strong>：code有效期为5分钟，需及时使用</li><li><strong>HTTPS要求</strong>：生产环境必须使用HTTPS协议</li></ol>
+
+<h2>5. 签名认证规范</h2>
+
+<h3>5.1 签名算法概述</h3>
+<p>智能门户API采用两种签名算法：</p>
+<ul><li><strong>待办中心、日程中心</strong>：MD5(SHA256(...)) 两步哈希签名</li><li><strong>消息中心</strong>：HMAC-SHA256 直接hex签名</li></ul>
+
+<h3>5.2 待办中心/日程中心签名算法（MD5(SHA256(...))）</h3>
+
+<h4>5.2.1 签名步骤</h4>
+<ol><li><strong>参数排序</strong>：将所有请求参数（不包括sign参数）按参数名ASCII码升序排列</li><li><strong>拼接字符串</strong>：将排序后的参数按"参数名=参数值"格式拼接，用"&amp;"连接</li><li><strong>SHA256哈希</strong>：对拼接后的字符串进行SHA256哈希，得到哈希值</li><li><strong>MD5哈希</strong>：对SHA256哈希值进行MD5哈希，得到最终签名</li><li><strong>签名有效期</strong>：签名有效期为5分钟，超时需重新生成</li></ol>
+
+<blockquote><strong>注意</strong>：待办中心/日程中心的签名算法为纯哈希签名（MD5(SHA256(...))），<strong>不使用AppSecret参与计算</strong>。AppSecret仅用于消息中心的HMAC-SHA256签名算法（详见5.3节）。</blockquote>
+
+<h4>5.2.2 代码示例（Python）</h4>
+<pre><code class="language-python">
+import hashlib
+import time
+import json
+
+def generate_todo_signature(app_id, params):
+    """
+    生成待办中心/日程中心API签名
+    
+    参数:
+        app_id: 应用ID
+        params: 请求参数字典
+    
+    返回:
+        signature: 签名字符串
+        timestamp: 时间戳
+    """
+    # 1. 添加必要参数
+    timestamp = str(int(time.time()))
+    params.update({
+        'appId': app_id,
+        'timestamp': timestamp
+    })
+    
+    # 2. 参数排序
+    sorted_params = sorted(params.items(), key=lambda x: x[0])
+    
+    # 3. 拼接字符串
+    sign_str = '&amp;'.join([f"{k}={v}" for k, v in sorted_params])
+    
+    # 4. SHA256哈希
+    sha256_hash = hashlib.sha256(sign_str.encode('utf-8')).hexdigest()
+    
+    # 5. MD5哈希
+    md5_hash = hashlib.md5(sha256_hash.encode('utf-8')).hexdigest()
+    
+    return md5_hash, timestamp
+
+# 使用示例
+app_id = "GY_APP_001"
+params = {
+    'title': '待办事项测试',
+    'description': '这是一条测试待办',
+    'assignee': 'user123',
+    'dueDate': '2026-07-03 18:00:00'
+}
+
+signature, timestamp = generate_todo_signature(app_id, params)
+print(f"签名: {signature}")
+print(f"时间戳: {timestamp}")
+</code></pre>
+
+<h4>5.2.3 代码示例（Java）</h4>
+<pre><code class="language-java">
+import java.security.MessageDigest;
+import java.util.*;
+
+public class TodoSignatureGenerator {
+    
+    /**
+     * 生成待办中心/日程中心API签名
+     * 
+     * @param appId 应用ID
+     * @param params 请求参数
+     * @return 签名和时间戳
+     */
+    public static Map&lt;String, String&gt; generateSignature(String appId, Map&lt;String, String&gt; params) {
+        Map&lt;String, String&gt; result = new HashMap&lt;&gt;();
+        
+        // 1. 添加必要参数
+        long timestamp = System.currentTimeMillis() / 1000;
+        params.put("appId", appId);
+        params.put("timestamp", String.valueOf(timestamp));
+        
+        // 2. 参数排序
+        List&lt;String&gt; keys = new ArrayList&lt;&gt;(params.keySet());
+        Collections.sort(keys);
+        
+        // 3. 拼接字符串
+        StringBuilder signStr = new StringBuilder();
+        for (String key : keys) {
+            if (signStr.length() &gt; 0) {
+                signStr.append("&amp;");
+            }
+            signStr.append(key).append("=").append(params.get(key));
+        }
+        
+        try {
+            // 4. SHA256哈希
+            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+            byte[] sha256Hash = sha256.digest(signStr.toString().getBytes("UTF-8"));
+            String sha256Hex = bytesToHex(sha256Hash);
+            
+            // 5. MD5哈希
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] md5Hash = md5.digest(sha256Hex.getBytes("UTF-8"));
+            String signature = bytesToHex(md5Hash);
+            
+            result.put("signature", signature);
+            result.put("timestamp", String.valueOf(timestamp));
+            
+        } catch (Exception e) {
+            throw new RuntimeException("签名生成失败", e);
+        }
+        
+        return result;
+    }
+    
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+    
+    public static void main(String[] args) {
+        String appId = "GY_APP_001";
+        
+        Map&lt;String, String&gt; params = new HashMap&lt;&gt;();
+        params.put("title", "待办事项测试");
+        params.put("description", "这是一条测试待办");
+        params.put("assignee", "user123");
+        params.put("dueDate", "2026-07-03 18:00:00");
+        
+        Map&lt;String, String&gt; result = generateSignature(appId, params);
+        System.out.println("签名: " + result.get("signature"));
+        System.out.println("时间戳: " + result.get("timestamp"));
+    }
+}
+</code></pre>
+
+<h3>5.3 消息中心签名算法（HMAC-SHA256）</h3>
+
+<h4>5.3.1 签名步骤</h4>
+<ol><li><strong>构造待签名字符串</strong>：按固定格式拼接请求头参数</li><li><strong>HMAC-SHA256计算</strong>：使用AppSecret作为密钥，对待签名字符串进行HMAC-SHA256计算</li><li><strong>转hex编码</strong>：将HMAC-SHA256计算结果转换为十六进制字符串</li><li><strong>防重放机制</strong>：请求头包含时间戳和随机数，时间窗口±5分钟，Nonce缓存防止重放</li></ol>
+
+<h4>5.3.2 请求头参数说明</h4>
+<table><thead><tr><th>参数名</th><th>说明</th><th>示例值</th></tr></thead><tbody><tr><td>X-AppKey</td><td>应用ID</td><td>GY_APP_001</td></tr><tr><td>X-Timestamp</td><td>请求时间戳（秒）</td><td>1783046400</td></tr><tr><td>X-Nonce</td><td>随机字符串（32位）</td><td>a1b2c3d4e5f6789012345678901234567890</td></tr><tr><td>X-Sign</td><td>签名</td><td>a1b2c3d4e5f6...</td></tr></tbody></table>
+
+<h4>5.3.3 待签名字符串格式</h4>
+<pre><code class="language-">
+X-AppKey={appKey}&amp;X-Timestamp={timestamp}&amp;X-Nonce={nonce}
+</code></pre>
+
+<h4>5.3.4 代码示例（Python）</h4>
+<pre><code class="language-python">
+import hmac
+import hashlib
+import time
+import uuid
+
+def generate_message_signature(app_key, app_secret):
+    """
+    生成消息中心API签名
+    
+    参数:
+        app_key: 应用ID
+        app_secret: 应用密钥
+    
+    返回:
+        headers: 包含签名的请求头字典
+    """
+    # 1. 生成时间戳和随机数
+    timestamp = str(int(time.time()))
+    nonce = uuid.uuid4().hex
+    
+    # 2. 构造待签名字符串
+    sign_str = f"X-AppKey={app_key}&amp;X-Timestamp={timestamp}&amp;X-Nonce={nonce}"
+    
+    # 3. HMAC-SHA256计算
+    hmac_obj = hmac.new(app_secret.encode('utf-8'), sign_str.encode('utf-8'), hashlib.sha256)
+    signature = hmac_obj.hexdigest()
+    
+    # 4. 构造请求头
+    headers = {
+        'X-AppKey': app_key,
+        'X-Timestamp': timestamp,
+        'X-Nonce': nonce,
+        'X-Sign': signature,
+        'Content-Type': 'application/json'
+    }
+    
+    return headers
+
+# 使用示例
+app_key = "GY_APP_001"
+app_secret = "your_app_secret_here"
+
+headers = generate_message_signature(app_key, app_secret)
+print("请求头:")
+for key, value in headers.items():
+    print(f"{key}: {value}")
+</code></pre>
+
+<h4>5.3.5 代码示例（Java）</h4>
+<pre><code class="language-java">
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+public class MessageSignatureGenerator {
+    
+    /**
+     * 生成消息中心API签名
+     * 
+     * @param appKey 应用ID
+     * @param appSecret 应用密钥
+     * @return 包含签名的请求头
+     */
+    public static Map&lt;String, String&gt; generateHeaders(String appKey, String appSecret) {
+        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+        
+        // 1. 生成时间戳和随机数
+        long timestamp = System.currentTimeMillis() / 1000;
+        String nonce = UUID.randomUUID().toString().replace("-", "");
+        
+        // 2. 构造待签名字符串
+        String signStr = String.format("X-AppKey=%s&amp;X-Timestamp=%d&amp;X-Nonce=%s", 
+                                       appKey, timestamp, nonce);
+        
+        try {
+            // 3. HMAC-SHA256计算
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(appSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            mac.init(secretKeySpec);
+            byte[] hmacBytes = mac.doFinal(signStr.getBytes(StandardCharsets.UTF_8));
+            
+            // 4. 转hex编码
+            StringBuilder signature = new StringBuilder();
+            for (byte b : hmacBytes) {
+                signature.append(String.format("%02x", b));
+            }
+            
+            // 5. 构造请求头
+            headers.put("X-AppKey", appKey);
+            headers.put("X-Timestamp", String.valueOf(timestamp));
+            headers.put("X-Nonce", nonce);
+            headers.put("X-Sign", signature.toString());
+            headers.put("Content-Type", "application/json");
+            
+        } catch (Exception e) {
+            throw new RuntimeException("签名生成失败", e);
+        }
+        
+        return headers;
+    }
+    
+    public static void main(String[] args) {
+        String appKey = "GY_APP_001";
+        String appSecret = "your_app_secret_here";
+        
+        Map&lt;String, String&gt; headers = generateHeaders(appKey, appSecret);
+        System.out.println("请求头:");
+        headers.forEach((key, value) -&gt; System.out.println(key + ": " + value));
+    }
+}
+</code></pre>
+
+<h3>5.4 签名算法对比</h3>
+<table><thead><tr><th>特性</th><th>待办中心/日程中心</th><th>消息中心</th></tr></thead><tbody><tr><td>算法</td><td>MD5(SHA256(...))</td><td>HMAC-SHA256</td></tr><tr><td>签名有效期</td><td>5分钟</td><td>±5分钟时间窗口</td></tr><tr><td>防重放机制</td><td>时间戳有效期</td><td>Nonce缓存</td></tr><tr><td>参数传递</td><td>请求参数</td><td>请求头</td></tr><tr><td>复杂度</td><td>中等</td><td>较低</td></tr></tbody></table>
+
+<h2>6. 安全网关配置</h2>
+
+<h3>6.1 配置概述</h3>
+<p>安全网关用于控制第三方应用对企业微信API的访问，提供身份验证、权限控制、流量监控等安全能力。所有第三方应用在接入企业微信API前，必须完成安全网关配置。</p>
+
+<h3>6.2 配置步骤</h3>
+<ol><li>登录企业微信管理后台</li><li>点击右上角"安全网关"入口</li><li>进入安全网关配置界面</li></ol>
+
+<h3>6.3 新建资源</h3>
+<p>在安全网关配置界面，按以下步骤新建资源：</p>
+
+<h4>6.3.1 基础设置</h4>
+<table><thead><tr><th>配置项</th><th>说明</th><th>必填</th></tr></thead><tbody><tr><td>名称</td><td>资源显示名称</td><td>是</td></tr><tr><td>地址</td><td>后端服务地址</td><td>是</td></tr><tr><td>端口</td><td>后端服务端口</td><td>是</td></tr><tr><td>所属应用</td><td>关联的企业微信应用</td><td>是</td></tr></tbody></table>
+
+<h4>6.3.2 高级设置</h4>
+<table><thead><tr><th>配置项</th><th>说明</th><th>推荐值</th></tr></thead><tbody><tr><td>网关策略</td><td>选择"网关代理模式"</td><td>网关代理模式</td></tr><tr><td>所属节点</td><td>勾选部署节点</td><td>根据实际部署选择</td></tr></tbody></table>
+
+<h3>6.4 配置注意事项</h3>
+<ol><li><strong>域名要求</strong>：支持IP地址或域名</li><li><strong>端口配置</strong>：确保端口未被占用且防火墙已放行</li><li><strong>应用关联</strong>：必须关联已创建的企业微信应用</li><li><strong>生效时间</strong>：配置保存后需退出移动端企微应用重新进入生效</li></ol>
+
+<h3>6.5 验证配置</h3>
+<p>配置完成后，可通过以下方式验证：</p>
+<ol><li>退出企业微信移动端应用</li><li>重新进入应用</li><li>访问需要安全网关保护的资源</li><li>检查是否能正常访问</li></ol>
+
+<h2>7. 前端H5集成</h2>
+
+<h3>7.1 JS-SDK引入</h3>
+<p>在需要调用企业微信JS-SDK的页面中，引入以下脚本：</p>
+<pre><code class="language-html">
+&lt;script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<h3>7.2 权限验证配置</h3>
+<p>通过config接口注入权限验证配置，需要后端提供签名所需参数：</p>
+
+<pre><code class="language-javascript">
+wx.config({
+    beta: true, // 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+    debug: false, // 开启调试模式，调用的所有api的返回值会在客户端alert出来
+    appId: 'CORPID', // 必填，企业微信的corpID
+    timestamp: timestamp, // 必填，生成签名的时间戳
+    nonceStr: nonceStr, // 必填，生成签名的随机串
+    signature: signature, // 必填，签名
+    jsApiList: ['onMenuShareWechat', 'onMenuShareTimeline', 'getLocation', 'openLocation', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'chooseWXPay'] // 必填，需要使用的JS接口列表
+});
+</code></pre>
+
+<h3>7.3 签名生成</h3>
+<p>后端需生成签名，签名算法如下：</p>
+<ol><li>使用企业微信提供的jsapi_ticket（通过access_token获取）</li><li>拼接字符串：<code>jsapi_ticket=TICKET&amp;noncestr=NONCESTR&amp;timestamp=TIMESTAMP&amp;url=URL</code></li><li>对拼接字符串进行SHA1哈希</li><li>生成签名</li></ol>
+
+<h3>7.4 常用JSAPI</h3>
+<table><thead><tr><th>JSAPI</th><th>功能</th><th>说明</th></tr></thead><tbody><tr><td>onMenuShareWechat</td><td>分享到微信</td><td>企业微信支持分享到微信</td></tr><tr><td>onMenuShareTimeline</td><td>分享到朋友圈</td><td>企业微信支持分享到朋友圈</td></tr><tr><td>getLocation</td><td>获取地理位置</td><td>获取当前用户地理位置</td></tr><tr><td>openLocation</td><td>打开地理位置</td><td>使用微信内置地图查看位置</td></tr><tr><td>chooseImage</td><td>拍照或从手机相册中选图</td><td>选择图片</td></tr><tr><td>previewImage</td><td>预览图片</td><td>预览图片</td></tr><tr><td>uploadImage</td><td>上传图片</td><td>上传图片到企业微信服务器</td></tr><tr><td>downloadImage</td><td>下载图片</td><td>从企业微信服务器下载图片</td></tr><tr><td>chooseWXPay</td><td>发起支付</td><td>企业微信支付功能</td></tr></tbody></table>
+
+<h3>7.5 错误处理</h3>
+<pre><code class="language-javascript">
+wx.ready(function(){
+    // config信息验证成功
+    console.log('JS-SDK验证成功');
+});
+
+wx.error(function(res){
+    // config信息验证失败
+    console.error('JS-SDK验证失败：', res);
+});
+</code></pre>
+
+<h3>7.6 开发调试建议</h3>
+<ol><li><strong>开启debug模式</strong>：开发阶段设置<code>debug: true</code>，便于调试</li><li><strong>使用测试环境</strong>：先在测试环境验证功能</li><li><strong>检查域名白名单</strong>：确保前端域名已在企业微信管理后台配置</li><li><strong>查看错误日志</strong>：通过控制台查看详细的错误信息</li></ol>
+
+<h2>8. 待办中心接入</h2>
+
+<h3>8.1 接口清单</h3>
+<p>待办中心共提供9个REST接口：</p>
+
+<table><thead><tr><th>序号</th><th>接口名称</th><th>HTTP方法</th><th>接口路径</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>创建待办</td><td>POST</td><td>/api/todo/create</td><td>创建新的待办事项</td></tr><tr><td>2</td><td>更新待办</td><td>POST</td><td>/api/todo/update</td><td>更新待办事项信息</td></tr><tr><td>3</td><td>删除待办</td><td>POST</td><td>/api/todo/delete</td><td>删除待办事项</td></tr><tr><td>4</td><td>查询待办详情</td><td>GET</td><td>/api/todo/detail</td><td>根据ID查询待办详情</td></tr><tr><td>5</td><td>查询待办列表</td><td>GET</td><td>/api/todo/list</td><td>查询待办列表（分页）</td></tr><tr><td>6</td><td>标记完成</td><td>POST</td><td>/api/todo/complete</td><td>标记待办为已完成</td></tr><tr><td>7</td><td>标记已读</td><td>POST</td><td>/api/todo/read</td><td>标记待办为已读</td></tr><tr><td>8</td><td>批量操作</td><td>POST</td><td>/api/todo/batch</td><td>批量处理待办事项</td></tr><tr><td>9</td><td>查询统计</td><td>GET</td><td>/api/todo/stats</td><td>查询待办统计数据</td></tr></tbody></table>
+
+<blockquote><strong>重要说明</strong>：所有待办中心接口地址需加 <code>/api</code> 前缀，例如：<code>/api/task/external/createTask</code>。时间戳与企微服务器时间差不超过5分钟。</blockquote>
+
+<h3>8.2 通用参数说明</h3>
+<p>所有待办中心接口都需要以下公共参数：</p>
+
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>appId</td><td>String</td><td>是</td><td>应用ID</td></tr><tr><td>timestamp</td><td>String</td><td>是</td><td>请求时间戳（秒）</td></tr><tr><td>sign</td><td>String</td><td>是</td><td>签名字符串</td></tr><tr><td>userId</td><td>String</td><td>是</td><td>用户ID（SSO账号）</td></tr></tbody></table>
+
+<h3>8.3 创建待办接口详情</h3>
+
+<h4>8.3.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>title</td><td>String</td><td>是</td><td>待办标题，最大长度200字符</td></tr><tr><td>description</td><td>String</td><td>否</td><td>待办描述，最大长度1000字符</td></tr><tr><td>assignee</td><td>String</td><td>是</td><td>待办处理人用户ID</td></tr><tr><td>dueDate</td><td>String</td><td>否</td><td>截止时间，格式：yyyy-MM-dd HH:mm:ss</td></tr><tr><td>priority</td><td>Integer</td><td>否</td><td>优先级：1-低，2-中，3-高，默认2</td></tr><tr><td>category</td><td>String</td><td>否</td><td>待办分类</td></tr><tr><td>callbackUrl</td><td>String</td><td>否</td><td>回调地址，待办状态变更时通知</td></tr><tr><td>extInfo</td><td>String</td><td>否</td><td>扩展信息，JSON格式</td></tr></tbody></table>
+
+<h4>8.3.2 请求示例</h4>
+<pre><code class="language-json">
+POST /api/todo/create HTTP/1.1
+Host: gateway.gyzq.com
+Content-Type: application/json
+
+{
+    "appId": "GY_APP_001",
+    "timestamp": "1783046400",
+    "sign": "a1b2c3d4e5f678901234567890123456",
+    "userId": "admin",
+    "title": "审批待办：张三的请假申请",
+    "description": "张三申请2026年7月3日-7月5日年假，请审批",
+    "assignee": "manager001",
+    "dueDate": "2026-07-03 18:00:00",
+    "priority": 2,
+    "category": "OA审批",
+    "callbackUrl": "https://oa.gyzq.com/callback/todo",
+    "extInfo": "{\"orderId\":\"OA20260703001\",\"type\":\"leave\"}"
+}
+</code></pre>
+
+<h4>8.3.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "todoId": "TD20260703001",
+        "createTime": "2026-07-03 10:30:00",
+        "status": "pending"
+    }
+}
+</code></pre>
+
+<h3>8.4 查询待办列表接口详情</h3>
+
+<h4>8.4.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>userId</td><td>String</td><td>是</td><td>查询用户的ID</td></tr><tr><td>status</td><td>String</td><td>否</td><td>状态筛选：pending-待办，completed-已完成，all-全部</td></tr><tr><td>category</td><td>String</td><td>否</td><td>分类筛选</td></tr><tr><td>keyword</td><td>String</td><td>否</td><td>关键词搜索</td></tr><tr><td>startDate</td><td>String</td><td>否</td><td>开始时间，格式：yyyy-MM-dd</td></tr><tr><td>endDate</td><td>String</td><td>否</td><td>结束时间，格式：yyyy-MM-dd</td></tr><tr><td>pageNum</td><td>Integer</td><td>否</td><td>页码，默认1</td></tr><tr><td>pageSize</td><td>Integer</td><td>否</td><td>每页数量，默认20，最大100</td></tr></tbody></table>
+
+<h4>8.4.2 请求示例</h4>
+<pre><code class="language-">
+GET /api/todo/list?appId=GY_APP_001&amp;timestamp=1783046400&amp;sign=a1b2c3d4&amp;userId=admin&amp;status=pending&amp;pageNum=1&amp;pageSize=20 HTTP/1.1
+Host: gateway.gyzq.com
+</code></pre>
+
+<h4>8.4.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "total": 15,
+        "pageNum": 1,
+        "pageSize": 20,
+        "list": [
+            {
+                "todoId": "TD20260703001",
+                "title": "审批待办：张三的请假申请",
+                "description": "张三申请2026年7月3日-7月5日年假，请审批",
+                "assignee": "manager001",
+                "dueDate": "2026-07-03 18:00:00",
+                "priority": 2,
+                "category": "OA审批",
+                "status": "pending",
+                "createTime": "2026-07-03 10:30:00",
+                "unread": true
+            }
+        ]
+    }
+}
+</code></pre>
+
+<h3>8.5 错误码说明</h3>
+<table><thead><tr><th>错误码</th><th>说明</th><th>处理建议</th></tr></thead><tbody><tr><td>0</td><td>成功</td><td>-</td></tr><tr><td>401</td><td>认证失败</td><td>检查AppID、AppSecret和签名是否正确</td></tr><tr><td>403</td><td>无权限</td><td>检查应用权限配置，联系管理员授权</td></tr><tr><td>400</td><td>参数错误</td><td>检查请求参数格式和必填项</td></tr><tr><td>429</td><td>频率超限</td><td>降低请求频率，联系管理员调整限制</td></tr><tr><td>500</td><td>内部错误</td><td>稍后重试，如持续出现联系技术支持</td></tr></tbody></table>
+
+<h2>9. 消息中心接入</h2>
+
+<h3>9.1 接口清单</h3>
+<p>消息中心提供以下核心接口：</p>
+
+<table><thead><tr><th>序号</th><th>接口名称</th><th>HTTP方法</th><th>接口路径</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>发送消息</td><td>POST</td><td>/do1cloud-message-api/openapi/message/save</td><td>发送新消息</td></tr><tr><td>2</td><td>撤回消息</td><td>POST</td><td>/do1cloud-message-api/openapi/message/revoke</td><td>撤回已发送消息</td></tr><tr><td>3</td><td>查询消息状态</td><td>GET</td><td>/do1cloud-message-api/openapi/message/status</td><td>查询消息发送状态</td></tr><tr><td>4</td><td>查询消息列表</td><td>GET</td><td>/do1cloud-message-api/openapi/message/list</td><td>查询消息列表</td></tr></tbody></table>
+
+<h3>9.2 消息类型说明</h3>
+<p>消息中心支持三种消息类型：</p>
+
+<h4>9.2.1 文本消息（text）</h4>
+<p>纯文本消息，支持简单格式化。</p>
+
+<pre><code class="language-json">
+{
+    "msgtype": "text",
+    "text": {
+        "content": "您的审批申请已通过，请知悉。"
+    }
+}
+</code></pre>
+
+<h4>9.2.2 文本卡片消息（textcard）</h4>
+<p>带标题、描述和操作按钮的卡片消息，适合展示通知类信息。</p>
+
+<pre><code class="language-json">
+{
+    "msgtype": "textcard",
+    "textcard": {
+        "title": "审批结果通知",
+        "description": "您的请假申请已审批通过，假期：2026年7月3日-7月5日",
+        "url": "https://oa.gyzq.com/approval/detail/123",
+        "btntxt": "查看详情"
+    }
+}
+</code></pre>
+
+<h4>9.2.3 图文消息（news）</h4>
+<p>包含图片和文字的富媒体消息，适合新闻、公告类信息。</p>
+
+<pre><code class="language-json">
+{
+    "msgtype": "news",
+    "news": {
+        "articles": [
+            {
+                "title": "公司年度大会通知",
+                "description": "2026年度公司大会将于7月20日举行，请全体员工准时参加。",
+                "url": "https://portal.gyzq.com/news/annual-meeting",
+                "picurl": "https://portal.gyzq.com/images/meeting.jpg"
+            }
+        ]
+    }
+}
+</code></pre>
+
+<h3>9.3 可见范围配置</h3>
+<p>消息发送时需要配置可见范围，支持以下配置方式：</p>
+
+<table><thead><tr><th>配置方式</th><th>参数名</th><th>说明</th><th>示例值</th></tr></thead><tbody><tr><td>指定用户</td><td>touser</td><td>用户ID列表，多个用"\</td><td>"分隔</td><td>"user1\</td><td>user2\</td><td>user3"</td></tr><tr><td>指定部门</td><td>toparty</td><td>部门ID列表，多个用"\</td><td>"分隔</td><td>"dept1\</td><td>dept2"</td></tr><tr><td>指定标签</td><td>totag</td><td>标签ID列表，多个用"\</td><td>"分隔</td><td>"tag1\</td><td>tag2"</td></tr><tr><td>全员发送</td><td>toall</td><td>是否全员发送，true/false</td><td>true</td></tr></tbody></table>
+
+<h3>9.4 发送消息接口详情</h3>
+
+<h4>9.4.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>touser</td><td>String</td><td>否</td><td>接收人用户ID列表，与toparty、totag三选一</td></tr><tr><td>toparty</td><td>String</td><td>否</td><td>接收部门ID列表</td></tr><tr><td>totag</td><td>String</td><td>否</td><td>接收标签ID列表</td></tr><tr><td>toall</td><td>Boolean</td><td>否</td><td>是否全员发送，默认false</td></tr><tr><td>msgtype</td><td>String</td><td>是</td><td>消息类型：text/textcard/news</td></tr><tr><td>agentid</td><td>String</td><td>是</td><td>应用AgentID</td></tr><tr><td>content</td><td>Object</td><td>是</td><td>消息内容，根据msgtype不同结构不同</td></tr></tbody></table>
+
+<h4>9.4.2 请求示例</h4>
+<pre><code class="language-json">
+POST /do1cloud-message-api/openapi/message/save HTTP/1.1
+Host: gateway.gyzq.com
+Content-Type: application/json
+X-AppKey: GY_APP_001
+X-Timestamp: 1783046400
+X-Nonce: a1b2c3d4e5f6789012345678901234567890
+X-Sign: b2c3d4e5f6789012345678901234567890123456789012345678901234567890
+
+{
+    "touser": "user001|user002|user003",
+    "msgtype": "textcard",
+    "agentid": "GY_AGENT_001",
+    "textcard": {
+        "title": "系统维护通知",
+        "description": "智能门户系统将于今晚22:00-次日02:00进行维护升级，届时系统将暂停服务，请提前做好相关工作安排。",
+        "url": "https://portal.gyzq.com/notice/maintenance",
+        "btntxt": "了解详情"
+    }
+}
+</code></pre>
+
+<h4>9.4.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "msgid": "MSG20260703001",
+        "sendTime": "2026-07-03 10:30:00",
+        "status": "sent"
+    }
+}
+</code></pre>
+
+<h3>9.5 撤回消息接口详情</h3>
+
+<h4>9.5.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>msgid</td><td>String</td><td>是</td><td>要撤回的消息ID</td></tr><tr><td>reason</td><td>String</td><td>否</td><td>撤回原因</td></tr></tbody></table>
+
+<h4>9.5.2 请求示例</h4>
+<pre><code class="language-json">
+POST /do1cloud-message-api/openapi/message/revoke HTTP/1.1
+Host: gateway.gyzq.com
+Content-Type: application/json
+X-AppKey: GY_APP_001
+X-Timestamp: 1783046500
+X-Nonce: b2c3d4e5f678901234567890123456789012
+X-Sign: c3d4e5f678901234567890123456789012345678901234567890123456789012
+
+{
+    "msgid": "MSG20260703001",
+    "reason": "信息有误，需要更正后重新发送"
+}
+</code></pre>
+
+<h4>9.5.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "msgid": "MSG20260703001",
+        "revokeTime": "2026-07-03 10:35:00",
+        "status": "revoked"
+    }
+}
+</code></pre>
+
+<h3>9.6 消息中心错误码</h3>
+<table><thead><tr><th>错误码</th><th>说明</th><th>处理建议</th></tr></thead><tbody><tr><td>0</td><td>成功</td><td>-</td></tr><tr><td>401</td><td>认证失败</td><td>检查请求头X-AppKey、X-Timestamp、X-Nonce、X-Sign是否正确</td></tr><tr><td>403</td><td>无权限</td><td>检查应用权限配置，确认agentid是否正确</td></tr><tr><td>400</td><td>参数错误</td><td>检查请求参数格式，特别是msgtype和content结构</td></tr><tr><td>429</td><td>频率超限</td><td>降低请求频率，单应用每分钟最多100条消息</td></tr><tr><td>500</td><td>内部错误</td><td>稍后重试，如持续出现联系技术支持</td></tr><tr><td>404</td><td>消息不存在</td><td>检查msgid是否正确，消息是否已过期</td></tr></tbody></table>
+
+<h2>10. 日程中心接入</h2>
+
+<h3>10.1 接口清单</h3>
+<p>日程中心共提供5个REST接口：</p>
+
+<table><thead><tr><th>序号</th><th>接口名称</th><th>HTTP方法</th><th>接口路径</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>创建日程</td><td>POST</td><td>/api/schedule/create</td><td>创建新的日程安排</td></tr><tr><td>2</td><td>编辑日程</td><td>POST</td><td>/api/schedule/update</td><td>更新日程信息</td></tr><tr><td>3</td><td>删除日程</td><td>POST</td><td>/api/schedule/delete</td><td>删除日程安排</td></tr><tr><td>4</td><td>查询日程列表</td><td>GET</td><td>/api/schedule/list</td><td>查询日程列表</td></tr><tr><td>5</td><td>查询日程详情</td><td>GET</td><td>/api/schedule/detail</td><td>查询单个日程详情</td></tr></tbody></table>
+
+<h3>10.2 通用参数说明</h3>
+<p>所有日程中心接口都需要以下公共参数：</p>
+
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>appId</td><td>String</td><td>是</td><td>应用ID</td></tr><tr><td>timestamp</td><td>String</td><td>是</td><td>请求时间戳（秒）</td></tr><tr><td>sign</td><td>String</td><td>是</td><td>签名字符串</td></tr><tr><td>userId</td><td>String</td><td>是</td><td>用户ID（SSO账号）</td></tr></tbody></table>
+
+<h3>10.3 创建日程接口详情</h3>
+
+<h4>10.3.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>title</td><td>String</td><td>是</td><td>日程标题，最大长度200字符</td></tr><tr><td>description</td><td>String</td><td>否</td><td>日程描述，最大长度1000字符</td></tr><tr><td>startTime</td><td>String</td><td>是</td><td>开始时间，格式：yyyy-MM-dd HH:mm:ss</td></tr><tr><td>endTime</td><td>String</td><td>是</td><td>结束时间，格式：yyyy-MM-dd HH:mm:ss</td></tr><tr><td>location</td><td>String</td><td>否</td><td>地点信息</td></tr><tr><td>attendees</td><td>String</td><td>否</td><td>参与人用户ID列表，多个用","分隔</td></tr><tr><td>reminder</td><td>Integer</td><td>否</td><td>提醒时间（分钟），0-不提醒，15-提前15分钟，30-提前30分钟，60-提前1小时</td></tr><tr><td>recurrence</td><td>String</td><td>否</td><td>重复规则，支持：daily-每天，weekly-每周，monthly-每月，yearly-每年</td></tr><tr><td>color</td><td>String</td><td>否</td><td>日程颜色，十六进制颜色值</td></tr><tr><td>allDay</td><td>Boolean</td><td>否</td><td>是否全天日程，默认false</td></tr></tbody></table>
+
+<h4>10.3.2 请求示例</h4>
+<pre><code class="language-json">
+POST /api/schedule/create HTTP/1.1
+Host: gateway.gyzq.com
+Content-Type: application/json
+
+{
+    "appId": "GY_APP_001",
+    "timestamp": "1783046400",
+    "sign": "a1b2c3d4e5f678901234567890123456",
+    "userId": "admin",
+    "title": "项目评审会议",
+    "description": "智能门户项目二期评审会议，请相关同事准时参加。",
+    "startTime": "2026-07-20 14:00:00",
+    "endTime": "2026-07-20 16:00:00",
+    "location": "总部大楼3楼会议室A",
+    "attendees": "user001,user002,user003,user004",
+    "reminder": 30,
+    "color": "#4CAF50",
+    "allDay": false
+}
+</code></pre>
+
+<h4>10.3.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "scheduleId": "SC20260708001",
+        "createTime": "2026-07-03 10:30:00",
+        "creator": "admin"
+    }
+}
+</code></pre>
+
+<h3>10.4 查询日程列表接口详情</h3>
+
+<h4>10.4.1 请求参数</h4>
+<table><thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td>userId</td><td>String</td><td>是</td><td>查询用户的ID</td></tr><tr><td>startDate</td><td>String</td><td>是</td><td>开始时间，格式：yyyy-MM-dd</td></tr><tr><td>endDate</td><td>String</td><td>是</td><td>结束时间，格式：yyyy-MM-dd</td></tr><tr><td>keyword</td><td>String</td><td>否</td><td>关键词搜索</td></tr><tr><td>pageNum</td><td>Integer</td><td>否</td><td>页码，默认1</td></tr><tr><td>pageSize</td><td>Integer</td><td>否</td><td>每页数量，默认20，最大100</td></tr></tbody></table>
+
+<h4>10.4.2 请求示例</h4>
+<pre><code class="language-">
+GET /api/schedule/list?appId=GY_APP_001&amp;timestamp=1783046400&amp;sign=a1b2c3d4&amp;userId=admin&amp;startDate=2026-07-03&amp;endDate=2026-07-31&amp;pageNum=1&amp;pageSize=20 HTTP/1.1
+Host: gateway.gyzq.com
+</code></pre>
+
+<h4>10.4.3 响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "total": 8,
+        "pageNum": 1,
+        "pageSize": 20,
+        "list": [
+            {
+                "scheduleId": "SC20260708001",
+                "title": "项目评审会议",
+                "description": "智能门户项目二期评审会议，请相关同事准时参加。",
+                "startTime": "2026-07-20 14:00:00",
+                "endTime": "2026-07-20 16:00:00",
+                "location": "总部大楼3楼会议室A",
+                "attendees": ["user001", "user002", "user003", "user004"],
+                "creator": "admin",
+                "createTime": "2026-07-03 10:30:00",
+                "color": "#4CAF50",
+                "allDay": false
+            }
+        ]
+    }
+}
+</code></pre>
+
+<h3>10.5 日程中心错误码</h3>
+<table><thead><tr><th>错误码</th><th>说明</th><th>处理建议</th></tr></thead><tbody><tr><td>0</td><td>成功</td><td>-</td></tr><tr><td>401</td><td>认证失败</td><td>检查AppID、AppSecret和签名是否正确</td></tr><tr><td>403</td><td>无权限</td><td>检查应用权限配置，联系管理员授权</td></tr><tr><td>400</td><td>参数错误</td><td>检查请求参数格式，特别是时间格式</td></tr><tr><td>429</td><td>频率超限</td><td>降低请求频率，联系管理员调整限制</td></tr><tr><td>500</td><td>内部错误</td><td>稍后重试，如持续出现联系技术支持</td></tr><tr><td>404</td><td>日程不存在</td><td>检查scheduleId是否正确</td></tr></tbody></table>
+
+<h2>11. 数据源接入</h2>
+
+<h3>11.1 接入模式概述</h3>
+<p>数据源接入支持两种模式：</p>
+
+<table><thead><tr><th>模式</th><th>说明</th><th>适用场景</th><th>优势</th><th>劣势</th></tr></thead><tbody><tr><td>主动拉取</td><td>门户定时从数据源拉取数据</td><td>数据更新频率较低（小时级/天级）</td><td>实现简单，无需推送服务</td><td>实时性较差</td></tr><tr><td>数据推送</td><td>数据源主动推送数据到门户</td><td>数据更新频率较高（分钟级/秒级）</td><td>实时性好</td><td>实现复杂，需维护推送服务</td></tr></tbody></table>
+
+<h3>11.2 主动拉取模式</h3>
+
+<h4>11.2.1 接口规范</h4>
+<p>数据源需提供标准REST接口供门户调用：</p>
+
+<table><thead><tr><th>接口类型</th><th>HTTP方法</th><th>说明</th></tr></thead><tbody><tr><td>数据列表</td><td>GET</td><td>获取数据列表，支持分页</td></tr><tr><td>数据详情</td><td>GET</td><td>获取单条数据详情</td></tr><tr><td>增量数据</td><td>GET</td><td>获取指定时间后的增量数据</td></tr></tbody></table>
+
+<h4>11.2.2 数据格式要求</h4>
+<p>数据源接口返回数据需遵循以下格式：</p>
+
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "total": 100,
+        "pageNum": 1,
+        "pageSize": 20,
+        "list": [
+            {
+                "id": "data001",
+                "title": "数据标题",
+                "content": "数据内容",
+                "updateTime": "2026-07-03 10:30:00",
+                "extra": {}
+            }
+        ]
+    }
+}
+</code></pre>
+
+<h4>11.2.3 认证方式</h4>
+<p>数据源接口支持以下认证方式：</p>
+<ol><li><strong>API Key认证</strong>：请求头携带API Key</li><li><strong>OAuth2.0认证</strong>：使用客户端凭证模式</li><li><strong>签名认证</strong>：使用智能门户签名算法</li></ol>
+
+<h3>11.3 数据推送模式</h3>
+
+<h4>11.3.1 推送接口</h4>
+<p>门户提供数据接收接口：</p>
+
+<table><thead><tr><th>接口名称</th><th>HTTP方法</th><th>接口路径</th><th>说明</th></tr></thead><tbody><tr><td>数据推送</td><td>POST</td><td>/api/data/push</td><td>接收数据源推送的数据</td></tr><tr><td>批量推送</td><td>POST</td><td>/api/data/batch-push</td><td>批量接收数据</td></tr></tbody></table>
+
+<h4>11.3.2 推送请求示例</h4>
+<pre><code class="language-json">
+POST /api/data/push HTTP/1.1
+Host: gateway.gyzq.com
+Content-Type: application/json
+X-AppKey: GY_APP_001
+X-Timestamp: 1783046400
+X-Nonce: a1b2c3d4e5f6789012345678901234567890
+X-Sign: b2c3d4e5f6789012345678901234567890123456789012345678901234567890
+
+{
+    "dataSourceId": "DS001",
+    "dataType": "report",
+    "data": [
+        {
+            "id": "data001",
+            "title": "2026年第一季度销售报表",
+            "content": "第一季度销售额达到5000万元，同比增长15%",
+            "updateTime": "2026-07-03 10:30:00",
+            "category": "销售报表",
+            "extra": {
+                "quarter": "Q1",
+                "year": 2026,
+                "amount": 50000000
+            }
+        }
+    ],
+    "timestamp": "1783046400"
+}
+</code></pre>
+
+<h4>11.3.3 推送响应示例</h4>
+<pre><code class="language-json">
+{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "receivedCount": 1,
+        "processedCount": 1,
+        "failedCount": 0,
+        "processTime": "2026-07-03 10:30:01"
+    }
+}
+</code></pre>
+
+<h3>11.4 数据源接入流程</h3>
+<ol><li><strong>申请数据源</strong>：在智能门户管理控制台申请数据源接入</li><li><strong>配置数据源</strong>：配置数据源类型、接口地址、认证方式等</li><li><strong>测试连接</strong>：测试数据源接口连通性</li><li><strong>映射字段</strong>：配置数据源字段与门户字段的映射关系</li><li><strong>设置同步策略</strong>：配置同步频率、增量策略等</li><li><strong>上线运行</strong>：启用数据源同步任务</li></ol>
+
+<h3>11.5 数据源错误码</h3>
+<table><thead><tr><th>错误码</th><th>说明</th><th>处理建议</th></tr></thead><tbody><tr><td>0</td><td>成功</td><td>-</td></tr><tr><td>401</td><td>认证失败</td><td>检查数据源认证配置</td></tr><tr><td>403</td><td>无权限</td><td>检查数据源权限配置</td></tr><tr><td>400</td><td>参数错误</td><td>检查推送数据格式</td></tr><tr><td>408</td><td>连接超时</td><td>检查网络连通性，调整超时配置</td></tr><tr><td>429</td><td>频率超限</td><td>降低推送频率，联系管理员调整限制</td></tr><tr><td>500</td><td>内部错误</td><td>稍后重试，如持续出现联系技术支持</td></tr></tbody></table>
+
+<h2>12. 接入审批流程</h2>
+
+<h3>12.1 审批流程概述</h3>
+<p>第三方应用接入智能门户需经过以下审批流程：</p>
+
+<pre><code class="language-">
+应用申请 → 技术评审 → 安全评审 → 业务评审 → 开发接入 → 测试验证 → 上线审批
+</code></pre>
+
+<h3>12.2 审批节点说明</h3>
+
+<h4>12.2.1 应用申请</h4>
+<ul><li><strong>提交材料</strong>：应用接入申请表、应用说明文档、技术架构图</li><li><strong>审批人员</strong>：应用管理员</li><li><strong>审批时限</strong>：1个工作日</li></ul>
+
+<h4>12.2.2 技术评审</h4>
+<ul><li><strong>评审内容</strong>：接口设计、数据格式、签名算法、性能要求</li><li><strong>评审人员</strong>：技术架构师、开发工程师</li><li><strong>评审时限</strong>：2个工作日</li></ul>
+
+<h4>12.2.3 安全评审</h4>
+<ul><li><strong>评审内容</strong>：数据安全、访问控制、日志审计、漏洞扫描</li><li><strong>评审人员</strong>：安全工程师、运维工程师</li><li><strong>评审时限</strong>：2个工作日</li></ul>
+
+<h4>12.2.4 业务评审</h4>
+<ul><li><strong>评审内容</strong>：业务需求、用户体验、数据一致性</li><li><strong>评审人员</strong>：产品经理、业务负责人</li><li><strong>评审时限</strong>：1个工作日</li></ul>
+
+<h4>12.2.5 开发接入</h4>
+<ul><li><strong>开发内容</strong>：接口开发、签名实现、异常处理</li><li><strong>开发周期</strong>：参考各场景工时估算</li><li><strong>支持资源</strong>：技术文档、示例代码、技术支持</li></ul>
+
+<h4>12.2.6 测试验证</h4>
+<ul><li><strong>测试内容</strong>：功能测试、性能测试、安全测试</li><li><strong>测试环境</strong>：开发环境、测试环境</li><li><strong>测试周期</strong>：2-3个工作日</li></ul>
+
+<h4>12.2.7 上线审批</h4>
+<ul><li><strong>审批内容</strong>：测试报告、上线方案、回滚方案</li><li><strong>审批人员</strong>：项目经理、运维负责人</li><li><strong>审批时限</strong>：1个工作日</li></ul>
+
+<h3>12.3 审批状态查询</h3>
+<p>通过管理控制台可查询审批状态：</p>
+
+<table><thead><tr><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>待审批</td><td>申请已提交，等待审批</td></tr><tr><td>审批中</td><td>正在进行技术/安全/业务评审</td></tr><tr><td>已通过</td><td>审批通过，可进行开发接入</td></tr><tr><td>已拒绝</td><td>审批未通过，需修改后重新申请</td></tr><tr><td>开发中</td><td>正在进行接口开发</td></tr><tr><td>测试中</td><td>正在进行测试验证</td></tr><tr><td>已上线</td><td>应用已上线运行</td></tr></tbody></table>
+
+<h2>13. 常见问题与排查</h2>
+
+<h3>13.1 签名相关问题</h3>
+
+<h4>13.1.1 签名验证失败（错误码401）</h4>
+<p><strong>可能原因</strong>：</p>
+<ol><li>AppID或AppSecret错误</li><li>参数排序不正确</li><li>时间戳超出5分钟有效期</li><li>签名算法使用错误（待办中心用MD5(SHA256(...))，消息中心用HMAC-SHA256）</li></ol>
+
+<p><strong>排查步骤</strong>：</p>
+<ol><li>检查AppID和AppSecret是否正确</li><li>确认参数按ASCII码升序排列</li><li>检查时间戳是否在5分钟有效期内</li><li>确认使用的签名算法是否正确</li><li>使用日志记录签名过程，与示例代码对比</li></ol>
+
+<h4>13.1.2 时间戳过期</h4>
+<p><strong>可能原因</strong>：</p>
+<ul><li>服务器时间与门户服务器时间不同步</li><li>网络延迟导致请求处理时间过长</li></ul>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>同步服务器时间：<code>ntpdate ntp.gyzq.com</code></li><li>优化网络连接，减少延迟</li><li>在签名前获取最新时间戳</li></ol>
+
+<h3>13.2 接口调用问题</h3>
+
+<h4>13.2.1 请求频率超限（错误码429）</h4>
+<p><strong>可能原因</strong>：</p>
+<ul><li>单位时间内请求次数超过限制</li><li>批量操作未控制并发</li></ul>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>降低请求频率，参考各接口频率限制</li><li>使用批量接口减少请求次数</li><li>实现请求队列和限流机制</li><li>联系管理员调整频率限制</li></ol>
+
+<h4>13.2.2 参数错误（错误码400）</h4>
+<p><strong>可能原因</strong>：</p>
+<ul><li>必填参数缺失</li><li>参数格式错误</li><li>参数值超出范围</li></ul>
+
+<p><strong>排查步骤</strong>：</p>
+<ol><li>检查请求参数是否完整</li><li>验证参数格式（如时间格式、JSON格式）</li><li>检查参数值是否在允许范围内</li><li>参考接口文档核对参数说明</li></ol>
+
+<h3>13.3 数据同步问题</h3>
+
+<h4>13.3.1 数据推送失败</h4>
+<p><strong>可能原因</strong>：</p>
+<ul><li>网络连接问题</li><li>数据格式错误</li><li>认证失败</li></ul>
+
+<p><strong>排查步骤</strong>：</p>
+<ol><li>检查网络连通性</li><li>验证数据格式是否符合规范</li><li>检查认证配置</li><li>查看门户日志获取详细错误信息</li></ol>
+
+<h4>13.3.2 数据同步延迟</h4>
+<p><strong>可能原因</strong>：</p>
+<ul><li>同步任务执行频率设置过低</li><li>数据量过大处理时间过长</li><li>系统资源不足</li></ul>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>调整同步频率</li><li>优化数据查询和处理逻辑</li><li>增加系统资源</li><li>使用增量同步减少数据量</li></ol>
+
+<h3>13.4 性能优化建议</h3>
+
+<h4>13.4.1 接口调用优化</h4>
+<ol><li><strong>批量操作</strong>：使用批量接口减少请求次数</li><li><strong>缓存机制</strong>：缓存不常变化的数据</li><li><strong>异步处理</strong>：非关键路径使用异步调用</li><li><strong>连接池</strong>：使用HTTP连接池减少连接建立开销</li></ol>
+
+<h4>13.4.2 数据同步优化</h4>
+<ol><li><strong>增量同步</strong>：只同步变化的数据</li><li><strong>压缩传输</strong>：对大量数据启用压缩</li><li><strong>分页处理</strong>：大数据量分页处理</li><li><strong>错峰同步</strong>：避开业务高峰期</li></ol>
+
+<h3>13.5 技术支持</h3>
+
+<h4>13.5.1 日志记录</h4>
+<p>建议记录以下日志信息：</p>
+<ul><li>请求时间、接口路径、请求参数</li><li>响应时间、响应状态码、响应数据</li><li>签名生成过程、签名结果</li><li>错误信息、异常堆栈</li></ul>
+
+<h4>13.5.2 联系方式</h4>
+<ul><li><strong>技术支持邮箱</strong>：tech-support@gyzq.com</li><li><strong>技术支持电话</strong>：程文斐：0551-62201332 / 葛鹏飞：0551-62207154</li><li><strong>技术支持群</strong>：请联系王昭获取</li><li><strong>文档反馈</strong>：doc-feedback@gyzq.com</li></ul>
+
+<h2>14. 附录</h2>
+
+<h3>14.1 接口清单汇总表</h3>
+
+<table><thead><tr><th>序号</th><th>中心</th><th>接口名称</th><th>HTTP方法</th><th>接口路径</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>待办中心</td><td>创建待办</td><td>POST</td><td>/api/todo/create</td><td>创建新的待办事项</td></tr><tr><td>2</td><td>待办中心</td><td>更新待办</td><td>POST</td><td>/api/todo/update</td><td>更新待办事项信息</td></tr><tr><td>3</td><td>待办中心</td><td>删除待办</td><td>POST</td><td>/api/todo/delete</td><td>删除待办事项</td></tr><tr><td>4</td><td>待办中心</td><td>查询待办详情</td><td>GET</td><td>/api/todo/detail</td><td>根据ID查询待办详情</td></tr><tr><td>5</td><td>待办中心</td><td>查询待办列表</td><td>GET</td><td>/api/todo/list</td><td>查询待办列表（分页）</td></tr><tr><td>6</td><td>待办中心</td><td>标记完成</td><td>POST</td><td>/api/todo/complete</td><td>标记待办为已完成</td></tr><tr><td>7</td><td>待办中心</td><td>标记已读</td><td>POST</td><td>/api/todo/read</td><td>标记待办为已读</td></tr><tr><td>8</td><td>待办中心</td><td>批量操作</td><td>POST</td><td>/api/todo/batch</td><td>批量处理待办事项</td></tr><tr><td>9</td><td>待办中心</td><td>查询统计</td><td>GET</td><td>/api/todo/stats</td><td>查询待办统计数据</td></tr><tr><td>10</td><td>消息中心</td><td>发送消息</td><td>POST</td><td>/do1cloud-message-api/openapi/message/save</td><td>发送新消息</td></tr><tr><td>11</td><td>消息中心</td><td>撤回消息</td><td>POST</td><td>/do1cloud-message-api/openapi/message/revoke</td><td>撤回已发送消息</td></tr><tr><td>12</td><td>消息中心</td><td>查询消息状态</td><td>GET</td><td>/do1cloud-message-api/openapi/message/status</td><td>查询消息发送状态</td></tr><tr><td>13</td><td>消息中心</td><td>查询消息列表</td><td>GET</td><td>/do1cloud-message-api/openapi/message/list</td><td>查询消息列表</td></tr><tr><td>14</td><td>日程中心</td><td>创建日程</td><td>POST</td><td>/api/schedule/create</td><td>创建新的日程安排</td></tr><tr><td>15</td><td>日程中心</td><td>编辑日程</td><td>POST</td><td>/api/schedule/update</td><td>更新日程信息</td></tr><tr><td>16</td><td>日程中心</td><td>删除日程</td><td>POST</td><td>/api/schedule/delete</td><td>删除日程安排</td></tr><tr><td>17</td><td>日程中心</td><td>查询日程列表</td><td>GET</td><td>/api/schedule/list</td><td>查询日程列表</td></tr><tr><td>18</td><td>日程中心</td><td>查询日程详情</td><td>GET</td><td>/api/schedule/detail</td><td>查询单个日程详情</td></tr><tr><td>19</td><td>数据源</td><td>数据推送</td><td>POST</td><td>/api/data/push</td><td>接收数据源推送的数据</td></tr><tr><td>20</td><td>数据源</td><td>批量推送</td><td>POST</td><td>/api/data/batch-push</td><td>批量接收数据</td></tr></tbody></table>
+
+<h3>14.2 错误码表</h3>
+
+<table><thead><tr><th>错误码</th><th>说明</th><th>适用接口</th><th>处理建议</th></tr></thead><tbody><tr><td>0</td><td>成功</td><td>所有接口</td><td>-</td></tr><tr><td>400</td><td>参数错误</td><td>所有接口</td><td>检查请求参数格式和必填项</td></tr><tr><td>401</td><td>认证失败</td><td>所有接口</td><td>检查AppID、AppSecret和签名是否正确</td></tr><tr><td>403</td><td>无权限</td><td>所有接口</td><td>检查应用权限配置，联系管理员授权</td></tr><tr><td>404</td><td>资源不存在</td><td>查询类接口</td><td>检查资源ID是否正确</td></tr><tr><td>408</td><td>连接超时</td><td>数据源接口</td><td>检查网络连通性，调整超时配置</td></tr><tr><td>429</td><td>频率超限</td><td>所有接口</td><td>降低请求频率，联系管理员调整限制</td></tr><tr><td>500</td><td>内部错误</td><td>所有接口</td><td>稍后重试，如持续出现联系技术支持</td></tr></tbody></table>
+
+<h3>14.3 已识别需接入应用清单</h3>
+<p>以下为已识别的18个需接入应用：</p>
+
+<table><thead><tr><th>序号</th><th>应用名称</th><th>接入场景</th><th>优先级</th><th>状态</th></tr></thead><tbody><tr><td>1</td><td>微盘扩容</td><td>待办中心</td><td>高</td><td>待接入</td></tr><tr><td>2</td><td>新闻公告</td><td>消息中心</td><td>高</td><td>待接入</td></tr><tr><td>3</td><td>七巧plus</td><td>待办中心、消息中心</td><td>高</td><td>待接入</td></tr><tr><td>4</td><td>云办公系列</td><td>待办中心、消息中心、日程中心</td><td>高</td><td>待接入</td></tr><tr><td>5</td><td>OA系统</td><td>待办中心、消息中心</td><td>高</td><td>待接入</td></tr><tr><td>6</td><td>HR系统</td><td>待办中心、消息中心</td><td>中</td><td>待接入</td></tr><tr><td>7</td><td>财务系统</td><td>待办中心、消息中心</td><td>中</td><td>待接入</td></tr><tr><td>8</td><td>CRM系统</td><td>待办中心、消息中心</td><td>中</td><td>待接入</td></tr><tr><td>9</td><td>项目管理</td><td>待办中心、日程中心</td><td>中</td><td>待接入</td></tr><tr><td>10</td><td>知识库</td><td>消息中心</td><td>中</td><td>待接入</td></tr><tr><td>11</td><td>报表系统</td><td>数据源</td><td>中</td><td>待接入</td></tr><tr><td>12</td><td>监控系统</td><td>数据源、消息中心</td><td>中</td><td>待接入</td></tr><tr><td>13</td><td>日志系统</td><td>数据源</td><td>低</td><td>待接入</td></tr><tr><td>14</td><td>配置中心</td><td>消息中心</td><td>低</td><td>待接入</td></tr><tr><td>15</td><td>权限系统</td><td>待办中心</td><td>低</td><td>待接入</td></tr><tr><td>16</td><td>审计系统</td><td>数据源</td><td>低</td><td>待接入</td></tr><tr><td>17</td><td>消息队列</td><td>消息中心</td><td>低</td><td>待接入</td></tr><tr><td>18</td><td>缓存系统</td><td>数据源</td><td>低</td><td>待接入</td></tr></tbody></table>
+
+<h3>14.4 工时估算参考</h3>
+
+<table><thead><tr><th>接入场景</th><th>单个应用工时</th><th>影响因素</th><th>优化建议</th></tr></thead><tbody><tr><td>待办中心接入</td><td>3-5人天</td><td>接口数量、业务复杂度、签名实现</td><td>使用示例代码模板，减少重复开发</td></tr><tr><td>消息中心接入</td><td>2-3人天</td><td>消息类型、可见范围配置</td><td>复用消息模板，减少定制开发</td></tr><tr><td>日程中心接入</td><td>2-3人天</td><td>接口数量、业务逻辑</td><td>标准化日程字段，减少映射工作</td></tr><tr><td>数据源接入</td><td>1-2人天/数据源</td><td>数据量、同步频率、数据格式</td><td>使用标准数据格式，减少转换工作</td></tr></tbody></table>
+
+<h3>14.5 环境配置参考</h3>
+
+<table><thead><tr><th>配置项</th><th>开发环境</th><th>测试环境</th><th>生产环境</th></tr></thead><tbody><tr><td>网关域名</td><td>dev-gateway.gyzq.com</td><td>test-gateway.gyzq.com</td><td>gateway.gyzq.com</td></tr><tr><td>端口</td><td>443</td><td>443</td><td>443</td></tr><tr><td>协议</td><td>HTTPS</td><td>HTTPS</td><td>HTTPS</td></tr><tr><td>超时时间</td><td>30秒</td><td>30秒</td><td>30秒</td></tr><tr><td>重试次数</td><td>3次</td><td>3次</td><td>3次</td></tr><tr><td>日志级别</td><td>DEBUG</td><td>INFO</td><td>WARN</td></tr><tr><td>监控状态</td><td>开启</td><td>开启</td><td>开启</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档编制</strong>：王昭  </p>
+<p><strong>版本</strong>：V1.0  </p>
+<p><strong>日期</strong>：2026年7月3日  </p>
+<p><strong>审核</strong>：丁小建  </p>
+<p><strong>批准</strong>：何金钟</p>
+</body>
+</html>

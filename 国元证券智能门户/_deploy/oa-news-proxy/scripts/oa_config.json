@@ -1,0 +1,31 @@
+{
+    "_comment": "OA认证代理配置文件 — 部署前修改此文件内容，不要提交到版本库",
+    "oa": {
+        "base_url": "http://home.oa.gyzq.com",
+        "login_page": "/_forms/default.aspx?ReturnUrl=%2f",
+        "auth_type": "cookie_form",
+        "_auth_type_help": "cookie_form: 表单登录后获取Cookie; ntlm: Windows集成认证"
+    },
+    "credentials": {
+        "username": "请填写OA服务账号",
+        "password": "请填写密码",
+        "_note": "如果auth_type为ntlm，用户名格式为 DOMAIN\\username"
+    },
+    "proxy": {
+        "listen_host": "127.0.0.1",
+        "listen_port": 8899,
+        "_note": "仅监听本地，不对外暴露"
+    },
+    "session": {
+        "cookie_max_age_hours": 4,
+        "retry_count": 3,
+        "retry_delay_seconds": 5,
+        "request_timeout": 10
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "/var/log/oa-proxy/proxy.log",
+        "max_bytes_mb": 10,
+        "backup_count": 3
+    }
+}

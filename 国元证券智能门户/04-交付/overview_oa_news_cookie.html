@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>overview_oa_news_cookie</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>老OA新闻数据源同步 — Cookie认证方案摘要</h1>
+
+<p><strong>日期</strong>：2026-07-16 | <strong>编制</strong>：王昭</p>
+
+<hr>
+
+<h2>结论：可以同步！✅</h2>
+
+<p>老OA（SharePoint on-premises）提供了27个REST API接口覆盖8个新闻分类，可以通过<strong>Nginx反向代理+Cookie注入</strong>实现数据同步到智能门户。</p>
+
+<h2>为什么不能直接调</h2>
+
+<ul><li>OA Cookie属于 <code>home.oa.gyzq.com</code> 域</li><li>门户在 <code>portal.oa.gyzq.com</code> 域</li><li>浏览器跨域安全策略禁止前端携带OA Cookie</li></ul>
+
+<h2>怎么做（三步走）</h2>
+
+<pre><code class="language-">
+获取OA Cookie → Nginx注入代理 → 门户配置同域数据源
+</code></pre>
+
+<ol><li><strong>获取Cookie</strong>：向客户要一个OA服务账号，登录拿到<code>FedAuth</code>/<code>rtFa</code> Cookie</li><li><strong>部署代理</strong>：在门户应用服务器(10.0.63.11)部署代理服务，注入Cookie并转发到OA</li><li><strong>配置门户</strong>：数据源URL改为 <code>https://portal.oa.gyzq.com/oa-news/gsdt/_api/...</code></li></ol>
+
+<h2>Cookie过期怎么办</h2>
+
+<p>部署Python刷新脚本，定时（每2小时）模拟登录获取新Cookie写入文件，Nginx动态读取。</p>
+
+<h2>需要客户配合</h2>
+
+<ul><li>提供一个OA服务账号（新闻阅读权限即可）</li><li>确认门户应用服务器到OA的网络已通</li></ul>
+
+<h2>详细方案</h2>
+
+<p>见 <code>output/新闻数据源配置方案.md</code>（已更新至V2.0）</p>
+
+</body>
+</html>

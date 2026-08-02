@@ -1,0 +1,52 @@
+# ============================================
+# 国元证券 - OA新闻同步门户配置
+# ============================================
+
+# --- SharePoint OA 配置 ---
+sp:
+  base_url: "http://home.oa.gyzq.com"
+  site_path: "/gsdt"  # 站点路径，可改为 /bmjb /cxfz/zcdt 等其他新闻站点
+  list_name: "页面"    # SharePoint列表名（编码后 %E9%A1%B5%E9%9D%A2）
+  query:
+    $select: "Created,Title,Id,ArticleStartDate,FileRef,Modified"
+    $top: 20
+    $orderby: "ArticleStartDate desc"
+    $filter: "OData__ModerationStatus eq 0"
+
+# --- Keycloak SSO 认证 ---
+# 方式一：直接授权（推荐）
+keycloak:
+  enabled: true
+  url: "https://sso.gyzq.com/auth/realms/emps/protocol/openid-connect/token"
+  client_id: "oa-portal"
+  username: "zszx"
+  password: "Zszx@4567"
+
+# 方式二：Cookie 认证（方式一不可用时）
+# 从浏览器开发者工具复制 Cookie 到 cookie.txt
+cookie_auth:
+  enabled: false
+  cookie_file: "cookie.txt"
+
+# --- 门户数据源推送配置 ---
+portal:
+  # ↓↓↓ 以下三项需要在门户后台 → 数据源设置 中获取 ↓↓↓
+  domain: "https://portal.oa.gyzq.com"
+  tenant_id: "REPLACE_WITH_TENANT_ID"       # 租户ID
+  data_source_id: "REPLACE_WITH_DS_ID"      # 数据源ID
+  secret: "REPLACE_WITH_SECRET"             # 推送密钥
+
+# --- 数据映射 ---
+# 信息列表字段映射
+mapping:
+  news_type: "information"    # 信息列表
+  data_type: 1                # 1=所有人可见, 0=按权限
+  # OA详情页基础URL（FileRef 是相对路径，拼接用）
+  detail_base_url: "http://home.oa.gyzq.com"
+
+# --- 同步策略 ---
+sync:
+  interval_minutes: 15        # 同步间隔（分钟）
+  max_items: 20               # 每次拉取最大条数
+  # 增量同步：基于时间戳跟踪已推送的数据
+  state_file: "sync_state.json"

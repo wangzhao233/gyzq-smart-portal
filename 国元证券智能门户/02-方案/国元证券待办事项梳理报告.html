@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国元证券待办事项梳理报告</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>国元证券项目待办事项梳理报告</h1>
+
+<blockquote>更新时间：2026-07-10 (23:55)<br>项目经理：王昭<br>自动化提醒：已配置（工作日每日）<br>滴答清单同步：35条活跃任务（本次+2：微信能力确认+人员组织同步确认）</blockquote>
+
+<hr>
+
+<h2>一、项目整体状态</h2>
+
+<p><strong>项目阶段</strong>：一期收尾（7/20上线目标） + 二期准备并行  </p>
+<p><strong>目标上线</strong>：2026年7月20日  </p>
+<p><strong>合同金额</strong>：¥387万  </p>
+<p><strong>风险等级</strong>：🔴 高 — 7/10双deadline今日到期！6/26技术待办全部14天🔴，定制打包超17天🔴</p>
+
+<hr>
+
+<h2>二、核心待办事项</h2>
+
+<h3>1. 第三方应用接入（一期收尾关键）</h3>
+
+<p><strong>总体进度</strong>：67个应用（原49 + 截图盘点新增18），<strong>57个已完成（85%）</strong>，11个待完成（7/7更新：+元心助手+AI能力平台）</p>
+
+<table><thead><tr><th>类别</th><th>数量</th><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>新建（门户核心功能）</td><td>7</td><td>✅ 已部署</td><td>智能门户、统一待办中心、邮件等</td></tr><tr><td>迁移-无需修改</td><td>17</td><td>⬜ 待验证</td><td>仅"数聚驾驶舱"已验证</td></tr><tr><td>迁移-修改配置参数</td><td>23</td><td>🔄 进行中</td><td>3个已验证，8个已排期</td></tr><tr><td>迁移-重新扫码绑定</td><td>2</td><td>⬜ 待迁移</td><td>尽调采集助手、电子名片</td></tr><tr><td>截图盘点新增</td><td>18</td><td>⬜ 待纳入排期</td><td>—</td></tr></tbody></table>
+
+<p><strong>已验证应用（3个）</strong>：</p>
+<ul><li>✅ 商旅平台（1000045）- 6/10验证</li><li>✅ 融汇平台（1000165）- 6/15验证  </li><li>✅ 数聚驾驶舱（1000068）- 6/17验证</li></ul>
+
+<p><strong>已排期待迁移（8个）</strong>：6/26后无更新 → 🔴超14天</p>
+<p><strong>⚠️ 融和（1000139）</strong>：开发商提出改造费用，需决策 → 🔴超14天</p>
+
+<p><strong>统一待办中心对接计划（5个应用）</strong>：</p>
+<ul><li>智慧投行、管理会计、融和、审计管理、绩效管理</li></ul>
+
+<hr>
+
+<h3>2. 6/26群聊纪要技术待办（12条，全部🔴超14天无更新，截至7/10）</h3>
+
+<table><thead><tr><th>编号</th><th>事项</th><th>负责人</th><th>优先级</th><th>状态</th></tr></thead><tbody><tr><td>T1</td><td>人员信息接口增加 yglb + zzzt 字段</td><td>Y/张沿</td><td>🔴高</td><td>开发中</td></tr><tr><td>T2</td><td>企微同步禁用逻辑（zzzt 非0/2/5禁用）</td><td>Y/张沿</td><td>🔴高</td><td>待开发</td></tr><tr><td>T3</td><td>门户账户同步禁用逻辑（同企微）</td><td>Y/张沿</td><td>🔴高</td><td>待开发</td></tr><tr><td>T4</td><td>员工类别作为标签同步到企微</td><td>Y/张沿</td><td>中</td><td>待开发</td></tr><tr><td>T5</td><td>元心助手应用配置可信IP+可见字段</td><td>葛鹏飞/张沿</td><td>🔴高</td><td>待配置</td></tr><tr><td>T6</td><td>统一待办报错排查</td><td>张沿</td><td>🔴高</td><td>排查中</td></tr><tr><td>T7</td><td>消息接口文档整理并发送</td><td>张沿</td><td>🔴高</td><td>整理中</td></tr><tr><td>T8</td><td>邮箱绑定丢失问题排查（同步覆盖）</td><td>张沿/研发</td><td>🔴高</td><td>排查中</td></tr><tr><td>T9</td><td>中间登录程序双节点高可用部署</td><td>赵子健</td><td>🔴高</td><td>待部署</td></tr><tr><td>T10</td><td>服务监控部署</td><td>赵子健</td><td>🔴高</td><td>待部署</td></tr><tr><td>T11</td><td>打卡时间取整逻辑确认/调整</td><td>张沿</td><td>中</td><td>待处理</td></tr><tr><td>T12</td><td>企微客户端TGT过期时间确认</td><td>张沿</td><td>低</td><td>待确认</td></tr></tbody></table>
+
+<hr>
+
+<h3>3. APP备案与定制打包</h3>
+
+<table><thead><tr><th>里程碑</th><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>应用名称确认（国元元信）</td><td>✅ 已完成</td><td>—</td></tr><tr><td>Logo资源准备</td><td>✅ 已完成</td><td>7/1 ICO/鸿蒙已提交</td></tr><tr><td>🔴 定制打包下单</td><td>🔄 <strong>🔴超18天无确认</strong></td><td>计划6/23下单</td></tr><tr><td>ICP备案</td><td>🔄 进行中</td><td>非公开分发，40-75工作日</td></tr><tr><td>应用市场上架</td><td>⬜ 待启动</td><td>—</td></tr></tbody></table>
+
+<p><strong>待办</strong>：</p>
+<ul><li>[ ] 确认iOS商务平台注册 &amp; 组织ID</li><li>[ ] 提供营业执照/法人证书</li><li>[ ] 明确是否使用微信相关能力</li><li>[ ] 第三方SDK声明</li><li>[ ] 提供测试账号（2个）</li></ul>
+
+<hr>
+
+<h3>4. 二期准备工作</h3>
+
+<h4>信创适配（156人天）</h4>
+<ul><li>智能门户：92人天</li><li>七巧低代码：64人天</li><li>技术栈：海光CPU + 银河麒麟V10 + OceanBase + 宝兰德</li></ul>
+
+<h4>定制需求（89.5人天）</h4>
+<table><thead><tr><th>需求</th><th>人天</th><th>状态</th></tr></thead><tbody><tr><td>帐号体系（SSO+同步+接口）</td><td>25人天</td><td>🔄 已提前启动</td></tr><tr><td>历史数据迁移</td><td>5人天</td><td>🔄 已提前启动</td></tr><tr><td>预览对接Zoffice</td><td>10人天</td><td>🔄 已提前启动</td></tr><tr><td>消息中心</td><td>9人天</td><td>⬜ 待启动</td></tr><tr><td>新闻公告</td><td>37.5人天</td><td>🔄 7/9 分类栏目ID已配置(11个)</td></tr></tbody></table>
+
+<hr>
+
+<h3>5. 其他进行中工作</h3>
+
+<table><thead><tr><th>事项</th><th>状态</th><th>最后更新</th></tr></thead><tbody><tr><td>人员组织机构同步 &amp; 统一认证对接</td><td>⚠️ 登录已通过，组织同步开发中</td><td>6/26</td></tr><tr><td>正式门户模板确认</td><td>🔄 专项会议</td><td>6/26</td></tr><tr><td>全量数据迁移开发</td><td>🔄 进行中</td><td>6/26</td></tr><tr><td>预览对接开发</td><td>🔄 计划6/26</td><td>6/26</td></tr><tr><td>培训、操作文档材料</td><td>🔄 进行中</td><td>6/26</td></tr></tbody></table>
+
+<hr>
+
+<h2>三、下一步行动</h2>
+
+<h3>🔴 本周必须推进（截至7/10）</h3>
+<ol><li><strong>6/26 技术待办 T1-T12</strong>：12条全部超14天🔴，逐条问张沿/赵子健进度</li><li><strong>定制打包下单</strong>：确认6/23下单是否已执行（超18天🔴）</li><li><strong>融和费用问题</strong>：与开发商沟通或找替代方案（超14天🔴）</li><li><strong>应用对接进度</strong>：7/7已推进2个（57/67=85%），继续推进剩余10个</li><li><strong>网络环境就绪</strong>：里程碑#4 <strong>今日07.10到期</strong> → 🔴<strong>立即确认</strong></li><li><strong>APP备案SDK声明+测试账号</strong>：<strong>今日07.10到期</strong> → 🔴<strong>立即确认</strong></li></ol>
+
+<h3>🟡 持续跟进</h3>
+<ol><li>补充29个待排期应用对接人</li><li>中间登录高可用部署（赵子健）</li><li>信创适配方案 / 二期需求评估 / 验收材料</li></ol>
+
+<hr>
+
+<h2>四、风险提示</h2>
+
+<table><thead><tr><th>风险</th><th>等级</th><th>来源</th></tr></thead><tbody><tr><td>技术问题积压</td><td>🔴</td><td>6/26 12条待办全超14天无更新</td></tr><tr><td>定制打包延期</td><td>🔴</td><td>计划6/23下单，超18天无确认</td></tr><tr><td>应用对接延期</td><td>🔴</td><td>一期收尾关键路径，超14天无更新</td></tr><tr><td>融和费用</td><td>🔴</td><td>开发商提改造费，超14天未决策</td></tr><tr><td>中间登录单点</td><td>🔴</td><td>高可用未部署，超14天</td></tr><tr><td>APP备案材料缺口</td><td>🔴</td><td>iOS注册+营业执照超2天，SDK声明+测试账号明日到期</td></tr><tr><td>二期启动时间不明</td><td>🔴</td><td>提前启动项14天无反馈，信创156人天未排期</td></tr></tbody></table>
+
+<hr>
+
+<h2>五、提醒机制</h2>
+
+<table><thead><tr><th>配置项</th><th>值</th></tr></thead><tbody><tr><td>自动化ID</td><td><code>automation-1783044935340</code></td></tr><tr><td>频率</td><td>工作日每日</td></tr><tr><td>过期标记</td><td>&gt;3天 ⚠️ / &gt;7天 🔴</td></tr><tr><td>工作空间</td><td><code>国元证券智能门户</code></td></tr></tbody></table>
+
+<hr>
+<blockquote>📋 整合 6/24 初版 + 6/26 群聊纪要 + 6/26 周报，2026-07-10 更新。</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务交接_老OA新闻同步</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>任务交接：老OA新闻同步到智能门户</h1>
+
+<p><strong>交接人</strong>：王昭</p>
+<p><strong>日期</strong>：2026-07-18</p>
+<p><strong>任务状态</strong>：方案V3.0已完成，代理代码已更新，待上机部署测试</p>
+
+<hr>
+
+<h2>一、任务目标</h2>
+
+<p>将老OA（SharePoint on-premises）的新闻数据，通过智能门户数据源同步到首页展示。覆盖8个新闻分类：公司动态、部门简报、创新发展、监管动态、党建群团、子公司及分支机构、党建指南、服务台。</p>
+
+<h2>二、已确认的前提</h2>
+
+<table><thead><tr><th>项</th><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>OA系统</td><td>✅</td><td>SharePoint on-premises，<code>http://home.oa.gyzq.com</code></td></tr><tr><td>接口清单</td><td>✅</td><td>27个SP REST API，客户已提供 <code>官网SP接口.xlsx</code></td></tr><tr><td>认证方式</td><td>✅</td><td>需Cookie认证（FedAuth/rtFa）</td></tr><tr><td>OA服务账号</td><td>✅</td><td>已有</td></tr><tr><td>网络</td><td>✅</td><td>门户应用服务器10.0.63.11双网卡，可访问OA内网</td></tr><tr><td>门户数据源能力</td><td>✅</td><td>主动拉取模式：POST请求，消息列表组件，需特定JSON格式</td></tr><tr><td>SSO</td><td>ℹ️</td><td>老OA+新门户都接Keycloak，但SSO不能替代代理（SP API只认Cookie）</td></tr></tbody></table>
+
+<h2>三、技术方案（V3.0 定稿）</h2>
+
+<p><strong>方案</strong>：代理服务 + 门户主动拉取 + JSON格式转换</p>
+
+<pre><code class="language-">
+门户后端(POST) → http://10.0.63.11:8899/api/news
+                      ↓
+              OaProxyServer V2.0
+                 ├─ 接收: typeId(分类)/maxCount(条数)/currentPage(页码)
+                 ├─ 映射typeId→SharePoint站点路径
+                 ├─ 注入Cookie → GET SharePoint REST API
+                 ├─ 转换: OData JSON → 门户消息列表JSON
+                 └─ 返回门户格式JSON
+</code></pre>
+
+<p><strong>关键变化（V2→V3.0）</strong>：</p>
+<ul><li>V2.0 假设门户发GET请求+透传JSON → <strong>错误</strong></li><li>V3.0 门户发POST请求+代理做格式转换 → <strong>正确</strong></li><li>不再需要Nginx额外代理层，代理直接在应用服务器上接受门户后端请求</li></ul>
+
+<h2>四、已完成的交付物</h2>
+
+<h3>4.1 方案文档</h3>
+
+<table><thead><tr><th>文件</th><th>路径</th><th>说明</th></tr></thead><tbody><tr><td>新闻数据源配置方案 V3.0</td><td><code>output/新闻数据源配置方案.md</code></td><td>完整技术方案，含字段映射、门户配置步骤</td></tr><tr><td>任务交接文件</td><td><code>output/任务交接_老OA新闻同步.md</code></td><td>本文档</td></tr></tbody></table>
+
+<h3>4.2 代理服务 V2.0</h3>
+
+<table><thead><tr><th>文件</th><th>路径</th><th>说明</th></tr></thead><tbody><tr><td>Java代理源码</td><td><code>_deploy/oa-news-proxy-java/src/OaProxyServer.java</code></td><td>V2.0，新增<code>/api/news</code>端点+格式转换</td></tr><tr><td>配置文件</td><td><code>_deploy/oa-news-proxy-java/oa-proxy.properties</code></td><td>OA账号密码配置</td></tr><tr><td>编译脚本</td><td><code>_deploy/oa-news-proxy-java/build.sh</code></td><td><code>javac</code>编译为oa-proxy.jar</td></tr><tr><td>部署脚本</td><td><code>_deploy/oa-news-proxy-java/deploy.sh</code></td><td>一键部署到10.0.63.11</td></tr><tr><td>验证脚本</td><td><code>_deploy/oa-news-proxy-java/verify.sh</code></td><td>部署后验证</td></tr><tr><td>部署说明</td><td><code>_deploy/oa-news-proxy-java/README.md</code></td><td>部署文档</td></tr></tbody></table>
+
+<h3>4.3 参考文档</h3>
+
+<table><thead><tr><th>文件</th><th>来源</th></tr></thead><tbody><tr><td><code>智能门户数据源对接指南2.14.pdf</code></td><td>道一云官方</td></tr><tr><td><code>智能门户数据源API文档--主动拉取-v608.pdf</code></td><td>道一云官方</td></tr><tr><td><code>智能门户数据源API文档--数据推送-v608.pdf</code></td><td>道一云官方</td></tr><tr><td><code>官网SP接口.xlsx</code></td><td>客户提供</td></tr><tr><td>SSO三份接入文档</td><td>客户提供</td></tr></tbody></table>
+
+<h2>五、部署步骤</h2>
+
+<h3>第1步：准备</h3>
+<ol><li>确认门户应用服务器(10.0.63.11)的Java版本：<code>java -version</code>（需JDK 8+）</li><li>如无Java，安装：<code>yum install java-1.8.0-openjdk-devel -y</code></li></ol>
+
+<h3>第2步：配置OA账号</h3>
+<p>编辑 <code>oa-proxy.properties</code>，填入OA服务账号：</p>
+<pre><code class="language-properties">
+oa.username=OA服务账号
+oa.password=密码
+</code></pre>
+
+<h3>第3步：编译+部署</h3>
+<pre><code class="language-bash">
+cd _deploy/oa-news-proxy-java
+bash build.sh              # 本地编译 → oa-proxy.jar
+# 将 oa-proxy.jar + oa-proxy.properties + deploy.sh 传到10.0.63.11
+sudo bash deploy.sh        # 在服务器上执行
+</code></pre>
+
+<h3>第4步：验证</h3>
+<pre><code class="language-bash">
+# 健康检查
+curl http://10.0.63.11:8899/health
+
+# 测试主动拉取（模拟门户POST）
+curl -X POST http://10.0.63.11:8899/api/news \
+  -d "typeId=gsdt&amp;maxCount=5&amp;currentPage=1" \
+  -H "Content-Type: application/x-www-form-urlencoded"
+</code></pre>
+<p>应返回JSON包含<code>"code":0</code>和<code>"data":{"value":[...]}</code>。</p>
+
+<h3>第5步：门户后台配置数据源</h3>
+
+<p>管理员登录门户后台 → 门户中心 → 数据源设置 → 消息列表 → 创建数据源：</p>
+
+<table><thead><tr><th>配置项</th><th>值</th></tr></thead><tbody><tr><td>数据源名称</td><td>OA公司动态</td></tr><tr><td>获取数据方式</td><td>主动拉取</td></tr><tr><td>API地址</td><td><code>http://10.0.63.11:8899/api/news</code></td></tr><tr><td>自定义参数</td><td>固定参数：<code>typeId=gsdt</code></td></tr></tbody></table>
+
+<p><strong>每个分类创建独立数据源</strong>：</p>
+
+<table><thead><tr><th>数据源</th><th>typeId</th><th>对应SP站点</th></tr></thead><tbody><tr><td>OA公司动态</td><td><code>gsdt</code></td><td><code>/gsdt/</code></td></tr><tr><td>OA部门简报</td><td><code>bmjb</code></td><td><code>/bmjb/</code></td></tr><tr><td>OA创新发展</td><td><code>cxfz</code></td><td><code>/cxfz/zcdt/</code></td></tr><tr><td>OA监管动态</td><td><code>jgdt</code></td><td><code>/hggl/jgdt/</code></td></tr><tr><td>OA党建群团</td><td><code>djqt</code></td><td><code>/gsdt/djqt/</code></td></tr><tr><td>OA子公司</td><td><code>zgs</code></td><td><code>/gsdt/zgsfzjg/</code></td></tr><tr><td>OA党建指南</td><td><code>lxyz</code></td><td><code>/jdlm/lxyz/</code></td></tr></tbody></table>
+
+<p>配置后在门户首页编辑中绑定这些数据源到消息列表组件，预览效果后发布。</p>
+
+<h2>六、待办</h2>
+
+<table><thead><tr><th>#</th><th>事项</th><th>优先级</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>部署代理到10.0.63.11</td><td>P0</td><td>编译→传文件→run</td></tr><tr><td>2</td><td>门户后台创建8个数据源</td><td>P0</td><td>每个新闻分类一个</td></tr><tr><td>3</td><td>门户首页绑定组件并发布</td><td>P0</td><td>预览→确认→发布</td></tr><tr><td>4</td><td>确认OA Cookie有效期</td><td>P1</td><td>影响自动刷新频率</td></tr><tr><td>5</td><td>审查同事提供的JAR包（如有）</td><td>P1</td><td>—</td></tr></tbody></table>
+
+<h2>七、已知风险</h2>
+
+<table><thead><tr><th>风险</th><th>应对</th></tr></thead><tbody><tr><td>SharePoint表单认证方式不确定</td><td>支持<code>cookie_form</code>和<code>ntlm</code>两种，失败时切换</td></tr><tr><td>Cookie过期导致新闻中断</td><td>代理每30分钟自动刷新Cookie</td></tr><tr><td>门户<code>/api/news</code>端口被防火墙拦截</td><td>代理部署在应用服务器上，门户后端直连内网无防火墙问题</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档版本</strong>：V1.1</p>
+<p><strong>交接日期</strong>：2026-07-18</p>
+<p><strong>交接人</strong>：王昭</p>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>元信 Logo V3 · 对标企微原版结构</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC','Microsoft YaHei',-apple-system,sans-serif;
+    background: #f5f6f8; color: #1a1a2e; padding: 40px 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .header h1 { font-size: 28px; font-weight: 700; }
+  .header .sub { color: #8899aa; font-size: 14px; margin-top: 6px; }
+
+  .compare-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;
+    align-items: start;
+  }
+  .compare-card {
+    background: #fff; border-radius: 16px; padding: 24px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .compare-card .label { font-size: 12px; color: #8899aa; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .compare-card img { width: 140px; height: 140px; }
+  .compare-card .note { font-size: 11px; color: #bbb; margin-top: 8px; }
+
+  .option-row {
+    display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;
+  }
+  .option-card {
+    background: #fff; border-radius: 20px; padding: 32px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .opt-header {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;
+  }
+  .opt-letter {
+    background: #1478FF; color: #fff; font-size: 13px; font-weight: 700;
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .opt-name { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+  .opt-sub { font-size: 13px; color: #8899aa; margin-left: 8px; }
+  .opt-desc { font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 20px; }
+
+  .opt-preview-row {
+    display: flex; gap: 24px; align-items: center;
+  }
+  .opt-preview-row .icon-big { width: 160px; height: 160px; flex-shrink: 0; }
+  .opt-mockups {
+    display: flex; gap: 12px;
+  }
+  .mockup {
+    width: 64px; height: 64px; border-radius: 14px; overflow: hidden;
+    border: 1px solid #e8eaed;
+  }
+  .mockup.dark { background: #1a1a2e; }
+  .mockup.light { background: #f0f2f5; }
+  .mockup.white { background: #fff; }
+  .mockup img { width: 100%; height: 100%; }
+
+  .scenes { margin-top: 12px; display: flex; gap: 8px; }
+  .scene-tag {
+    font-size: 10px; color: #aaa; background: #f5f6f8;
+    padding: 2px 8px; border-radius: 10px;
+  }
+
+  .divider { border: none; border-top: 1px solid #e8eaed; margin: 32px 0; }
+  .footer { text-align: center; font-size: 12px; color: #8899aa; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+  <h1>元信 · Logo V3</h1>
+  <p class="sub">严格对标企微私有化原版结构：白色底 + 蓝色描边气泡 + 简洁内部元素</p>
+</div>
+
+<!-- Reference comparison -->
+<div class="compare-row">
+  <div class="compare-card">
+    <div class="label">企微私有化原版</div>
+    <div style="width:140px;height:140px;margin:0 auto;border-radius:28px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.8);">
+      <svg viewBox="0 0 200 200" width="130" height="130">
+        <rect x="14" y="14" width="172" height="172" rx="34" fill="#fff"/>
+        <g transform="translate(100,93)">
+          <path d="M-58,-42 v-6 a9,9 0 0,1 9,-9 h98 a9,9 0 0,1 9,9 v68 a9,9 0 0,1 -9,9 h-78 l-20,18 v-18 h-8" fill="none" stroke="#1478FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="-18" cy="-5" rx="12" ry="18" fill="#07C160" transform="rotate(-45,-18,-5)"/>
+          <ellipse cx="18" cy="-5" rx="12" ry="18" fill="#F4B400" transform="rotate(45,18,-5)"/>
+          <ellipse cx="0" cy="-22" rx="12" ry="18" fill="#1478FF" transform="rotate(0,0,-22)"/>
+          <ellipse cx="0" cy="12" rx="12" ry="18" fill="#FF6B6B" transform="rotate(0,0,12)"/>
+        </g>
+      </svg>
+    </div>
+    <p class="note">白底+蓝描边气泡+彩色四叶星</p>
+  </div>
+  <div class="compare-card">
+    <div class="label">国元证券 Logo（参考元素）</div>
+    <div style="width:140px;height:140px;margin:0 auto;border-radius:28px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.8);">
+      <svg viewBox="0 0 200 200" width="130" height="130">
+        <circle cx="80" cy="100" r="22" fill="none" stroke="#CC0000" stroke-width="4"/>
+        <circle cx="80" cy="100" r="18" fill="none" stroke="#CC0000" stroke-width="2" stroke-dasharray="30 18 5" stroke-dashoffset="8"/>
+        <polygon points="80,82 93,100 80,118 67,100" fill="#CC0000"/>
+      </svg>
+    </div>
+    <p class="note">红圆+开口C形+红色菱形</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Option A -->
+<div class="option-card">
+  <div class="opt-header">
+    <div class="opt-letter">A</div>
+    <div class="opt-name">几何·信</div>
+    <span class="opt-sub">甲骨文「信」= 几何化</span>
+  </div>
+  <p class="opt-desc">
+    将甲骨文「信」字（人+言）转化为纯几何线条，位于蓝色描边气泡正中央。人形弧线 + 三条言字横线 + 底部口字方块，一眼认出是"信"但保持极简。最接近原版"几何图形居中"的结构。
+  </p>
+  <div class="opt-preview-row">
+    <img class="icon-big" src="v3-opt-a-信字几何.svg" alt="Option A">
+    <div>
+      <div class="opt-mockups">
+        <div class="mockup white"><img src="v3-opt-a-信字几何.svg" alt=""></div>
+        <div class="mockup light"><img src="v3-opt-a-信字几何.svg" alt=""></div>
+        <div class="mockup dark"><img src="v3-opt-a-信字几何.svg" alt=""></div>
+      </div>
+      <div class="scenes">
+        <span class="scene-tag">App图标</span><span class="scene-tag">浅色页面</span><span class="scene-tag">深色背景</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Option B -->
+<div class="option-card">
+  <div class="opt-header">
+    <div class="opt-letter">B</div>
+    <div class="opt-name">菱形·信</div>
+    <span class="opt-sub">国元菱形 + 信字内嵌</span>
+  </div>
+  <p class="opt-desc">
+    金色菱形取自国元Logo核心视觉元素，内嵌白色简化"信"字。蓝色气泡 + 金色菱形 = 企微 + 国元的最直观融合。参考了你的草稿思路（蓝泡+金菱形），并做了细节打磨。
+  </p>
+  <div class="opt-preview-row">
+    <img class="icon-big" src="v3-opt-b-菱形信.svg" alt="Option B">
+    <div>
+      <div class="opt-mockups">
+        <div class="mockup white"><img src="v3-opt-b-菱形信.svg" alt=""></div>
+        <div class="mockup light"><img src="v3-opt-b-菱形信.svg" alt=""></div>
+        <div class="mockup dark"><img src="v3-opt-b-菱形信.svg" alt=""></div>
+      </div>
+      <div class="scenes">
+        <span class="scene-tag">App图标</span><span class="scene-tag">浅色页面</span><span class="scene-tag">深色背景</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Option C -->
+<div class="option-card">
+  <div class="opt-header">
+    <div class="opt-letter">C</div>
+    <div class="opt-name">对话·信</div>
+    <span class="opt-sub">双层气泡 + 信字交叠</span>
+  </div>
+  <p class="opt-desc">
+    大蓝气泡内嵌套两枚小气泡（蓝+金），中间以金色"信"字连接。表达"信任在对话中形成"——两层气泡的叠加暗示沟通的多维性。三套中辨识度最高，更有原创性和故事感。
+  </p>
+  <div class="opt-preview-row">
+    <img class="icon-big" src="v3-opt-c-对话信.svg" alt="Option C">
+    <div>
+      <div class="opt-mockups">
+        <div class="mockup white"><img src="v3-opt-c-对话信.svg" alt=""></div>
+        <div class="mockup light"><img src="v3-opt-c-对话信.svg" alt=""></div>
+        <div class="mockup dark"><img src="v3-opt-c-对话信.svg" alt=""></div>
+      </div>
+      <div class="scenes">
+        <span class="scene-tag">App图标</span><span class="scene-tag">浅色页面</span><span class="scene-tag">深色背景</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  元信 (YUANXIN) V3 · 所有方案为纯SVG矢量，可直接交付 · 输出目录 output/元信logo/
+</div>
+</div>
+</body>
+</html>

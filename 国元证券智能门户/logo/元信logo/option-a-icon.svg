@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d2b45"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d4a843"/>
+      <stop offset="50%" stop-color="#e8c96a"/>
+      <stop offset="100%" stop-color="#b8912e"/>
+    </linearGradient>
+    <linearGradient id="bubbleGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a5090"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App icon rounded square background -->
+  <rect x="10" y="10" width="180" height="180" rx="32" ry="32" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid lines (一网) -->
+  <g opacity="0.06" stroke="#ffffff" stroke-width="0.5">
+    <line x1="10" y1="55" x2="190" y2="55"/>
+    <line x1="10" y1="100" x2="190" y2="100"/>
+    <line x1="10" y1="145" x2="190" y2="145"/>
+    <line x1="55" y1="10" x2="55" y2="190"/>
+    <line x1="100" y1="10" x2="100" y2="190"/>
+    <line x1="145" y1="10" x2="145" y2="190"/>
+  </g>
+
+  <!-- Speech bubble (WeCom DNA) -->
+  <g transform="translate(100,95)">
+    <!-- Bubble body -->
+    <path d="M-58,-42 v-8 a12,12 0 0,1 12,-12 h92 a12,12 0 0,1 12,12 v68 a12,12 0 0,1 -12,12 h-72 l-20,18 v-18 h-12 a12,12 0 0,1 -12,-12 v-52" 
+          fill="url(#bubbleGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" rx="12"/>
+    <!-- Bubble tail -->
+    <path d="M-58,30 l-20,18 v-18z" fill="#1a5090"/>
+    
+    <!-- Inner speech lines (代表"言") -->
+    <g opacity="0.3" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+      <line x1="-30" y1="-18" x2="30" y2="-18"/>
+      <line x1="-30" y1="-6" x2="20" y2="-6"/>
+      <line x1="-30" y1="6" x2="25" y2="6"/>
+    </g>
+
+    <!-- Oracle bone "信" - 人 (left) -->
+    <g transform="translate(-22,0)" fill="none" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- 人 character - person standing -->
+      <path d="M0,-32 v28 c0,6 4,12 8,16"/>
+      <path d="M-12,-16 c-4,-4 -2,-16 0,-20 c2,4 4,16 0,20"/>
+    </g>
+
+    <!-- Oracle bone "信" - 言 (right) -->
+    <g transform="translate(10,0)" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Top horizontal (言 = speech) -->
+      <line x1="-14" y1="-30" x2="14" y2="-30"/>
+      <!-- Second line -->
+      <line x1="-18" y1="-18" x2="18" y2="-18"/>
+      <!-- Third line -->
+      <line x1="-16" y1="-6" x2="16" y2="-6"/>
+      <!-- Bottom 口 (mouth) -->
+      <rect x="-8" y="6" width="20" height="16" rx="3"/>
+    </g>
+  </g>
+
+  <!-- Gold diamond accent (国元 DNA) top-right -->
+  <g transform="translate(155, 38)" fill="url(#goldGrad)" opacity="0.9">
+    <polygon points="0,-10 8,0 0,10 -8,0"/>
+  </g>
+</svg>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D4_组织架构同步运维指南</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>D4 组织架构同步运维指南</h1>
+
+<blockquote><strong>文档版本</strong>：V1.0<br><strong>编制日期</strong>：2026年7月3日<br><strong>编制人员</strong>：王昭<br><strong>适用系统</strong>：国元证券智能门户（元信私有化企微 + 智能门户 + 七巧低代码平台）</blockquote>
+
+<hr>
+
+<h2>1. 文档说明</h2>
+
+<h3>1.1 适用范围</h3>
+
+<p>本文档适用于国元证券智能门户系统中的组织架构同步功能，涵盖从HR系统到智能门户再到元信（私有化企微）的完整数据同步链路。主要适用于：</p>
+
+<ul><li>系统运维人员日常同步任务执行</li><li>同步异常时的故障排查与处理</li><li>紧急情况下的手动数据调整</li></ul>
+
+<h3>1.2 读者对象</h3>
+
+<table><thead><tr><th>读者角色</th><th>关注重点</th></tr></thead><tbody><tr><td>系统运维工程师</td><td>同步操作流程、监控检查、异常处理</td></tr><tr><td>技术支持人员</td><td>故障排查、数据修复方法</td></tr><tr><td>项目经理</td><td>同步机制理解、风险点掌握</td></tr><tr><td>HR系统管理员</td><td>数据源确认、同步规则理解</td></tr></tbody></table>
+
+<h3>1.3 术语说明</h3>
+
+<table><thead><tr><th>术语</th><th>说明</th></tr></thead><tbody><tr><td>HR系统</td><td>指国元证券人力资源管理系统（S3），人员信息唯一数据源</td></tr><tr><td>门户中台</td><td>智能门户后台管理系统，作为数据同步枢纽</td></tr><tr><td>元信</td><td>企业微信私有化部署版本，同步的目标系统之一</td></tr><tr><td>增量同步</td><td>仅同步变更数据（新增/修改/删除），效率高</td></tr><tr><td>全量同步</td><td>同步全部数据，用于数据修复或首次初始化</td></tr><tr><td>yglb</td><td>员工类别字段，控制同步范围</td></tr><tr><td>zzzt</td><td>在职状态字段，控制同步范围</td></tr></tbody></table>
+
+<hr>
+
+<h2>2. 同步架构概述</h2>
+
+<h3>2.1 同步链路图</h3>
+
+<pre><code class="language-">
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   HR系统    │ ──── │  门户中台   │ ──── │   元信      │
+│   (S3)      │      │  (数据枢纽) │      │  (私有化企微)│
+└─────────────┘      └─────────────┘      └─────────────┘
+       │                    │                    │
+       │                    │                    │
+       ▼                    ▼                    ▼
+   人员数据源          数据清洗/转换         用户/组织创建
+   组织架构源          规则过滤/校验         权限分配
+</code></pre>
+
+<h3>2.2 门户中台角色定位</h3>
+
+<p>门户中台在同步链路中承担<strong>数据枢纽</strong>角色，主要职责包括：</p>
+
+<ol><li><strong>数据抽取</strong>：从HR系统拉取人员和组织架构数据</li><li><strong>数据转换</strong>：统一数据格式，适配元信接口规范</li><li><strong>规则过滤</strong>：根据员工类别和在职状态过滤同步范围</li><li><strong>数据推送</strong>：将处理后的数据推送到元信系统</li><li><strong>状态管理</strong>：记录同步状态，支持增量和全量模式</li></ol>
+
+<h3>2.3 同步时间窗口</h3>
+
+<table><thead><tr><th>同步类型</th><th>执行时间</th><th>说明</th></tr></thead><tbody><tr><td>组织架构同步</td><td>每天凌晨 0:00</td><td>部门、岗位等组织信息同步</td></tr><tr><td>人员信息同步</td><td>每天凌晨 0:00</td><td>员工基本信息同步</td></tr><tr><td>手动触发同步</td><td>任意时间</td><td>运维人员根据需要手动触发</td></tr></tbody></table>
+
+<hr>
+
+<h2>3. 同步规则说明</h2>
+
+<h3>3.1 员工类别过滤规则</h3>
+
+<p>仅同步以下员工类别（yglb字段）的数据：</p>
+
+<table><thead><tr><th>员工类别代码</th><th>类别名称</th><th>是否同步</th></tr></thead><tbody><tr><td>1</td><td>正式员工</td><td>✅ 同步</td></tr><tr><td>2</td><td>合同制员工</td><td>✅ 同步</td></tr><tr><td>5</td><td>劳务派遣</td><td>✅ 同步</td></tr><tr><td>6</td><td>实习生</td><td>✅ 同步</td></tr><tr><td>8</td><td>其他类别</td><td>✅ 同步</td></tr><tr><td>其他代码</td><td>未定义类别</td><td>❌ 不同步</td></tr></tbody></table>
+
+<h3>3.2 在职状态过滤规则</h3>
+
+<p>仅同步以下在职状态（zzzt字段）的数据：</p>
+
+<table><thead><tr><th>在职状态代码</th><th>状态名称</th><th>是否同步</th></tr></thead><tbody><tr><td>0</td><td>在职</td><td>✅ 同步</td></tr><tr><td>2</td><td>内退</td><td>✅ 同步</td></tr><tr><td>5</td><td>长期病假</td><td>✅ 同步</td></tr><tr><td>其他代码</td><td>离职/退休等</td><td>❌ 不同步（执行禁用逻辑）</td></tr></tbody></table>
+
+<h3>3.3 禁用逻辑处理</h3>
+
+<p>对于离职/退休人员，采用<strong>禁用而非删除</strong>策略：</p>
+
+<ol><li><strong>HR系统侧</strong>：人员状态变更为离职/退休</li><li><strong>门户中台侧</strong>：检测到状态变更，标记为禁用</li><li><strong>元信侧</strong>：账户状态设置为禁用，但数据保留</li></ol>
+
+<p><strong>重要原则</strong>：企微账户<strong>不要有删除逻辑</strong>，所有账户变更均通过禁用/启用方式处理。</p>
+
+<h3>3.4 数据权限控制</h3>
+
+<ul><li>人员信息修改权限<strong>锁定在门户本地系统</strong></li><li>同步后的手工调整<strong>仅限应急场景</strong></li><li>常规人员信息变更必须通过HR系统发起</li></ul>
+
+<hr>
+
+<h2>4. 同步操作指南</h2>
+
+<h3>4.1 增量同步操作</h3>
+
+<p>增量同步用于日常数据同步，仅处理变更数据：</p>
+
+<h4>4.1.1 自动增量同步</h4>
+
+<p>系统按预定时间自动执行：</p>
+
+<pre><code class="language-bash">
+# 查看自动同步任务状态
+crontab -l | grep sync
+
+# 查看同步日志
+tail -f /var/log/portal/sync/sync.log
+</code></pre>
+
+<h4>4.1.2 手动触发增量同步</h4>
+
+<p>当需要立即同步最新数据时，可手动触发：</p>
+
+<pre><code class="language-bash">
+# 手动触发增量同步
+cd /opt/portal/sync
+./sync.sh --mode=incremental
+
+# 查看同步进度
+tail -f /var/log/portal/sync/incremental.log
+</code></pre>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>登录门户中台管理后台</li><li>进入「系统管理」→「数据同步」模块</li><li>选择「增量同步」模式</li><li>点击「立即执行」按钮</li><li>等待同步完成，查看同步日志</li></ol>
+
+<h3>4.2 全量同步操作</h3>
+
+<p>全量同步用于数据修复或首次初始化，同步全部数据：</p>
+
+<h4>4.2.1 自动全量同步</h4>
+
+<pre><code class="language-bash">
+# 查看全量同步任务
+crontab -l | grep full
+
+# 全量同步通常在周末或维护窗口执行
+</code></pre>
+
+<h4>4.2.2 手动触发全量同步</h4>
+
+<p><strong>重要提示</strong>：全量同步会覆盖现有数据，请谨慎操作！</p>
+
+<pre><code class="language-bash">
+# 手动触发全量同步
+cd /opt/portal/sync
+./sync.sh --mode=full
+
+# 查看同步进度
+tail -f /var/log/portal/sync/full.log
+</code></pre>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>登录门户中台管理后台</li><li>进入「系统管理」→「数据同步」模块</li><li>选择「全量同步」模式</li><li><strong>确认操作</strong>：系统将提示全量同步风险</li><li>点击「立即执行」按钮</li><li>等待同步完成，查看同步日志</li></ol>
+
+<h3>4.3 同步状态查询</h3>
+
+<pre><code class="language-bash">
+# 查询同步状态
+curl -X GET "http://localhost:8080/api/sync/status" \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json"
+
+# 查询特定用户同步状态
+curl -X GET "http://localhost:8080/api/sync/status?userId=12345" \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json"
+</code></pre>
+
+<p><strong>界面查询</strong>：</p>
+
+<ol><li>登录门户中台管理后台</li><li>进入「系统管理」→「数据同步」→「同步状态」</li><li>可按时间范围、同步类型、状态等条件筛选</li><li>查看同步详情：成功/失败/跳过的记录数</li></ol>
+
+<hr>
+
+<h2>5. 同步监控与检查</h2>
+
+<h3>5.1 无告警环境下的手动检查</h3>
+
+<p>由于当前系统<strong>无同步失败告警</strong>，需要定期手动检查：</p>
+
+<h4>5.1.1 每日检查清单</h4>
+
+<pre><code class="language-bash">
+# 检查同步日志是否有错误
+grep -i "error\|exception\|fail" /var/log/portal/sync/sync.log | tail -20
+
+# 检查同步任务执行状态
+ps aux | grep sync
+
+# 检查数据库连接状态
+/opt/portal/sync/check_db.sh
+</code></pre>
+
+<h4>5.1.2 检查内容</h4>
+
+<table><thead><tr><th>检查项</th><th>检查方法</th><th>预期结果</th></tr></thead><tbody><tr><td>同步任务状态</td><td>查看进程/服务状态</td><td>任务正常运行</td></tr><tr><td>同步日志</td><td>检查错误日志</td><td>无错误信息</td></tr><tr><td>数据一致性</td><td>抽样比对数据</td><td>数据一致</td></tr><tr><td>同步时间</td><td>查看最后同步时间</td><td>在预定时间执行</td></tr></tbody></table>
+
+<h3>5.2 数据校验步骤</h3>
+
+<h4>5.2.1 数据一致性校验</h4>
+
+<pre><code class="language-bash">
+# 校验HR系统与门户中台数据一致性
+/opt/portal/sync/verify.sh --source=hr --target=portal
+
+# 校验门户中台与元信数据一致性
+/opt/portal/sync/verify.sh --source=portal --target=yuanxin
+</code></pre>
+
+<h4>5.2.2 抽样校验方法</h4>
+
+<ol><li><strong>随机抽取10个用户</strong>：从HR系统、门户中台、元信分别查询</li><li><strong>比对关键字段</strong>：姓名、工号、部门、职位、状态</li><li><strong>检查同步时间</strong>：确认最后同步时间是否一致</li><li><strong>记录校验结果</strong>：填写校验记录表</li></ol>
+
+<h4>5.2.3 数据完整性校验</h4>
+
+<pre><code class="language-bash">
+# 检查数据完整性
+/opt/portal/sync/verify.sh --integrity
+
+# 检查必填字段完整性
+/opt/portal/sync/verify.sh --required-fields
+</code></pre>
+
+<h3>5.3 监控指标</h3>
+
+<table><thead><tr><th>监控指标</th><th>监控方法</th><th>阈值</th></tr></thead><tbody><tr><td>同步成功率</td><td>日志分析</td><td>&gt; 99%</td></tr><tr><td>同步延迟</td><td>时间戳比对</td><td>&lt; 5分钟</td></tr><tr><td>数据一致性</td><td>定期校验</td><td>100%</td></tr><tr><td>错误日志数量</td><td>日志统计</td><td>&lt; 10条/天</td></tr></tbody></table>
+
+<hr>
+
+<h2>6. 异常排查指南</h2>
+
+<h3>6.1 常见同步问题及解决方案</h3>
+
+<h4>6.1.1 同步任务未执行</h4>
+
+<p><strong>症状</strong>：预定时间未执行同步任务</p>
+
+<p><strong>排查步骤</strong>：</p>
+
+<pre><code class="language-bash">
+# 1. 检查crontab任务
+crontab -l
+
+# 2. 检查同步服务状态
+systemctl status portal-sync
+
+# 3. 检查系统日志
+journalctl -u portal-sync -f
+
+# 4. 检查磁盘空间
+df -h
+</code></pre>
+
+<p><strong>解决方案</strong>：</p>
+
+<ol><li>重启同步服务：<code>systemctl restart portal-sync</code></li><li>手动触发同步：<code>./sync.sh --mode=incremental</code></li><li>检查磁盘空间，清理日志文件</li></ol>
+
+<h4>6.1.2 同步失败</h4>
+
+<p><strong>症状</strong>：同步任务执行失败，日志中有错误信息</p>
+
+<p><strong>排查步骤</strong>：</p>
+
+<pre><code class="language-bash">
+# 1. 查看错误日志
+tail -100 /var/log/portal/sync/error.log
+
+# 2. 检查网络连接
+ping hr.example.com
+ping yuanxin.example.com
+
+# 3. 检查数据库连接
+/opt/portal/sync/check_db.sh
+</code></pre>
+
+<p><strong>常见错误及解决方案</strong>：</p>
+
+<table><thead><tr><th>错误信息</th><th>可能原因</th><th>解决方案</th></tr></thead><tbody><tr><td>Connection timeout</td><td>网络连接超时</td><td>检查网络配置，增加超时时间</td></tr><tr><td>Authentication failed</td><td>认证失败</td><td>检查账号密码，更新凭证</td></tr><tr><td>Data format error</td><td>数据格式错误</td><td>检查数据源格式，更新转换规则</td></tr><tr><td>Duplicate key</td><td>主键冲突</td><td>检查数据源重复记录</td></tr></tbody></table>
+
+<h4>6.1.3 邮箱绑定丢失</h4>
+
+<p><strong>症状</strong>：用户邮箱绑定信息丢失</p>
+
+<p><strong>排查步骤</strong>：</p>
+
+<pre><code class="language-bash">
+# 1. 检查用户邮箱字段
+curl -X GET "http://localhost:8080/api/users/{userId}" \
+  -H "Authorization: Bearer &lt;token&gt;"
+
+# 2. 检查同步日志中的邮箱字段处理
+grep "email" /var/log/portal/sync/sync.log
+
+# 3. 检查HR系统原始数据
+curl -X GET "http://hr.example.com/api/users/{userId}"
+</code></pre>
+
+<p><strong>解决方案</strong>：</p>
+
+<ol><li>手动补充邮箱绑定信息</li><li>检查同步规则中邮箱字段映射</li><li>更新同步配置，确保邮箱字段正确处理</li></ol>
+
+<h3>6.2 数据不一致问题</h3>
+
+<h4>6.2.1 用户状态不一致</h4>
+
+<p><strong>症状</strong>：同一用户在HR系统和元信中状态不同</p>
+
+<p><strong>排查步骤</strong>：</p>
+
+<pre><code class="language-bash">
+# 1. 比对用户状态
+/opt/portal/sync/compare.sh --userId=12345
+
+# 2. 检查状态映射规则
+cat /opt/portal/sync/config/status_mapping.json
+
+# 3. 查看同步日志中的状态变更记录
+grep "status" /var/log/portal/sync/sync.log | grep "12345"
+</code></pre>
+
+<p><strong>解决方案</strong>：</p>
+
+<ol><li>手动触发增量同步</li><li>检查状态映射规则是否正确</li><li>必要时执行全量同步</li></ol>
+
+<h4>6.2.2 组织架构不一致</h4>
+
+<p><strong>症状</strong>：部门、岗位等组织信息不一致</p>
+
+<p><strong>排查步骤</strong>：</p>
+
+<pre><code class="language-bash">
+# 1. 比对组织架构
+/opt/portal/sync/compare.sh --org
+
+# 2. 检查组织架构映射规则
+cat /opt/portal/sync/config/org_mapping.json
+
+# 3. 查看组织架构同步日志
+grep "organization" /var/log/portal/sync/sync.log
+</code></pre>
+
+<p><strong>解决方案</strong>：</p>
+
+<ol><li>手动触发组织架构增量同步</li><li>检查组织架构映射规则</li><li>必要时执行全量组织架构同步</li></ol>
+
+<hr>
+
+<h2>7. 应急处理</h2>
+
+<h3>7.1 手动调整流程</h3>
+
+<p><strong>重要提示</strong>：手动调整仅限应急场景，常规变更必须通过HR系统发起！</p>
+
+<h4>7.1.1 手动调整用户信息</h4>
+
+<p><strong>适用场景</strong>：用户信息有误，HR系统无法及时更新</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li><strong>登录门户中台管理后台</strong></li><li><strong>进入「用户管理」→「用户列表」</strong></li><li><strong>搜索目标用户</strong>：按姓名或工号搜索</li><li><strong>编辑用户信息</strong>：修改需要调整的字段</li><li><strong>保存并同步</strong>：系统提示是否同步到元信</li><li><strong>填写调整记录</strong>：记录调整原因、时间、操作人</li></ol>
+
+<pre><code class="language-bash">
+# 手动更新用户信息（命令行方式）
+curl -X PUT "http://localhost:8080/api/users/{userId}" \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "张三",
+    "department": "技术部",
+    "position": "高级工程师",
+    "status": "active"
+  }'
+
+# 手动同步到元信
+curl -X POST "http://localhost:8080/api/sync/manual/{userId}" \
+  -H "Authorization: Bearer &lt;token&gt;"
+</code></pre>
+
+<h4>7.1.2 手动禁用/启用用户</h4>
+
+<p><strong>适用场景</strong>：用户离职/入职，HR系统未及时更新</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li><strong>登录门户中台管理后台</strong></li><li><strong>进入「用户管理」→「用户列表」</strong></li><li><strong>搜索目标用户</strong></li><li><strong>点击「禁用」或「启用」按钮</strong></li><li><strong>填写操作原因</strong></li><li><strong>确认操作</strong></li></ol>
+
+<pre><code class="language-bash">
+# 手动禁用用户
+curl -X POST "http://localhost:8080/api/users/{userId}/disable" \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reason": "手动禁用 - 应急处理",
+    "operator": "admin",
+    "timestamp": "2026-07-03T10:00:00"
+  }'
+
+# 手动启用用户
+curl -X POST "http://localhost:8080/api/users/{userId}/enable" \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reason": "手动启用 - 应急处理",
+    "operator": "admin",
+    "timestamp": "2026-07-03T10:00:00"
+  }'
+</code></pre>
+
+<h3>7.2 数据修复方法</h3>
+
+<h4>7.2.1 数据不一致修复</h4>
+
+<p><strong>适用场景</strong>：HR系统与元信数据不一致</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li><strong>备份当前数据</strong></li><li><strong>执行全量同步</strong>（见4.2.2节）</li><li><strong>验证数据一致性</strong>（见5.2节）</li><li><strong>记录修复过程</strong></li></ol>
+
+<pre><code class="language-bash">
+# 备份当前数据
+/opt/portal/sync/backup.sh --date=$(date +%Y%m%d)
+
+# 执行全量同步
+/opt/portal/sync/sync.sh --mode=full
+
+# 验证数据一致性
+/opt/portal/sync/verify.sh --source=hr --target=yuanxin
+</code></pre>
+
+<h4>7.2.2 数据丢失修复</h4>
+
+<p><strong>适用场景</strong>：同步过程中数据丢失</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li><strong>停止同步服务</strong></li><li><strong>从备份恢复数据</strong></li><li><strong>检查数据完整性</strong></li><li><strong>重启同步服务</strong></li><li><strong>执行增量同步</strong></li></ol>
+
+<pre><code class="language-bash">
+# 停止同步服务
+systemctl stop portal-sync
+
+# 从备份恢复数据
+/opt/portal/sync/restore.sh --backup-file=/backup/portal_20260702.tar.gz
+
+# 检查数据完整性
+/opt/portal/sync/verify.sh --integrity
+
+# 重启同步服务
+systemctl start portal-sync
+
+# 执行增量同步
+/opt/portal/sync/sync.sh --mode=incremental
+</code></pre>
+
+<h3>7.3 应急联系人</h3>
+
+<table><thead><tr><th>角色</th><th>联系人</th><th>联系方式</th><th>职责</th></tr></thead><tbody><tr><td>项目负责人</td><td>王昭</td><td>[待填写]</td><td>整体协调，决策</td></tr><tr><td>技术负责人</td><td>赵子健</td><td>13780590178</td><td>技术问题处理</td></tr><tr><td>HR系统管理员</td><td>[待填写]</td><td>[待填写]</td><td>数据源确认</td></tr><tr><td>元信管理员</td><td>程文斐 / 葛鹏飞</td><td>0551-62201332 / 0551-62207154</td><td>元信系统问题</td></tr></tbody></table>
+
+<hr>
+
+<h2>8. 附录</h2>
+
+<h3>8.1 同步字段映射表</h3>
+
+<table><thead><tr><th>HR系统字段</th><th>门户中台字段</th><th>元信字段</th><th>说明</th></tr></thead><tbody><tr><td>ygbh</td><td>userId</td><td>userid</td><td>员工编号</td></tr><tr><td>ygxming</td><td>userName</td><td>name</td><td>员工姓名</td></tr><tr><td>yglb</td><td>employeeType</td><td>-</td><td>员工类别（同步过滤条件）</td></tr><tr><td>zzzt</td><td>status</td><td>status</td><td>在职状态（同步过滤条件）</td></tr><tr><td>bmid</td><td>departmentId</td><td>department</td><td>部门ID</td></tr><tr><td>bmmc</td><td>departmentName</td><td>-</td><td>部门名称</td></tr><tr><td>zhiw</td><td>position</td><td>position</td><td>职务</td></tr><tr><td>dianhua</td><td>phone</td><td>mobile</td><td>手机号码</td></tr><tr><td>youx</td><td>email</td><td>email</td><td>电子邮箱</td></tr><tr><td>ruzrq</td><td>hireDate</td><td>-</td><td>入职日期</td></tr><tr><td>lizrq</td><td>leaveDate</td><td>-</td><td>离职日期</td></tr></tbody></table>
+
+<h3>8.2 状态码说明</h3>
+
+<h4>8.2.1 员工类别（yglb）状态码</h4>
+
+<table><thead><tr><th>状态码</th><th>说明</th><th>是否同步</th></tr></thead><tbody><tr><td>1</td><td>正式员工</td><td>✅</td></tr><tr><td>2</td><td>合同制员工</td><td>✅</td></tr><tr><td>5</td><td>劳务派遣</td><td>✅</td></tr><tr><td>6</td><td>实习生</td><td>✅</td></tr><tr><td>8</td><td>其他类别</td><td>✅</td></tr><tr><td>其他</td><td>未定义类别</td><td>❌</td></tr></tbody></table>
+
+<h4>8.2.2 在职状态（zzzt）状态码</h4>
+
+<table><thead><tr><th>状态码</th><th>说明</th><th>是否同步</th></tr></thead><tbody><tr><td>0</td><td>在职</td><td>✅</td></tr><tr><td>2</td><td>内退</td><td>✅</td></tr><tr><td>5</td><td>长期病假</td><td>✅</td></tr><tr><td>其他</td><td>离职/退休等</td><td>❌（执行禁用逻辑）</td></tr></tbody></table>
+
+<h3>8.3 同步配置文件示例</h3>
+
+<pre><code class="language-json">
+{
+  "sync_config": {
+    "schedule": {
+      "organization_sync": "0 3 * * *",
+      "user_sync": "0 4 * * *"
+    },
+    "filter_rules": {
+      "employee_types": [1, 2, 5, 6, 8],
+      "status_codes": [0, 2, 5]
+    },
+    "sync_mode": {
+      "default": "incremental",
+      "full_sync_day": "sunday"
+    },
+    "retry_policy": {
+      "max_retries": 3,
+      "retry_interval": 300
+    }
+  }
+}
+</code></pre>
+
+<h3>8.4 日志文件位置</h3>
+
+<table><thead><tr><th>日志类型</th><th>文件路径</th><th>说明</th></tr></thead><tbody><tr><td>同步主日志</td><td>/var/log/portal/sync/sync.log</td><td>所有同步操作记录</td></tr><tr><td>错误日志</td><td>/var/log/portal/sync/error.log</td><td>错误信息记录</td></tr><tr><td>增量同步日志</td><td>/var/log/portal/sync/incremental.log</td><td>增量同步详情</td></tr><tr><td>全量同步日志</td><td>/var/log/portal/sync/full.log</td><td>全量同步详情</td></tr><tr><td>验证日志</td><td>/var/log/portal/sync/verify.log</td><td>数据校验记录</td></tr></tbody></table>
+
+<h3>8.5 常用命令速查</h3>
+
+<table><thead><tr><th>命令</th><th>说明</th></tr></thead><tbody><tr><td><code>./sync.sh --mode=incremental</code></td><td>手动触发增量同步</td></tr><tr><td><code>./sync.sh --mode=full</code></td><td>手动触发全量同步</td></tr><tr><td><code>./verify.sh --source=hr --target=portal</code></td><td>校验HR与门户数据一致性</td></tr><tr><td><code>./verify.sh --source=portal --target=yuanxin</code></td><td>校验门户与元信数据一致性</td></tr><tr><td><code>./verify.sh --integrity</code></td><td>检查数据完整性</td></tr><tr><td><code>tail -f /var/log/portal/sync/sync.log</code></td><td>实时查看同步日志</td></tr><tr><td><code>systemctl status portal-sync</code></td><td>查看同步服务状态</td></tr><tr><td><code>systemctl restart portal-sync</code></td><td>重启同步服务</td></tr></tbody></table>
+
+<hr>
+
+<h2>版本记录</h2>
+
+<table><thead><tr><th>版本</th><th>日期</th><th>修改人</th><th>修改内容</th></tr></thead><tbody><tr><td>V1.0</td><td>2026-07-03</td><td>王昭</td><td>初始版本</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+
+<hr>
+
+<h2>附录A：同步配置参数说明</h2>
+
+<h3>F.1 环境变量配置</h3>
+
+<pre><code class="language-bash">
+# 数据库连接配置
+export DB_HOST=localhost
+export DB_PORT=3306  # MySQL模式，默认3306
+export DB_NAME=portal_sync
+export DB_USER=sync_user
+export DB_PASS=[待填写]
+
+# HR系统连接配置
+export HR_HOST=[待填写]
+export HR_PORT=[待填写]
+export HR_API_KEY=[待填写]
+
+# 元信连接配置
+export YX_HOST=[待填写]
+export YX_PORT=[待填写]
+export YX_APP_ID=[待填写]
+export YX_APP_SECRET=[待填写]
+</code></pre>
+
+<h3>F.2 同步性能调优</h3>
+
+<table><thead><tr><th>参数</th><th>默认值</th><th>建议范围</th><th>说明</th></tr></thead><tbody><tr><td>batch_size</td><td>100</td><td>50-500</td><td>每批处理记录数</td></tr><tr><td>thread_count</td><td>4</td><td>2-8</td><td>并发线程数</td></tr><tr><td>timeout</td><td>30</td><td>10-60</td><td>请求超时时间（秒）</td></tr><tr><td>retry_interval</td><td>300</td><td>60-600</td><td>重试间隔（秒）</td></tr><tr><td>max_retries</td><td>3</td><td>1-5</td><td>最大重试次数</td></tr></tbody></table>
+
+<hr>
+
+<h2>附录B：故障排查流程图</h2>
+
+<pre><code class="language-">
+开始
+  │
+  ▼
+检查同步任务状态
+  │
+  ├─ 任务未执行 ──► 检查crontab/服务状态 ──► 重启服务 ──► 结束
+  │
+  ├─ 任务执行失败 ──► 查看错误日志 ──► 定位问题 ──► 解决问题 ──► 结束
+  │
+  ├─ 数据不一致 ──► 执行数据校验 ──► 确定差异 ──► 手动修复或全量同步 ──► 结束
+  │
+  └─ 其他问题 ──► 联系技术支持 ──► 结束
+</code></pre>
+
+<hr>
+
+<p><strong>文档结束</strong></p>
+
+<blockquote><strong>注意</strong>：本文档中的命令行示例仅供参考，实际命令可能因系统配置而有所不同。请根据实际环境调整命令参数。</blockquote>
+
+</body>
+</html>

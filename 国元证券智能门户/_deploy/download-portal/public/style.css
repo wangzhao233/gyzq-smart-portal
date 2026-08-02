@@ -1,0 +1,553 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #F5F7FA;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  flex: 1;
+  width: 100%;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+.header .logo {
+  width: 80px;
+  height: 80px;
+  background: #1F4E79;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 36px;
+  color: white;
+  font-weight: bold;
+}
+
+.header h1 {
+  font-size: 22px;
+  color: #1F4E79;
+  font-weight: 700;
+}
+
+.header p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card h2 {
+  font-size: 16px;
+  color: #1F4E79;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Download entry cards */
+.download-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.download-card:active {
+  transform: scale(0.98);
+}
+
+.download-card .icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.download-card .icon.ios {
+  background: #1F4E79;
+  color: white;
+}
+
+.download-card .icon.android {
+  background: #3DDC84;
+  color: white;
+}
+
+.download-card .icon.pc {
+  background: #0078D7;
+  color: white;
+}
+
+.download-card .icon.linux {
+  background: #FCC624;
+  color: #333;
+}
+
+.download-card .info {
+  flex: 1;
+}
+
+.download-card .info h3 {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.download-card .info span {
+  font-size: 13px;
+  color: #999;
+}
+
+.download-card .arrow {
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #2B7CD3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #1F6BBF;
+}
+
+/* QR Code section */
+.qr-section {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.qr-section img {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto;
+}
+
+.qr-section .hint {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* Steps */
+.steps {
+  list-style: none;
+  padding: 0;
+}
+
+.steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #555;
+}
+
+.steps li:last-child {
+  border-bottom: none;
+}
+
+.steps .step-num {
+  width: 24px;
+  height: 24px;
+  background: #1F4E79;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.available {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge.used {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+/* Admin layout */
+.admin-layout {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  flex: 1;
+  width: 100%;
+}
+
+.admin-header {
+  background: #1F4E79;
+  color: white;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 24px;
+}
+
+.admin-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.admin-nav a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+.admin-tab {
+  display: none;
+}
+
+.admin-tab.active {
+  display: block;
+}
+
+/* Stats cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.stat-card .number {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1F4E79;
+  line-height: 1.2;
+}
+
+.stat-card .label {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.stat-card .number.used {
+  color: #c62828;
+}
+
+.stat-card .number.available {
+  color: #2e7d32;
+}
+
+/* Bar chart (CSS only) */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  padding: 10px 0;
+}
+
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bar {
+  width: 100%;
+  background: #2B7CD3;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.3s;
+}
+
+.bar-label {
+  font-size: 11px;
+  color: #888;
+}
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+table th {
+  background: #f8f9fa;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #e0e0e0;
+  white-space: nowrap;
+}
+
+table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+
+table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 0;
+}
+
+.pagination a,
+.pagination span {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  color: #2B7CD3;
+  background: white;
+  border: 1px solid #e0e0e0;
+}
+
+.pagination a:hover {
+  background: #2B7CD3;
+  color: white;
+  border-color: #2B7CD3;
+}
+
+.pagination span.current {
+  background: #1F4E79;
+  color: white;
+  border-color: #1F4E79;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.filters select,
+.filters input,
+.filters button {
+  padding: 8px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.filters button {
+  background: #2B7CD3;
+  color: white;
+  border-color: #2B7CD3;
+  cursor: pointer;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  resize: vertical;
+}
+
+/* Messages */
+.msg {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.msg.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.msg.error {
+  background: #fbe9e7;
+  color: #c62828;
+  border: 1px solid #ffccbc;
+}
+
+.msg.info {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #bbdefb;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Error page */
+.error-page {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.error-page .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.error-page h2 {
+  font-size: 18px;
+  color: #c62828;
+  margin-bottom: 8px;
+}
+
+.error-page p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .admin-layout {
+    max-width: 1100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px;
+  }
+  .header .logo {
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+  .header h1 {
+    font-size: 18px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stat-card .number {
+    font-size: 24px;
+  }
+  .admin-header {
+    padding: 0 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 56px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .admin-nav a {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

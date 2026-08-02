@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D3_管理员操作手册</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>D3 管理员操作手册</h1>
+
+<p><strong>文档编号</strong>：D3  </p>
+<p><strong>编制人员</strong>：王昭  </p>
+<p><strong>编制日期</strong>：2026年7月3日  </p>
+<p><strong>适用版本</strong>：V1.0  </p>
+
+<hr>
+
+<h2>1. 管理员角色与权限说明</h2>
+
+<h3>1.1 角色定义</h3>
+
+<p>国元证券智能门户系统采用分层授权的管理模式，根据管理范围和职责不同，系统预设以下管理员角色：</p>
+
+<table><thead><tr><th>角色名称</th><th>管理范围</th><th>主要职责</th></tr></thead><tbody><tr><td><strong>超级管理员</strong></td><td>全系统</td><td>系统全局配置、所有用户和部门管理、权限分配、系统维护</td></tr><tr><td><strong>总部管理员</strong></td><td>总部及各部门</td><td>管理总部各部门用户、分配部门管理员权限、维护总部级应用</td></tr><tr><td><strong>子公司管理员</strong></td><td>所辖子公司</td><td>管理子公司用户、分配子公司内部门管理员、维护子公司级应用</td></tr><tr><td><strong>分公司管理员</strong></td><td>所辖分公司</td><td>管理分公司用户、分配分公司内部门管理员、维护分公司级应用</td></tr><tr><td><strong>部门管理员</strong></td><td>本部门</td><td>管理本部门用户、维护部门信息、分配部门内应用权限</td></tr><tr><td><strong>内容管理员</strong></td><td>指定内容模块</td><td>负责新闻公告、消息中心等内容的发布与管理</td></tr><tr><td><strong>应用管理员</strong></td><td>指定应用</td><td>负责特定应用的配置、维护与权限管理</td></tr></tbody></table>
+
+<h3>1.2 权限层级说明</h3>
+
+<p>系统权限采用"集团→总部→子公司→分公司→部门"的五级管理体系，具体权限继承关系如下：</p>
+
+<pre><code class="language-">
+集团级（超级管理员）
+  ├── 总部级（总部管理员）
+  │     ├── 部门级（部门管理员）
+  │     └── ...
+  ├── 子公司级（子公司管理员）
+  │     ├── 分公司级（分公司管理员）
+  │     │     ├── 营业部级（营业部管理员）
+  │     │     └── ...
+  │     └── ...
+  └── ...
+</code></pre>
+
+<h3>1.3 角色分配原则</h3>
+
+<ol><li><strong>最小权限原则</strong>：仅授予完成工作所必需的最小权限集合</li><li><strong>职责分离原则</strong>：关键操作需多人协作，避免单一角色拥有过大权限</li><li><strong>定期审查原则</strong>：每季度对管理员权限进行审查，及时调整异常权限</li><li><strong>权限继承限制</strong>：下级管理员不得授予超过上级管理员的权限范围</li></ol>
+
+<hr>
+
+<h2>2. 后台管理入口</h2>
+
+<h3>2.1 访问方式</h3>
+
+<p><strong>管理后台访问地址</strong>：</p>
+
+<table><thead><tr><th>访问方式</th><th>地址</th><th>说明</th></tr></thead><tbody><tr><td><strong>PC端Web访问</strong></td><td>https://admin.portal.oa.gyzq.com</td><td>推荐使用Chrome 90+或Edge 90+浏览器</td></tr><tr><td><strong>PC端快捷入口</strong></td><td>左上角任务头像 → 快捷入口 → 登录管理台</td><td>通过元信PC客户端快速跳转</td></tr><tr><td><strong>元信客户端内访问</strong></td><td>工作台 → 管理后台</td><td>需安装国元元信客户端</td></tr><tr><td><strong>移动端访问</strong></td><td>https://admin.portal.oa.gyzq.com/mobile</td><td>支持iOS 14+/Android 10+</td></tr></tbody></table>
+
+<p><strong>网络要求</strong>：</p>
+<ul><li>内网访问：无需特殊配置</li><li>外网访问：需通过VPN接入公司内网</li></ul>
+
+<h3>2.2 登录流程</h3>
+
+<blockquote><strong>说明</strong>：仅拥有管理员权限的用户才能登录管理后台。如需开通管理员权限，请联系超级管理员进行配置。</blockquote>
+
+<p><strong>方式一：网页扫码登录（推荐）</strong></p>
+
+<p><strong>步骤1：打开管理后台页面</strong></p>
+
+<p>在浏览器地址栏输入管理后台地址，按回车键打开登录页面。</p>
+
+<p><strong>步骤2：扫码认证</strong></p>
+
+<p>使用已登录的移动端元信客户端，扫描页面显示的二维码完成身份认证。</p>
+
+<p><strong>步骤3：进入管理后台</strong></p>
+
+<p>扫码确认后，系统自动跳转至管理后台首页。</p>
+
+<p><strong>方式二：账号密码登录</strong></p>
+
+<p><strong>步骤1：打开管理后台页面</strong></p>
+
+<p>在浏览器地址栏输入管理后台地址，按回车键打开登录页面。</p>
+
+<p><strong>步骤2：输入登录凭据</strong></p>
+
+<p>在登录页面输入以下信息：</p>
+<ul><li><strong>用户名</strong>：管理员工号（如：GY00001）</li><li><strong>密码</strong>：初始密码为身份证后6位（首次登录需修改）</li></ul>
+
+<p><strong>步骤3：完成身份验证</strong></p>
+
+<p>根据系统配置，可能需要完成以下验证方式之一：</p>
+<ul><li><strong>短信验证码</strong>：向绑定的手机号发送验证码</li><li><strong>企业微信扫码</strong>：使用元信客户端扫描二维码</li><li><strong>动态令牌</strong>：输入动态令牌生成的6位数字</li></ul>
+
+<p><strong>步骤4：进入管理后台</strong></p>
+
+<p>验证通过后，系统自动跳转至管理后台首页。</p>
+
+<h3>2.3 安全登录建议</h3>
+
+<ol><li><strong>密码复杂度要求</strong>：<br>- 长度不少于8位<br>- 包含大小写字母、数字和特殊字符<br>- 不得使用连续或重复字符<br>- 不得与用户名相同</li></ol>
+
+<ol><li><strong>登录安全设置</strong>：<br>- 连续5次密码错误将锁定账户30分钟<br>- 建议开启登录IP白名单限制<br>- 敏感操作需二次验证</li></ol>
+
+<ol><li><strong>会话管理</strong>：<br>- 默认会话超时时间：30分钟<br>- 可在系统设置中调整超时时间<br>- 建议在公共计算机上使用后及时退出</li></ol>
+
+<hr>
+
+<h2>3. 用户管理</h2>
+
+<h3>3.1 新增用户</h3>
+
+<p><strong>操作路径</strong>：用户管理 → 用户列表 → 新增用户</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入用户管理页面</strong></p>
+
+<p>在左侧导航栏选择"用户管理"，点击"用户列表"。</p>
+
+<p><strong>步骤2：点击新增用户按钮</strong></p>
+
+<p>在用户列表页面右上角，点击"新增用户"按钮。</p>
+
+<p><strong>步骤3：填写用户信息</strong></p>
+
+<p>在新增用户表单中填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>工号</td><td>员工工号，系统唯一标识</td><td>是</td></tr><tr><td>姓名</td><td>员工真实姓名</td><td>是</td></tr><tr><td>所属部门</td><td>选择员工所属部门</td><td>是</td></tr><tr><td>手机号</td><td>员工手机号码，用于接收验证码</td><td>是</td></tr><tr><td>邮箱</td><td>员工企业邮箱</td><td>否</td></tr><tr><td>职位</td><td>员工职位名称</td><td>否</td></tr><tr><td>入职日期</td><td>员工入职日期</td><td>否</td></tr><tr><td>账户状态</td><td>默认为"启用"</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：设置初始密码</strong></p>
+
+<p>系统默认设置初始密码为身份证后6位，并勾选"首次登录强制修改密码"。</p>
+
+<p><strong>步骤5：分配角色权限</strong></p>
+
+<p>在"角色分配"区域，勾选该用户需要的角色权限。</p>
+
+<p><strong>步骤6：保存并通知</strong></p>
+
+<p>点击"保存"按钮，系统自动发送欢迎邮件和短信通知。</p>
+
+<h3>3.2 编辑用户信息</h3>
+
+<p><strong>操作路径</strong>：用户管理 → 用户列表 → 选择用户 → 编辑</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标用户</strong></p>
+
+<p>在用户列表页面，通过以下方式查找用户：</p>
+<ul><li>搜索框输入工号或姓名</li><li>按部门筛选</li><li>按状态筛选（启用/禁用）</li></ul>
+
+<p><strong>步骤2：进入编辑页面</strong></p>
+
+<p>在用户列表中找到目标用户，点击操作列的"编辑"按钮。</p>
+
+<p><strong>步骤3：修改用户信息</strong></p>
+
+<p>在编辑页面修改需要更新的信息，可修改的字段包括：</p>
+<ul><li>姓名、手机号、邮箱等基本信息</li><li>所属部门、职位等组织信息</li><li>角色权限分配</li></ul>
+
+<p><strong>步骤4：保存修改</strong></p>
+
+<p>点击"保存"按钮，系统记录修改日志。</p>
+
+<h3>3.3 禁用/启用用户</h3>
+
+<p><strong>操作路径</strong>：用户管理 → 用户列表 → 选择用户 → 禁用/启用</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标用户</strong></p>
+
+<p>在用户列表页面，通过搜索或筛选找到目标用户。</p>
+
+<p><strong>步骤2：执行状态变更</strong></p>
+
+<ul><li><strong>禁用用户</strong>：点击操作列的"禁用"按钮，系统弹出确认对话框，确认后用户状态变更为"禁用"</li><li><strong>启用用户</strong>：点击操作列的"启用"按钮，系统弹出确认对话框，确认后用户状态变更为"启用"</li></ul>
+
+<p><strong>步骤3：状态变更影响</strong></p>
+
+<table><thead><tr><th>状态</th><th>影响范围</th></tr></thead><tbody><tr><td>禁用</td><td>用户无法登录系统，已分配的应用权限保留但不可用</td></tr><tr><td>启用</td><td>用户恢复登录权限，原有应用权限自动恢复</td></tr></tbody></table>
+
+<h3>3.4 批量导入用户</h3>
+
+<p><strong>操作路径</strong>：用户管理 → 用户列表 → 批量导入</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：下载导入模板</strong></p>
+
+<p>在用户列表页面，点击"批量导入"按钮，选择"下载模板"。</p>
+
+<p><strong>步骤2：填写用户信息</strong></p>
+
+<p>打开下载的Excel模板，按照以下格式填写用户信息：</p>
+
+<table><thead><tr><th>工号</th><th>姓名</th><th>所属部门</th><th>手机号</th><th>邮箱</th><th>职位</th><th>入职日期</th></tr></thead><tbody><tr><td>GY00001</td><td>张三</td><td>总部办公室</td><td>13800138000</td><td>zhangsan@gyzq.com</td><td>办公室主任</td><td>2024-01-15</td></tr><tr><td>GY00002</td><td>李四</td><td>信息技术部</td><td>13900139000</td><td>lisi@gyzq.com</td><td>系统工程师</td><td>2024-02-20</td></tr></tbody></table>
+
+<p><strong>步骤3：上传文件</strong></p>
+
+<p>在批量导入页面，点击"选择文件"按钮，选择填写好的Excel文件。</p>
+
+<p><strong>步骤4：数据校验</strong></p>
+
+<p>系统自动校验数据格式和完整性，校验结果包括：</p>
+<ul><li>校验通过的数据条数</li><li>校验失败的数据条数及失败原因</li></ul>
+
+<p><strong>步骤5：执行导入</strong></p>
+
+<p>确认校验无误后，点击"开始导入"按钮，系统逐条导入用户数据。</p>
+
+<p><strong>步骤6：导入结果查看</strong></p>
+
+<p>导入完成后，系统显示导入结果：</p>
+<ul><li>成功导入条数</li><li>失败条数及失败原因</li><li>生成导入日志供下载</li></ul>
+
+<hr>
+
+<h2>4. 部门管理</h2>
+
+<h3>4.1 组织架构维护</h3>
+
+<p><strong>操作路径</strong>：部门管理 → 组织架构</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查看组织架构树</strong></p>
+
+<p>在部门管理页面，系统以树状结构展示完整的组织架构：</p>
+<pre><code class="language-">
+国元证券股份有限公司（集团）
+├── 总部
+│   ├── 办公室
+│   ├── 人力资源部
+│   ├── 财务部
+│   ├── 信息技术部
+│   └── ...（共38个部门）
+├── 国元证券（上海）有限公司（子公司）
+│   ├── 上海分公司
+│   │   ├── 浦东营业部
+│   │   └── ...
+│   └── ...
+└── ...（共8家子公司、43家分公司、100+营业部）
+</code></pre>
+
+<p><strong>步骤2：展开/折叠节点</strong></p>
+
+<p>点击节点前的"+"或"-"图标，展开或折叠下级部门。</p>
+
+<p><strong>步骤3：查看部门详情</strong></p>
+
+<p>点击部门节点，右侧显示该部门的详细信息：</p>
+<ul><li>部门名称、部门编码</li><li>上级部门</li><li>部门管理员</li><li>部门人数</li><li>创建时间</li></ul>
+
+<h3>4.2 新增部门</h3>
+
+<p><strong>操作路径</strong>：部门管理 → 组织架构 → 选择上级部门 → 新增子部门</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择上级部门</strong></p>
+
+<p>在组织架构树中，点击要新增子部门的上级部门节点。</p>
+
+<p><strong>步骤2：点击新增按钮</strong></p>
+
+<p>在部门详情页面，点击"新增子部门"按钮。</p>
+
+<p><strong>步骤3：填写部门信息</strong></p>
+
+<p>在新增部门表单中填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>部门名称</td><td>部门全称</td><td>是</td></tr><tr><td>部门编码</td><td>系统自动生成，可手动修改</td><td>是</td></tr><tr><td>上级部门</td><td>自动填充当前选择的部门</td><td>是</td></tr><tr><td>部门类型</td><td>选择部门类型（总部/子公司/分公司/营业部/部门）</td><td>是</td></tr><tr><td>部门管理员</td><td>选择该部门的管理员</td><td>否</td></tr><tr><td>排序号</td><td>同级部门中的显示顺序</td><td>否</td></tr><tr><td>备注</td><td>部门描述信息</td><td>否</td></tr></tbody></table>
+
+<p><strong>步骤4：保存并生效</strong></p>
+
+<p>点击"保存"按钮，系统自动更新组织架构树。</p>
+
+<h3>4.3 编辑部门</h3>
+
+<p><strong>操作路径</strong>：部门管理 → 组织架构 → 选择部门 → 编辑</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标部门</strong></p>
+
+<p>在组织架构树中，点击要编辑的部门节点。</p>
+
+<p><strong>步骤2：进入编辑模式</strong></p>
+
+<p>在部门详情页面，点击"编辑"按钮。</p>
+
+<p><strong>步骤3：修改部门信息</strong></p>
+
+<p>在编辑页面修改需要更新的信息，可修改的字段包括：</p>
+<ul><li>部门名称、部门类型</li><li>部门管理员</li><li>排序号、备注</li></ul>
+
+<p><strong>步骤4：保存修改</strong></p>
+
+<p>点击"保存"按钮，系统记录修改日志。</p>
+
+<h3>4.4 删除部门</h3>
+
+<p><strong>操作路径</strong>：部门管理 → 组织架构 → 选择部门 → 删除</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标部门</strong></p>
+
+<p>在组织架构树中，点击要删除的部门节点。</p>
+
+<p><strong>步骤2：检查删除条件</strong></p>
+
+<p>系统检查以下删除条件：</p>
+<ul><li>该部门下是否有子部门</li><li>该部门下是否有用户</li><li>该部门是否为系统必需部门</li></ul>
+
+<p><strong>步骤3：执行删除</strong></p>
+
+<ul><li><strong>满足删除条件</strong>：点击"删除"按钮，系统弹出确认对话框，确认后删除该部门</li><li><strong>不满足删除条件</strong>：系统提示无法删除的原因，需先处理子部门或用户</li></ul>
+
+<p><strong>步骤4：删除后处理</strong></p>
+
+<p>删除部门后，系统自动：</p>
+<ul><li>将该部门下的用户移至上级部门</li><li>更新组织架构树</li><li>记录删除操作日志</li></ul>
+
+<h3>4.5 部门层级管理</h3>
+
+<p><strong>操作路径</strong>：部门管理 → 层级设置</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查看当前层级设置</strong></p>
+
+<p>在层级设置页面，显示当前组织架构的层级信息：</p>
+<ul><li>最大层级深度</li><li>各层级名称</li><li>层级编码规则</li></ul>
+
+<p><strong>步骤2：调整层级设置</strong></p>
+
+<p>根据组织架构调整需求，可以：</p>
+<ul><li>新增层级（如：新增"事业部"层级）</li><li>修改层级名称</li><li>调整层级顺序</li></ul>
+
+<p><strong>步骤3：应用层级变更</strong></p>
+
+<p>点击"应用"按钮，系统重新计算组织架构层级。</p>
+
+<p><strong>步骤4：验证层级变更</strong></p>
+
+<p>在组织架构页面验证层级变更是否正确应用。</p>
+
+<hr>
+
+<h2>5. 应用管理</h2>
+
+<h3>5.1 应用配置</h3>
+
+<p><strong>操作路径</strong>：管理后台 → "应用与小程序" Tab → 添加应用</p>
+
+<blockquote><strong>说明</strong>：自建应用在管理端按创建时间排序展示。以下为企业自建应用的完整配置流程。</blockquote>
+
+<h4>5.1.1 创建应用</h4>
+
+<p><strong>步骤1：进入应用管理页面</strong></p>
+
+<p>在管理后台顶部，点击"应用与小程序"标签页。</p>
+
+<p><strong>步骤2：点击添加应用</strong></p>
+
+<p>在应用列表页面右上角，点击"添加应用"按钮。</p>
+
+<p><strong>步骤3：上传应用Logo</strong></p>
+
+<p>上传应用的Logo图标，建议尺寸为 <strong>750×750像素</strong>，支持PNG/JPG格式。</p>
+
+<p><strong>步骤4：填写基本信息</strong></p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>应用名称</td><td>应用显示名称</td><td>是</td></tr><tr><td>应用介绍</td><td>应用功能描述，便于用户了解应用用途</td><td>否</td></tr></tbody></table>
+
+<p><strong>步骤5：设置可见范围</strong></p>
+
+<p>配置应用的可见范围，可按以下方式设置：</p>
+<ul><li><strong>按部门配置</strong>：选择指定部门，该部门及下属部门的员工可见</li><li><strong>按人员配置</strong>：搜索并添加指定员工</li><li><strong>全员可见</strong>：所有员工均可查看该应用</li></ul>
+
+<p><strong>步骤6：创建应用</strong></p>
+
+<p>确认信息填写无误后，点击"创建"按钮，系统自动创建应用并进入应用详情页。</p>
+
+<h4>5.1.2 应用详情配置</h4>
+
+<p>应用创建成功后，在应用详情页可进行以下配置：</p>
+
+<p><strong>1. 收发消息设置</strong></p>
+
+<p>配置应用的消息收发能力，包括：</p>
+<ul><li>应用可接收的消息类型</li><li>应用主动推送消息的配置</li><li>消息回调地址设置</li></ul>
+
+<p><strong>2. 应用展示配置</strong></p>
+
+<p>配置应用在客户端的展示方式，包括：</p>
+<ul><li>应用在工作台的显示位置</li><li>应用的入口类型（网页应用/小程序）</li><li>应用的访问地址</li></ul>
+
+<p><strong>3. 开发者功能配置</strong></p>
+
+<p>配置应用的开发对接参数：</p>
+<ul><li>设置应用的可信域名</li><li>配置OAuth2.0授权回调URL</li><li>配置事件接收URL（用于接收企业微信推送的事件）</li></ul>
+
+<h4>5.1.3 查看AgentID与Secret</h4>
+
+<p>应用创建后，需要获取应用的凭证信息（AgentID和Secret）用于开发对接。</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入开发者功能</strong></p>
+
+<p>在应用详情页，点击"开发者功能"右侧的图标，进入开发者配置区域。</p>
+
+<p><strong>步骤2：查看AgentID</strong></p>
+
+<p>AgentID直接展示在开发者配置页面，可直接复制使用。</p>
+
+<p><strong>步骤3：查看Secret</strong></p>
+
+<blockquote><strong>安全机制说明</strong>：出于安全考虑，Secret <strong>不会直接展示</strong>在管理端页面。</blockquote>
+
+<p>查看Secret的操作流程：</p>
+<ol><li>在开发者配置页面，点击Secret旁的"查看"按钮</li><li>系统向管理员的<strong>移动端元信客户端</strong>发送确认请求</li><li>管理员在<strong>客户端侧</strong>进行确认查收</li><li>确认后，Secret在客户端中显示</li></ol>
+
+<blockquote><strong>注意</strong>：Secret是应用的重要凭证，请妥善保管，切勿泄露给无关人员。如Secret泄露，应立即在管理端重置。</blockquote>
+
+<h3>5.2 网页授权及JS-SDK安全配置</h3>
+
+<p>在进行网页应用开发时，需要完成以下安全配置，以确保应用能正常调用企业微信相关接口。</p>
+
+<h4>5.2.1 配置可信IP白名单</h4>
+
+<p><strong>操作路径</strong>：应用详情 → 开发者功能 → 可信IP</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入可信IP配置页面</strong></p>
+
+<p>在应用详情页的"开发者功能"配置区域，找到"可信IP"设置项。</p>
+
+<p><strong>步骤2：添加IP地址</strong></p>
+
+<p>填写需要访问企业微信服务器地址的服务器IP地址。配置后，仅允许来自这些IP的请求调用企业微信API。</p>
+
+<blockquote><strong>说明</strong>：请确保填写的是应用后端服务器的<strong>出口IP</strong>，而非前端用户IP。</blockquote>
+
+<h4>5.2.2 配置网页授权及JS-SDK安全域名</h4>
+
+<p><strong>操作路径</strong>：应用详情 → 开发者功能 → 网页授权及JS-SDK</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入安全配置页面</strong></p>
+
+<p>在应用详情页的"开发者功能"配置区域，找到"网页授权及JS-SDK"设置项。</p>
+
+<p><strong>步骤2：配置授权回调域名</strong></p>
+
+<p>填写需要从企业微信跳转的前端页面的域名和端口（支持IP地址形式），用于OAuth2.0网页授权流程。</p>
+
+<blockquote><strong>注意</strong>：<br>- 域名不带协议前缀（如填写 <code>oa.gyzq.com</code>，而非 <code>https://oa.gyzq.com</code>）<br>- 如使用非标准端口，需带上端口号（如 <code>192.168.1.100:8080</code>）<br>- 配置后，企业微信仅允许跳转到该域名下的页面</blockquote>
+
+<h3>5.3 应用上下架</h3>
+
+<p><strong>操作路径</strong>：应用管理 → 应用列表 → 选择应用 → 上架/下架</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标应用</strong></p>
+
+<p>在应用列表页面，通过搜索或筛选找到目标应用。</p>
+
+<p><strong>步骤2：执行上下架操作</strong></p>
+
+<ul><li><strong>上架应用</strong>：点击操作列的"上架"按钮，系统弹出确认对话框，确认后应用状态变更为"上架"</li><li><strong>下架应用</strong>：点击操作列的"下架"按钮，系统弹出确认对话框，确认后应用状态变更为"下架"</li></ul>
+
+<p><strong>步骤3：上下架影响</strong></p>
+
+<table><thead><tr><th>状态</th><th>影响范围</th></tr></thead><tbody><tr><td>上架</td><td>应用在门户首页显示，用户可访问</td></tr><tr><td>下架</td><td>应用在门户首页隐藏，用户无法访问，已分配的权限保留</td></tr></tbody></table>
+
+<h3>5.4 应用权限分配</h3>
+
+<p><strong>操作路径</strong>：应用管理 → 应用列表 → 选择应用 → 权限分配</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标应用</strong></p>
+
+<p>在应用列表页面，点击要分配权限的应用。</p>
+
+<p><strong>步骤2：进入权限分配页面</strong></p>
+
+<p>在应用详情页面，点击"权限分配"标签页。</p>
+
+<p><strong>步骤3：配置访问权限</strong></p>
+
+<p>在权限分配页面，可以配置以下访问权限：</p>
+
+<table><thead><tr><th>权限类型</th><th>说明</th><th>配置方式</th></tr></thead><tbody><tr><td>部门权限</td><td>指定哪些部门可以访问该应用</td><td>选择部门树中的节点</td></tr><tr><td>角色权限</td><td>指定哪些角色可以访问该应用</td><td>勾选角色列表</td></tr><tr><td>用户权限</td><td>指定哪些用户可以访问该应用</td><td>搜索并添加用户</td></tr></tbody></table>
+
+<p><strong>步骤4：设置权限有效期</strong></p>
+
+<p>可以设置权限的有效期：</p>
+<ul><li><strong>永久有效</strong>：权限一直有效</li><li><strong>指定有效期</strong>：设置权限的起止日期</li></ul>
+
+<p><strong>步骤5：保存权限配置</strong></p>
+
+<p>点击"保存"按钮，系统自动应用权限配置。</p>
+
+<hr>
+
+<h2>6. 安全网关配置</h2>
+
+<h3>6.1 概述</h3>
+
+<p>安全网关用于为自建应用提供安全的网络访问代理，通过网关模式实现应用对内部服务的安全调用。当自建应用需要访问内部系统资源时，需通过安全网关进行代理。</p>
+
+<h3>6.2 进入安全网关</h3>
+
+<p><strong>操作路径</strong>：管理后台 → 右上角"安全网关"入口</p>
+
+<blockquote><strong>说明</strong>：如果管理后台未显示"安全网关"入口，请联系超级管理员进行安全网关的开通配置。</blockquote>
+
+<h3>6.3 新建网关资源</h3>
+
+<p><strong>操作路径</strong>：安全网关 → 资源管理 → 新建资源</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入资源管理页面</strong></p>
+
+<p>在安全网关管理页面，点击左侧"资源管理"菜单。</p>
+
+<p><strong>步骤2：点击新建资源</strong></p>
+
+<p>点击"新建资源"按钮，开始配置网关资源。</p>
+
+<p><strong>步骤3：配置基础设置</strong></p>
+
+<p>填写以下基础信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>资源名称</td><td>网关资源的显示名称</td><td>是</td></tr><tr><td>资源地址</td><td>需要代理访问的后端服务地址</td><td>是</td></tr><tr><td>端口</td><td>后端服务的端口号</td><td>是</td></tr><tr><td>所属应用</td><td>选择需要使用该网关资源的应用</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：配置高级设置</strong></p>
+
+<p>在高级设置区域，配置以下参数：</p>
+<ul><li><strong>网关策略</strong>：选择"网关代理模式"</li><li><strong>所属节点</strong>：勾选需要使用的网关节点</li></ul>
+
+<p><strong>步骤5：保存并生效</strong></p>
+
+<p>点击"保存"按钮完成网关资源创建。</p>
+
+<blockquote><strong>生效说明</strong>：网关资源创建完成后，需要<strong>退出移动端企微应用后重新进入</strong>，配置方可生效。</blockquote>
+
+<h3>6.4 网关资源管理</h3>
+
+<p>已创建的网关资源支持以下管理操作：</p>
+<ul><li><strong>编辑</strong>：修改资源的基础配置和高级设置</li><li><strong>禁用/启用</strong>：临时停用或恢复网关资源</li><li><strong>删除</strong>：删除不再使用的网关资源（需先确认无应用引用）</li></ul>
+
+<hr>
+
+<h2>7. 权限管理</h2>
+
+<h3>7.1 角色配置</h3>
+
+<p><strong>操作路径</strong>：权限管理 → 角色列表 → 新增角色</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入角色管理页面</strong></p>
+
+<p>在左侧导航栏选择"权限管理"，点击"角色列表"。</p>
+
+<p><strong>步骤2：点击新增角色按钮</strong></p>
+
+<p>在角色列表页面右上角，点击"新增角色"按钮。</p>
+
+<p><strong>步骤3：填写角色信息</strong></p>
+
+<p>在新增角色表单中填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>角色名称</td><td>角色显示名称</td><td>是</td></tr><tr><td>角色编码</td><td>系统唯一标识</td><td>是</td></tr><tr><td>角色描述</td><td>角色职责描述</td><td>否</td></tr><tr><td>角色状态</td><td>默认为"启用"</td><td>是</td></tr><tr><td>数据权限范围</td><td>选择角色可访问的数据范围</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：配置角色权限</strong></p>
+
+<p>在权限配置区域，勾选该角色需要的权限：</p>
+<ul><li><strong>菜单权限</strong>：控制角色可访问的菜单</li><li><strong>功能权限</strong>：控制角色可执行的操作</li><li><strong>数据权限</strong>：控制角色可访问的数据范围</li></ul>
+
+<p><strong>步骤5：保存角色配置</strong></p>
+
+<p>点击"保存"按钮，系统自动创建角色记录。</p>
+
+<h3>7.2 权限分配</h3>
+
+<p><strong>操作路径</strong>：权限管理 → 角色列表 → 选择角色 → 权限分配</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标角色</strong></p>
+
+<p>在角色列表页面，点击要分配权限的角色。</p>
+
+<p><strong>步骤2：进入权限分配页面</strong></p>
+
+<p>在角色详情页面，点击"权限分配"标签页。</p>
+
+<p><strong>步骤3：配置菜单权限</strong></p>
+
+<p>在菜单权限配置页面，勾选该角色可访问的菜单项：</p>
+<ul><li>一级菜单：控制顶部导航栏显示</li><li>二级菜单：控制左侧导航栏显示</li><li>三级菜单：控制具体功能页面</li></ul>
+
+<p><strong>步骤4：配置功能权限</strong></p>
+
+<p>在功能权限配置页面，勾选该角色可执行的操作：</p>
+<ul><li>查看权限：查看数据列表和详情</li><li>新增权限：创建新数据</li><li>编辑权限：修改现有数据</li><li>删除权限：删除数据</li><li>导出权限：导出数据到Excel</li><li>审批权限：执行审批操作</li></ul>
+
+<p><strong>步骤5：配置数据权限</strong></p>
+
+<p>在数据权限配置页面，选择该角色可访问的数据范围：</p>
+<ul><li><strong>全部数据</strong>：可访问系统所有数据</li><li><strong>本部门数据</strong>：仅可访问本部门数据</li><li><strong>本部门及下级数据</strong>：可访问本部门及所有下级部门数据</li><li><strong>仅本人数据</strong>：仅可访问自己创建的数据</li></ul>
+
+<p><strong>步骤6：保存权限配置</strong></p>
+
+<p>点击"保存"按钮，系统自动应用权限配置。</p>
+
+<h3>7.3 权限继承规则</h3>
+
+<p><strong>规则1：角色权限继承</strong></p>
+
+<p>下级角色自动继承上级角色的所有权限，但可以额外添加本级特有权限。</p>
+
+<p><strong>规则2：用户权限叠加</strong></p>
+
+<p>用户同时拥有多个角色时，权限取并集（即拥有所有角色的权限总和）。</p>
+
+<p><strong>规则3：数据权限限制</strong></p>
+
+<p>数据权限范围受组织架构层级限制，下级管理员的数据权限范围不得超过上级管理员。</p>
+
+<p><strong>规则4：特殊权限覆盖</strong></p>
+
+<p>某些特殊权限（如系统管理员权限）不受继承规则限制，需单独授权。</p>
+
+<hr>
+
+<h2>8. 系统配置</h2>
+
+<h3>8.1 基础设置</h3>
+
+<p><strong>操作路径</strong>：系统配置 → 基础设置</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入基础设置页面</strong></p>
+
+<p>在左侧导航栏选择"系统配置"，点击"基础设置"。</p>
+
+<p><strong>步骤2：配置系统基本信息</strong></p>
+
+<p>在基础设置页面，配置以下系统信息：</p>
+
+<table><thead><tr><th>配置项</th><th>说明</th><th>默认值</th></tr></thead><tbody><tr><td>系统名称</td><td>门户系统显示名称</td><td>国元证券智能门户</td></tr><tr><td>系统Logo</td><td>门户Logo图片</td><td>默认Logo</td></tr><tr><td>版权信息</td><td>页面底部版权信息</td><td>© 2026 国元证券股份有限公司</td></tr><tr><td>联系方式</td><td>系统管理员联系方式</td><td>程文斐：0551-62201332 / 葛鹏飞：0551-62207154</td></tr><tr><td>ICP备案号</td><td>网站备案信息</td><td>皖ICP备2021007224号-1</td></tr></tbody></table>
+
+<p><strong>步骤3：配置系统参数</strong></p>
+
+<p>在系统参数配置区域，配置以下参数：</p>
+
+<table><thead><tr><th>参数名称</th><th>说明</th><th>建议值</th></tr></thead><tbody><tr><td>会话超时时间</td><td>用户无操作自动退出时间</td><td>30分钟</td></tr><tr><td>密码有效期</td><td>密码强制修改周期</td><td>90天</td></tr><tr><td>登录失败锁定次数</td><td>连续错误登录锁定阈值</td><td>5次</td></tr><tr><td>锁定时间</td><td>账户锁定持续时间</td><td>30分钟</td></tr><tr><td>文件上传大小限制</td><td>单文件最大上传大小</td><td>10MB</td></tr><tr><td>允许上传文件类型</td><td>可上传的文件扩展名</td><td>jpg,png,gif,pdf,doc,docx,xls,xlsx</td></tr></tbody></table>
+
+<p><strong>步骤4：保存基础设置</strong></p>
+
+<p>点击"保存"按钮，系统自动应用基础设置。</p>
+
+<h3>8.2 菜单管理</h3>
+
+<p><strong>操作路径</strong>：系统配置 → 菜单管理</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入菜单管理页面</strong></p>
+
+<p>在左侧导航栏选择"系统配置"，点击"菜单管理"。</p>
+
+<p><strong>步骤2：查看菜单树</strong></p>
+
+<p>系统以树状结构展示当前菜单配置：</p>
+<pre><code class="language-">
+首页
+├── 工作台
+│   ├── 待办中心
+│   ├── 日程中心
+│   └── 消息中心
+├── 新闻公告
+│   ├── 公司新闻
+│   ├── 部门公告
+│   └── 制度文件
+├── 应用中心
+│   ├── 内部应用
+│   ├── 第三方应用
+│   └── 低代码应用
+└── 个人中心
+    ├── 个人设置
+    ├── 消息设置
+    └── 帮助中心
+</code></pre>
+
+<p><strong>步骤3：新增菜单项</strong></p>
+
+<p>点击"新增菜单"按钮，填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>菜单名称</td><td>菜单显示名称</td><td>是</td></tr><tr><td>菜单编码</td><td>系统唯一标识</td><td>是</td></tr><tr><td>上级菜单</td><td>选择父级菜单</td><td>是</td></tr><tr><td>菜单类型</td><td>选择菜单类型（目录/菜单/按钮）</td><td>是</td></tr><tr><td>菜单图标</td><td>选择菜单图标</td><td>否</td></tr><tr><td>路由地址</td><td>菜单对应的页面路由</td><td>是</td></tr><tr><td>排序号</td><td>同级菜单中的显示顺序</td><td>否</td></tr><tr><td>是否可见</td><td>菜单是否在导航栏显示</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：编辑菜单项</strong></p>
+
+<p>在菜单树中选择要编辑的菜单项，点击"编辑"按钮，修改菜单信息。</p>
+
+<p><strong>步骤5：删除菜单项</strong></p>
+
+<p>在菜单树中选择要删除的菜单项，点击"删除"按钮，系统弹出确认对话框，确认后删除该菜单项。</p>
+
+<p><strong>步骤6：调整菜单顺序</strong></p>
+
+<p>通过拖拽菜单项或修改排序号，调整菜单的显示顺序。</p>
+
+<h3>8.3 系统参数配置</h3>
+
+<p><strong>操作路径</strong>：系统配置 → 系统参数</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入系统参数页面</strong></p>
+
+<p>在左侧导航栏选择"系统配置"，点击"系统参数"。</p>
+
+<p><strong>步骤2：查看系统参数列表</strong></p>
+
+<p>系统参数按模块分类显示，包括：</p>
+<ul><li><strong>用户模块参数</strong>：用户相关配置</li><li><strong>部门模块参数</strong>：部门相关配置</li><li><strong>应用模块参数</strong>：应用相关配置</li><li><strong>权限模块参数</strong>：权限相关配置</li><li><strong>通知模块参数</strong>：通知相关配置</li><li><strong>安全模块参数</strong>：安全相关配置</li></ul>
+
+<p><strong>步骤3：修改系统参数</strong></p>
+
+<p>在系统参数列表中，找到要修改的参数，点击"编辑"按钮，修改参数值。</p>
+
+<p><strong>步骤4：参数说明</strong></p>
+
+<p>每个参数都有详细的说明，包括：</p>
+<ul><li>参数名称</li><li>参数编码</li><li>参数值类型（字符串/数字/布尔值）</li><li>参数描述</li><li>默认值</li><li>取值范围</li></ul>
+
+<p><strong>步骤5：保存参数配置</strong></p>
+
+<p>点击"保存"按钮，系统自动应用参数配置。</p>
+
+<hr>
+
+<h2>9. 日志与审计</h2>
+
+<h3>9.1 操作日志查看</h3>
+
+<p><strong>操作路径</strong>：日志与审计 → 操作日志</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入操作日志页面</strong></p>
+
+<p>在左侧导航栏选择"日志与审计"，点击"操作日志"。</p>
+
+<p><strong>步骤2：筛选日志记录</strong></p>
+
+<p>在操作日志页面，可以通过以下条件筛选日志：</p>
+
+<table><thead><tr><th>筛选条件</th><th>说明</th></tr></thead><tbody><tr><td>操作时间</td><td>选择时间范围</td></tr><tr><td>操作人员</td><td>输入操作人工号或姓名</td></tr><tr><td>操作类型</td><td>选择操作类型（登录/新增/编辑/删除/导出等）</td></tr><tr><td>操作模块</td><td>选择操作模块（用户管理/部门管理/应用管理等）</td></tr><tr><td>操作结果</td><td>选择操作结果（成功/失败）</td></tr></tbody></table>
+
+<p><strong>步骤3：查看日志详情</strong></p>
+
+<p>在日志列表中，点击某条日志记录，查看详细信息：</p>
+<ul><li>操作时间</li><li>操作人员</li><li>操作IP地址</li><li>操作类型</li><li>操作模块</li><li>操作内容</li><li>操作结果</li><li>错误信息（如有）</li></ul>
+
+<p><strong>步骤4：导出日志</strong></p>
+
+<p>点击"导出"按钮，将当前筛选结果导出为Excel文件。</p>
+
+<h3>9.2 审计追踪</h3>
+
+<p><strong>操作路径</strong>：日志与审计 → 审计追踪</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入审计追踪页面</strong></p>
+
+<p>在左侧导航栏选择"日志与审计"，点击"审计追踪"。</p>
+
+<p><strong>步骤2：查看审计记录</strong></p>
+
+<p>审计追踪页面显示所有关键操作的审计记录，包括：</p>
+<ul><li>用户权限变更记录</li><li>角色权限变更记录</li><li>系统配置变更记录</li><li>数据访问记录</li><li>异常操作记录</li></ul>
+
+<p><strong>步骤3：审计事件详情</strong></p>
+
+<p>点击某条审计记录，查看详细的审计事件信息：</p>
+<ul><li>事件时间</li><li>事件类型</li><li>操作人员</li><li>操作内容</li><li>变更前后对比</li><li>影响范围</li></ul>
+
+<p><strong>步骤4：审计报告生成</strong></p>
+
+<p>点击"生成审计报告"按钮，系统自动生成审计报告，包括：</p>
+<ul><li>审计时间范围</li><li>审计事件统计</li><li>关键事件摘要</li><li>风险事件提示</li></ul>
+
+<h3>9.3 导出日志</h3>
+
+<p><strong>操作路径</strong>：日志与审计 → 操作日志/审计追踪 → 导出</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择导出范围</strong></p>
+
+<p>在操作日志或审计追踪页面，设置筛选条件，确定导出范围。</p>
+
+<p><strong>步骤2：选择导出格式</strong></p>
+
+<p>选择导出文件格式：</p>
+<ul><li><strong>Excel格式</strong>：适用于数据分析</li><li><strong>CSV格式</strong>：适用于数据导入</li><li><strong>PDF格式</strong>：适用于存档打印</li></ul>
+
+<p><strong>步骤3：配置导出选项</strong></p>
+
+<p>配置导出选项：</p>
+<ul><li><strong>导出字段</strong>：选择需要导出的字段</li><li><strong>导出数量</strong>：设置单次导出最大记录数</li><li><strong>文件命名</strong>：设置导出文件名称</li></ul>
+
+<p><strong>步骤4：执行导出</strong></p>
+
+<p>点击"导出"按钮，系统开始生成导出文件。</p>
+
+<p><strong>步骤5：下载导出文件</strong></p>
+
+<p>导出完成后，系统提供文件下载链接，点击下载导出文件。</p>
+
+<hr>
+
+<h2>10. 常见管理问题</h2>
+
+<h3>10.1 用户管理问题</h3>
+
+<p><strong>问题1：用户无法登录系统</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>用户账户被禁用</li><li>用户密码错误或过期</li><li>用户未分配角色权限</li><li>用户不在系统白名单内</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查用户状态，确保为"启用"状态</li><li>重置用户密码，或检查密码有效期</li><li>为用户分配适当的角色权限</li><li>检查系统白名单设置</li></ol>
+
+<p><strong>问题2：批量导入用户失败</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>Excel模板格式错误</li><li>工号重复</li><li>必填字段缺失</li><li>数据格式不符合要求</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>重新下载最新模板，按格式填写</li><li>检查工号唯一性，删除重复记录</li><li>检查必填字段是否完整</li><li>检查手机号、邮箱等字段格式</li></ol>
+
+<h3>10.2 部门管理问题</h3>
+
+<p><strong>问题1：无法删除部门</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>部门下存在子部门</li><li>部门下存在用户</li><li>部门为系统必需部门</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>先删除或迁移子部门</li><li>先迁移或禁用部门下用户</li><li>系统必需部门无法删除，只能修改</li></ol>
+
+<p><strong>问题2：组织架构显示异常</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>部门层级设置错误</li><li>部门编码冲突</li><li>缓存数据未更新</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查部门层级设置，调整层级关系</li><li>检查部门编码唯一性，修复冲突</li><li>清除系统缓存，刷新页面</li></ol>
+
+<h3>10.3 应用管理问题</h3>
+
+<p><strong>问题1：应用无法访问</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>应用状态为"下架"</li><li>应用访问地址错误</li><li>用户未分配应用权限</li><li>网络连接问题</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查应用状态，确保为"上架"</li><li>检查应用访问地址是否正确</li><li>为用户分配应用访问权限</li><li>检查网络连接，确保可访问应用地址</li></ol>
+
+<p><strong>问题2：应用权限配置不生效</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>权限配置未保存</li><li>用户未重新登录</li><li>缓存数据未更新</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查权限配置是否已保存</li><li>建议用户重新登录系统</li><li>清除系统缓存，刷新页面</li></ol>
+
+<h3>10.4 权限管理问题</h3>
+
+<p><strong>问题1：用户权限不足</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>用户未分配相应角色</li><li>角色权限配置不完整</li><li>数据权限范围限制</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>为用户分配适当角色</li><li>检查角色权限配置，补充缺失权限</li><li>检查数据权限范围，调整限制</li></ol>
+
+<p><strong>问题2：权限变更不生效</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>权限变更未保存</li><li>用户会话未刷新</li><li>系统缓存未更新</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查权限变更是否已保存</li><li>建议用户重新登录系统</li><li>清除系统缓存，刷新页面</li></ol>
+
+<h3>10.5 系统配置问题</h3>
+
+<p><strong>问题1：系统设置不生效</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>设置未保存</li><li>系统缓存未更新</li><li>需要重启服务</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查设置是否已保存</li><li>清除系统缓存，刷新页面</li><li>根据提示重启相关服务</li></ol>
+
+<p><strong>问题2：菜单显示异常</strong></p>
+
+<p><strong>可能原因</strong>：</p>
+<ol><li>菜单配置错误</li><li>菜单权限配置问题</li><li>缓存数据未更新</li></ol>
+
+<p><strong>解决方案</strong>：</p>
+<ol><li>检查菜单配置，修复错误</li><li>检查菜单权限配置</li><li>清除系统缓存，刷新页面</li></ol>
+
+<hr>
+
+<h2>11. 认证中心管理</h2>
+
+<h3>11.1 概述</h3>
+
+<p>认证中心是智能门户系统统一身份认证的核心模块，管理员可通过认证中心管理多种认证源，为用户提供多样化的登录方式。</p>
+
+<p><strong>操作路径</strong>：认证中心 → 认证源管理界面</p>
+
+<h3>11.2 新增认证源</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入认证源管理页面</strong></p>
+
+<p>在左侧导航栏选择"认证中心"，点击"认证源管理"。</p>
+
+<p><strong>步骤2：点击新增认证源</strong></p>
+
+<p>在认证源管理页面右上角，点击"新增认证源"按钮。</p>
+
+<p><strong>步骤3：配置认证源基本信息</strong></p>
+
+<p>在新增认证源表单中填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>认证源名称</td><td>认证源的显示名称</td><td>是</td></tr><tr><td>描述</td><td>认证源的简要描述</td><td>否</td></tr><tr><td>认证模式</td><td>选择认证源类型</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：配置登录身份（选填）</strong></p>
+
+<p>根据业务需求，可配置登录身份信息：</p>
+
+<table><thead><tr><th>配置项</th><th>说明</th></tr></thead><tbody><tr><td>身份名称</td><td>登录身份的显示名称</td></tr><tr><td>唯一标识</td><td>身份的系统唯一标识</td></tr><tr><td>扫码登录身份信息</td><td>扫码登录时显示的身份信息</td></tr></tbody></table>
+
+<p><strong>步骤5：配置认证模式</strong></p>
+
+<p>根据选择的认证模式，配置相应的回调地址：</p>
+
+<table><thead><tr><th>认证模式</th><th>需要配置的回调地址</th></tr></thead><tbody><tr><td><strong>账密登录</strong></td><td>用户信息回调地址</td></tr><tr><td><strong>手机号码+验证码登录</strong></td><td>用户信息回调地址、租户信息回调地址</td></tr><tr><td><strong>企业微信第三方登录</strong></td><td>OAuth2获取用户信息回调地址、扫码获取用户信息回调地址</td></tr><tr><td><strong>企业微信自建应用</strong></td><td>OAuth2获取用户信息回调地址、扫码获取用户信息回调地址</td></tr><tr><td><strong>企业微信私有化</strong></td><td>OAuth2获取用户信息回调地址、扫码获取用户信息回调地址</td></tr></tbody></table>
+
+<p><strong>步骤6：保存认证源</strong></p>
+
+<p>点击"保存"按钮，系统自动创建认证源配置。</p>
+
+<h3>11.3 删除认证源</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标认证源</strong></p>
+
+<p>在认证源管理页面，找到要删除的认证源。</p>
+
+<p><strong>步骤2：执行删除操作</strong></p>
+
+<p>点击认证源卡片上的"删除"按钮，系统弹出二次确认对话框。</p>
+
+<p><strong>步骤3：确认删除</strong></p>
+
+<p>在确认对话框中点击"确认删除"按钮，系统删除该认证源。</p>
+
+<p>⚠️ <strong>重要提醒</strong>：如认证源已被应用引用，需先在应用管理中解绑相关应用，否则无法删除认证源。</p>
+
+<h3>11.4 编辑认证源</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标认证源</strong></p>
+
+<p>在认证源管理页面，找到要编辑的认证源。</p>
+
+<p><strong>步骤2：进入编辑模式</strong></p>
+
+<p>点击认证源卡片上的"编辑"按钮，进入认证源编辑页面。</p>
+
+<p><strong>步骤3：修改配置信息</strong></p>
+
+<p>在编辑页面可修改以下信息：</p>
+<ul><li>显示名称</li><li>描述信息</li><li>认证模式配置</li><li>回调地址配置</li></ul>
+
+<p><strong>步骤4：保存修改</strong></p>
+
+<p>点击"保存"按钮，系统保存修改并更新认证源配置。</p>
+
+<h3>11.5 查看认证源详情</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标认证源</strong></p>
+
+<p>在认证源管理页面，找到要查看的认证源。</p>
+
+<p><strong>步骤2：查看详情信息</strong></p>
+
+<p>点击认证源卡片，进入认证源详情页面，查看只读信息：</p>
+<ul><li>基本信息（名称、描述、创建时间）</li><li>认证模式配置</li><li>回调地址配置</li><li>引用该认证源的应用列表</li></ul>
+
+<h3>11.6 搜索认证源</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：输入搜索关键词</strong></p>
+
+<p>在认证源管理页面顶部的搜索框中，输入认证源名称关键词。</p>
+
+<p><strong>步骤2：执行搜索</strong></p>
+
+<p>点击搜索按钮或按回车键，系统显示匹配的认证源列表。</p>
+
+<hr>
+
+<h2>12. 消息中心管理</h2>
+
+<h3>12.1 概述</h3>
+
+<p>消息中心是智能门户系统统一消息管理的核心模块，管理员可通过消息中心配置应用的消息权限和发布各类消息内容。</p>
+
+<p><strong>操作路径</strong>：消息中心 → 应用配置/消息管理</p>
+
+<h3>12.2 应用配置</h3>
+
+<h4>12.2.1 添加应用</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入应用配置页面</strong></p>
+
+<p>在左侧导航栏选择"消息中心"，点击"应用配置"。</p>
+
+<p><strong>步骤2：点击添加应用</strong></p>
+
+<p>在应用配置页面右上角，点击"添加应用"按钮。</p>
+
+<p><strong>步骤3：选择应用</strong></p>
+
+<p>在应用选择弹窗中，从应用列表中选择需要配置消息权限的应用。</p>
+
+<p><strong>步骤4：设置消息权限</strong></p>
+
+<p>为选中的应用批量设置以下消息权限：</p>
+<ul><li><strong>智能门户工作台权限</strong>：控制应用在工作台的消息发送能力</li><li><strong>智能门户企业微信信息权限</strong>：控制应用在企业微信消息窗口的消息发送能力</li></ul>
+
+<p><strong>步骤5：保存配置</strong></p>
+
+<p>点击"保存"按钮，系统自动为应用配置消息权限。</p>
+
+<h4>12.2.2 查看应用</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标应用</strong></p>
+
+<p>在应用配置页面，通过搜索或翻页找到目标应用。</p>
+
+<p><strong>步骤2：查看应用详情</strong></p>
+
+<p>点击应用名称或"查看详情"按钮，查看应用的消息配置详情：</p>
+<ul><li>应用基本信息</li><li>已配置的消息权限</li><li>消息发送记录</li></ul>
+
+<h4>12.2.3 删除应用</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择目标应用</strong></p>
+
+<p>在应用配置页面，找到要删除的应用。</p>
+
+<p><strong>步骤2：执行删除操作</strong></p>
+
+<p>点击应用操作列的"删除"按钮，系统弹出确认对话框。</p>
+
+<p><strong>步骤3：确认删除</strong></p>
+
+<p>在确认对话框中点击"确认删除"按钮，系统删除该应用的消息配置。</p>
+
+<p>⚠️ <strong>重要提醒</strong>：删除应用后，该应用将无法再调用应用中心接口发送消息，此操作不可逆。</p>
+
+<h3>12.3 消息管理</h3>
+
+<h4>12.3.1 创建消息</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入消息管理页面</strong></p>
+
+<p>在左侧导航栏选择"消息中心"，点击"消息管理"。</p>
+
+<p><strong>步骤2：点击创建消息</strong></p>
+
+<p>在消息管理页面右上角，点击"创建消息"按钮。</p>
+
+<p><strong>步骤3：选择消息类型</strong></p>
+
+<p>在消息类型选择页面，选择要创建的消息类型：</p>
+
+<table><thead><tr><th>消息类型</th><th>说明</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>文本消息</strong></td><td>简单的文字消息</td><td>通知、提醒、公告</td></tr><tr><td><strong>图文消息</strong></td><td>包含标题、图片和正文的富文本消息</td><td>新闻、公告、活动宣传</td></tr></tbody></table>
+
+<p><strong>步骤4：配置消息内容</strong></p>
+
+<p>根据选择的消息类型，配置相应的消息内容：</p>
+
+<p><strong>文本消息配置</strong>：</p>
+
+<table><thead><tr><th>配置项</th><th>说明</th><th>是否必填</th></tr></thead><tbody><tr><td>消息内容</td><td>文本消息的具体内容</td><td>是</td></tr><tr><td>发布终端</td><td>选择消息发布的终端</td><td>是</td></tr><tr><td>发布对象</td><td>选择消息的接收对象</td><td>是</td></tr></tbody></table>
+
+<p><strong>图文消息配置</strong>：</p>
+
+<table><thead><tr><th>配置项</th><th>说明</th><th>是否必填</th></tr></thead><tbody><tr><td>标题</td><td>图文消息的标题</td><td>是</td></tr><tr><td>封面图</td><td>图文消息的封面图片</td><td>否</td></tr><tr><td>推送摘要</td><td>消息推送时的简要描述</td><td>否</td></tr><tr><td>正文</td><td>图文消息的正文内容</td><td>是</td></tr><tr><td>作者</td><td>消息的作者信息</td><td>否</td></tr><tr><td>发布终端</td><td>选择消息发布的终端</td><td>是</td></tr><tr><td>发布对象</td><td>选择消息的接收对象</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤5：设置发布参数</strong></p>
+
+<p>配置消息的发布参数：</p>
+<ul><li><strong>发布终端</strong>：可选择"工作台"或"企微消息窗口"或两者</li><li><strong>发布对象</strong>：可按部门、角色或指定用户选择接收对象</li></ul>
+
+<p><strong>步骤6：发布消息</strong></p>
+
+<p>点击"发布"按钮，系统发布消息并通知相关用户。</p>
+
+<h4>12.3.2 查看消息</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入消息列表</strong></p>
+
+<p>在消息管理页面，系统显示已创建的消息列表。</p>
+
+<p><strong>步骤2：筛选消息</strong></p>
+
+<p>可通过以下条件筛选消息：</p>
+<ul><li>消息类型（文本/图文）</li><li>创建时间范围</li><li>发布状态（已发布/草稿）</li></ul>
+
+<p><strong>步骤3：查看消息详情</strong></p>
+
+<p>在消息列表中，点击消息标题或"查看详情"按钮，查看消息的详细信息：</p>
+<ul><li>消息内容</li><li>发布终端</li><li>发布对象</li><li>发布时间</li><li>阅读统计</li></ul>
+
+<hr>
+
+<h2>13. 子账户管理</h2>
+
+<h3>13.1 概述</h3>
+
+<p>子账户管理是权限中心的重要功能，管理员可通过子账户管理创建和管理子账户，实现精细化的权限控制。</p>
+
+<p><strong>操作路径</strong>：权限中心 → 子账户管理界面</p>
+
+<h3>13.2 新增子账户</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：进入子账户管理页面</strong></p>
+
+<p>在左侧导航栏选择"权限中心"，点击"子账户管理"。</p>
+
+<p><strong>步骤2：点击新增子账户</strong></p>
+
+<p>在子账户管理页面右上角，点击"新增子账户"按钮。</p>
+
+<p><strong>步骤3：填写子账户信息</strong></p>
+
+<p>在新增子账户表单中填写以下信息：</p>
+
+<table><thead><tr><th>字段名称</th><th>填写说明</th><th>是否必填</th></tr></thead><tbody><tr><td>子账户名称</td><td>子账户的显示名称</td><td>是</td></tr><tr><td>登录账号</td><td>登录系统时使用的账号</td><td>是</td></tr><tr><td>密码</td><td>子账户的登录密码</td><td>是</td></tr><tr><td>确认密码</td><td>再次输入密码进行确认</td><td>是</td></tr><tr><td>绑定通讯录用户</td><td>选择要绑定的通讯录成员</td><td>否</td></tr><tr><td>手机号</td><td>子账户的手机号码</td><td>否</td></tr><tr><td>通讯录管理范围</td><td>子账户可管理的通讯录范围</td><td>是</td></tr><tr><td>所属角色</td><td>子账户所属的角色（决定应用权限）</td><td>是</td></tr></tbody></table>
+
+<p><strong>步骤4：配置账号信息</strong></p>
+
+<p>关于登录账号的特殊说明：</p>
+<ul><li>系统会自动为登录账号附带组织机构域后缀</li><li>一个通讯录成员最多可绑定5个子账户</li></ul>
+
+<p><strong>步骤5：保存子账户</strong></p>
+
+<p>点击"保存"按钮，系统自动创建子账户。</p>
+
+<h3>13.3 删除子账户</h3>
+
+<h4>13.3.1 单个删除</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标子账户</strong></p>
+
+<p>在子账户管理页面，通过搜索或筛选找到要删除的子账户。</p>
+
+<p><strong>步骤2：执行删除操作</strong></p>
+
+<p>点击子账户操作列的"删除"按钮，系统弹出确认对话框。</p>
+
+<p><strong>步骤3：确认删除</strong></p>
+
+<p>在确认对话框中点击"确认删除"按钮，系统删除该子账户。</p>
+
+<h4>13.3.2 批量删除</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：选择多个子账户</strong></p>
+
+<p>在子账户管理页面，勾选多个要删除的子账户。</p>
+
+<p><strong>步骤2：执行批量删除</strong></p>
+
+<p>点击页面顶部的"批量删除"按钮，系统弹出确认对话框。</p>
+
+<p><strong>步骤3：确认删除</strong></p>
+
+<p>在确认对话框中点击"确认删除"按钮，系统批量删除选中的子账户。</p>
+
+<p>⚠️ <strong>重要提醒</strong>：子账户下存在下一级子账户时不能删除，需先删除下级子账户。</p>
+
+<h3>13.4 编辑子账户</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标子账户</strong></p>
+
+<p>在子账户管理页面，通过搜索或筛选找到要编辑的子账户。</p>
+
+<p><strong>步骤2：进入编辑模式</strong></p>
+
+<p>点击子账户操作列的"编辑"按钮，进入子账户编辑页面。</p>
+
+<p><strong>步骤3：修改子账户信息</strong></p>
+
+<p>在编辑页面可修改以下信息：</p>
+<ul><li>子账户名称</li><li>密码</li><li>绑定通讯录用户</li><li>手机号</li><li>通讯录管理范围</li><li>所属角色</li></ul>
+
+<p>⚠️ <strong>重要提醒</strong>：登录账号不可修改，如需修改登录账号，需删除当前子账户后重新创建。</p>
+
+<p><strong>步骤4：保存修改</strong></p>
+
+<p>点击"保存"按钮，系统保存修改并更新子账户信息。</p>
+
+<h3>13.5 搜索子账户</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：输入搜索关键词</strong></p>
+
+<p>在子账户管理页面顶部的搜索框中，输入子账户名称或账号关键词。</p>
+
+<p><strong>步骤2：执行搜索</strong></p>
+
+<p>点击搜索按钮或按回车键，系统显示匹配的子账户列表。</p>
+
+<h3>13.6 禁用/启用子账户</h3>
+
+<h4>13.6.1 禁用子账户</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标子账户</strong></p>
+
+<p>在子账户管理页面，通过搜索或筛选找到要禁用的子账户。</p>
+
+<p><strong>步骤2：执行禁用操作</strong></p>
+
+<p>点击子账户操作列的"禁用"按钮，系统弹出确认对话框。</p>
+
+<p><strong>步骤3：确认禁用</strong></p>
+
+<p>在确认对话框中点击"确认禁用"按钮，系统禁用该子账户。</p>
+
+<p><strong>禁用后影响</strong>：</p>
+<ul><li>子账户无法登录系统</li><li>账号保留在通讯录中，状态显示为"已禁用"</li><li>已分配的权限保留但不可用</li></ul>
+
+<h4>13.6.2 启用子账户</h4>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找已禁用子账户</strong></p>
+
+<p>在子账户管理页面，通过搜索或筛选找到已禁用的子账户。</p>
+
+<p><strong>步骤2：执行启用操作</strong></p>
+
+<p>点击子账户操作列的"启用"按钮，系统弹出确认对话框。</p>
+
+<p><strong>步骤3：确认启用</strong></p>
+
+<p>在确认对话框中点击"确认启用"按钮，系统启用该子账户。</p>
+
+<p><strong>启用后影响</strong>：</p>
+<ul><li>子账户恢复正常使用</li><li>可正常登录系统</li><li>原有权限自动恢复</li></ul>
+
+<h3>13.7 重置密码</h3>
+
+<p><strong>操作步骤</strong>：</p>
+
+<p><strong>步骤1：查找目标子账户</strong></p>
+
+<p>在子账户管理页面，通过搜索或筛选找到要重置密码的子账户。</p>
+
+<p><strong>步骤2：执行重置密码操作</strong></p>
+
+<p>点击子账户操作列的"重置密码"按钮，系统弹出修改密码弹窗。</p>
+
+<p><strong>步骤3：设置新密码</strong></p>
+
+<p>在修改密码弹窗中，输入新密码并确认。</p>
+
+<p><strong>步骤4：保存新密码</strong></p>
+
+<p>点击"保存"按钮，系统更新子账户密码。</p>
+
+<p>⚠️ <strong>重要提醒</strong>：密码重置后，子账户需要使用新密码登录系统。</p>
+
+<hr>
+
+<h2>14. 门户中心管理</h2>
+
+<h3>14.1 概述</h3>
+
+<p>门户中心是智能门户平台的核心功能模块，用于管理企业工作台的创建、配置、发布和运营。管理员可以通过门户中心创建适配不同终端（移动端和桌面端）的工作台，配置各类组件展示企业应用和信息，并管理数据源和统计分析。</p>
+
+<p><strong>主要功能模块</strong>：</p>
+<ul><li>H5工作台管理</li><li>原生工作台管理</li><li>数据源设置</li><li>统计分析</li><li>门户模板管理</li><li>自定义组件管理</li></ul>
+
+<h3>14.2 H5工作台管理</h3>
+
+<h4>14.2.1 创建标准工作台</h4>
+
+<p><strong>操作路径</strong>：门户中心 → H5工作台 → 创建工作台</p>
+
+<p><strong>操作步骤</strong>：</p>
+
+<ol><li>进入门户中心页面后，点击"创建工作台"，可选择以下两种创建方式：<br>- <strong>从空白创建</strong>：在弹出页填写工作台名称，选择发布类型为"标准工作台"，选择发布平台与封面图内容。<br>- <strong>从模板创建</strong>：需要选择模板，并填写基础信息。</li></ol>
+
+<ol><li>保存基本信息后进入工作台设计页面进行内容配置，根据业务需求，自由拖拽左侧的组件放入中间模拟画布区进行配置，并设置右侧的组件参数。</li></ol>
+
+<ol><li>选择发布平台：<br>- <strong>移动端</strong>：可选[企业微信]<br>- <strong>PC桌面端</strong>：可选[企业微信]、[web浏览器]</li></ol>
+
+<p>   &gt; <strong>说明</strong>：设计面板和工作台需要开启对应的终端按钮才显示。</p>
+
+<h4>14.2.2 移动端配置</h4>
+
+<p><strong>页面/主题设置</strong>：</p>
+
+<p><strong>页面属性配置</strong>：</p>
+<ul><li><strong>页面组件排序</strong>：开启后，允许用户个人自由排序/隐藏页面组件。</li><li><strong>搜索</strong>：开启后，选择配置好的数据源，用户在使用工作台时，就能使用搜索功能。</li><li><strong>消息</strong>：启用后，用户可在工作台上查看各个应用及管理后台发送的消息。</li><li><strong>分页</strong>：可设置工作台内按照分页展示不同的组件，满足不同的业务场景。可通过切换Tab的方式切换分页，共可设置3个分页。</li></ul>
+
+<p><strong>主题选择</strong>：</p>
+<ul><li><strong>主题色</strong>：提供了8种主题色以供选择。</li><li><strong>头部样式</strong>：启用后，可选择头部样式效果。若不启用，则不显示头部。</li></ul>
+
+<p><strong>头部设置</strong>：</p>
+<p>点击头部，可设置：</p>
+<ul><li><strong>头部背景</strong>：点击后可上传图片，替换背景。</li><li><strong>用户信息</strong>：开启后，头部可显示用户的名称。</li><li><strong>天气定位</strong>：当在系统管理中开启了天气信息时，可在此处启用天气定位，启用后可在头部显示天气及定位信息。</li><li><strong>文字颜色</strong>：可修改头部文字的颜色。</li></ul>
+
+<p><strong>组件配置</strong>：</p>
+
+<table><thead><tr><th>组件名称</th><th>基础设置</th><th>业务属性说明</th></tr></thead><tbody><tr><td><strong>统一待办组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>样式、展示的分类、最多轮播显示X条数据、选择绑定数据源</td></tr><tr><td><strong>应用中心组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>组件样式、数据设置、是否允许用户自定义、是否启用记录最近使用应用、是否显示待办角标</td></tr><tr><td><strong>信息列表组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>最多显示X条数据、分组最多显示X个、配置数据源</td></tr><tr><td><strong>日程提醒组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可设置显示数据，可选已创建的数据源</td></tr><tr><td><strong>快捷方式组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可选择组件样式（4种样式），并添加快捷方式</td></tr><tr><td><strong>数据汇总组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可设置最多显示X个类型、并配置数据源</td></tr><tr><td><strong>广告轮播组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可配置轮播图组件样式、图片比例、显示样式、模式（数据源、自定义）</td></tr><tr><td><strong>外部嵌入组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可配置嵌入尺寸的大小、渲染页面URL</td></tr><tr><td><strong>图表组件</strong></td><td>标题显示名称、描述、独立权限配置</td><td>可选择图表类型、上传excel文档作为数据</td></tr><tr><td><strong>富文本组件</strong></td><td>标题、描述、独立权限</td><td>可在组件内直接编辑内容，设置文本格式</td></tr></tbody></table>
+
+<p><strong>数据源配置</strong>：</p>
+<p>大部分组件都需要配置数据来源，选择绑定一个已经创建好的数据源；可选由该管理员自建的数据源与被其他创建管理员设置为共享属性的数据源，以及官方数据源。</p>
+
+<p><strong>高级配置</strong>：</p>
+<p>在组件属性可通过标题栏高级配置对标题右侧按钮样式和跳转链接进行自定义（不同类型的组件设置逻辑略有差异）。需要设置开启状态、显示内容（图标或文本）、功能类型（刷新、跳转页面）和跳转模式（跳转数据源指定路径、跳转自定义路径）。</p>
+
+<p><strong>保存与发布</strong>：</p>
+<ol><li>配置完成后，点击"保存"将工作台页面内容进行保存，工作台无自动存储机制，要注意不要丢失操作。</li><li>配置内容完成后，点击"权限配置"，分配工作台的可见范围，可选择按部门、人员、标签分配。<br>- 部门分配后其下属部门所有人员也有该工作台的可见权限。<br>- 人员分配对个人生效拥有该工作台的可见权限。<br>- 标签分配对及下属绑定人员生效拥有该工作台的可见权限。<br>- 分配完成后保存配置。</li><li>如需要对某个组件单独设置可见权限，可在对应组件的"独立权限配置"字段配置。</li><li>提供多种快捷键，提高工作台搭建效率。</li><li>返回设计页，再点击"发布"使工作台发布生效。"未发布"状态的工作台不会在运行端生效可见。</li></ol>
+
+<h4>14.2.3 桌面端配置</h4>
+
+<p><strong>页面/主题设置</strong>：</p>
+
+<p><strong>页面属性配置</strong>：</p>
+<ul><li><strong>页面属性</strong>：可选择PC端页面展示的方式，支持：自动适配页面、大屏、普通屏、笔记本屏，还可选择"更多尺寸"，自定义屏幕尺寸。</li><li><strong>允许用户自定义设置</strong>：开启后，允许用户个人自由排序/隐藏页面组件。</li><li><strong>搜索</strong>：开启后，选择配置好的数据源，用户在使用工作台时，就能使用搜索功能。</li><li><strong>消息</strong>：启用后，用户可在工作台上查看各个应用及管理后台发送的消息。</li><li><strong>分页</strong>：新增菜单分页时，可选择菜单类型：为分页、自定义链接、或菜单目录。</li></ul>
+
+<p><strong>主题选择</strong>：</p>
+<ul><li><strong>主题色</strong>：提供了8种主题色以供选择。</li><li><strong>导航布局模块</strong>：启用后，可选择导航栏的样式效果。若不启用，则不显示导航，仅显示首页。</li></ul>
+
+<p><strong>头部设置</strong>：</p>
+<p>点击导航栏，可设置Logo图，开启后可上传Logo图。若不开启，则不显示Logo。</p>
+
+<p><strong>一键复制</strong>：</p>
+<p>可将当前移动端的配置复制到当前PC页面中，包括移动端所有已设置的组件及参数设置。</p>
+
+<p><strong>组件配置</strong>：</p>
+<p>桌面端组件配置与移动端类似，但部分参数有差异：</p>
+<ul><li>统一待办组件：同移动端</li><li>应用中心组件：样式选择为2个样式</li><li>信息列表组件：同移动端</li><li>日程提醒组件：同移动端</li><li>快捷方式组件：同移动端</li><li>数据汇总组件：同移动端</li><li>图片轮播组件（桌面端称"图片轮播"）：同移动端广告轮播</li><li>外部嵌入组件：同移动端</li><li>图表组件：同移动端</li><li>富文本组件：同移动端</li></ul>
+
+<p><strong>统一说明</strong>：</p>
+<ol><li>大部分组件都需要配置数据来源，选择绑定一个已经创建好的数据源；可选由该管理员自建的数据源与被其他创建管理员设置为共享属性的数据源，以及官方数据源。</li><li>配置完成后，点击"保存"将工作台页面内容进行保存，工作台无自动存储机制，要注意不要丢失操作。</li><li>配置内容完成后，点击"权限配置"，分配工作台的可见范围，可选择按部门、人员、标签分配。</li><li>在组件属性可通过标题栏高级配置对标题右侧按钮样式和跳转链接进行自定义。</li><li>如需要对某个组件单独设置可见权限，可在对应组件的"独立权限配置"字段配置。</li><li>提供多种快捷键，提高工作台搭建效率。</li><li>返回设计页，再点击"发布"使工作台发布生效。"未发布"状态的工作台不会在运行端生效可见。</li></ol>
+
+<h4>14.2.4 创建外部工作台</h4>
+
+<p><strong>功能描述</strong>：支持使用一些外部页面作为一个工作台，用户登录系统后，进行创建外部工作台操作，输入工作台的基本信息、跳转地址、分配可见用户权限，发布后可查看。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入H5工作台页面后，进入外部工作台栏目，点击"创建工作台"，弹出页填写工作台的基本信息，即可创建外部工作台。</li><li>生成外部工作台数据后，鼠标移到工作台右下角的更多图标处，进行可见权限的分配。</li><li>点击"发布"使工作台生效。会在终端出现在工作台的切换列表里。</li></ol>
+
+<h4>14.2.5 编辑工作台</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行编辑工作台操作，可修改工作台的基本信息、配置组件内容、设置可见权限范围，完成后工作台信息更新，但已发布状态的工作台需要通过重新发布使其在运行端生效。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>鼠标移到工作台右下角的更多图标处。</li><li>需要编辑基本信息，则点击"编辑信息"，可以修改工作台名称、描述、以及修改工作台类型、发布平台。并且可以查看该工作台的主页地址，该URL可作为配置自建应用的访问地址。</li><li>需要重新分配工作台可见权限，则点击"权限设置"，可以修改工作台的可见权限。</li><li>需要调整工作台的内容，则点击工作台的缩略图区域部分，直接进入设计页面进行调整。</li><li>需要将该工作台设置为某个部门的默认首页，则点击"默认首页"，再于弹框中选择部门即可。</li><li>注意！任何修改都仅是更新后台数据，但尚未在运行端生效，需要点击"重新发布"使调整的数据实际生效。</li><li>若需要将某个工作台从运行端撤回不显示，可以通过"撤销"操作实现，点击后工作台状态变为"未发布"，对运行端用户不可见。</li><li>若需要在某个工作台的基础上在配置新的工作台，可点击"复制为新工作台"，即可进入以当前工作台为基础的新工作台配置页。</li></ol>
+
+<h4>14.2.6 删除工作台</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行删除工作台操作，完成后该工作台数据消失。只有"未发布"的工作台可以被删除，发布的工作台需要撤销后才能删除。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>鼠标移到工作台右下角的更多图标处。</li><li>点击"删除"按钮，在弹出的确认对话框里选择"确定"，删除该工作台。</li></ol>
+
+<h4>14.2.7 查询工作台</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行工作台查询操作，可按工作台名称进行数据筛选，可按工作台发布状态进行数据筛选，可按工作台发布时间/最后更新时间进行数据排序。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>可以点击全部状态，选择全部/已发布/未发布进行数据筛选查看。</li><li>可以输入工作台名称进行模糊检索查看。</li></ol>
+
+<h4>14.2.8 预览工作台</h4>
+
+<p><strong>移动端预览</strong>：</p>
+<ol><li>在工作台搭建页面，点击预览。</li><li>用手机登录企业微信，用扫一扫功能去扫系统弹出的二维码进行预览查看。</li><li>预览工作台不可进行页面操作和跳转，仅供查看渲染效果。</li></ol>
+
+<p><strong>PC端预览</strong>：</p>
+<ol><li>点击"预览"按钮。</li><li>选择复制链接或者前往预览，可预览PC工作台。</li></ol>
+
+<h3>14.3 原生工作台管理</h3>
+
+<h4>14.3.1 创建组件</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进入"原生工作台"页面进行自定义组件创建与配置，选择一种自定义组件并绑定对应的应用、配置相关参数，完成后进行保存。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入"原生工作台"的设置页面后选择一项组件类型，系统提供多种模板，点击左侧组件栏里的"+"进行创建。</li><li>"图片型"、"关键数据型"、"列表型"为常规类型；"webview"类型为特殊类型，系统提供5类模板匹配常用业务。注意，"webview"类型因鉴权限制，产品采用无鉴权方案进行数据发布，故不建议与数据私密性较高的信息应用对接。</li><li>组件设置参数，选择一个绑定应用（该设置决定原生工作台里哪个应用变为自定义展示模块）。注意，已被其他组件绑定的应用不可再选中。</li><li>数据来源分两种情况，"webview"类型除"自定义页面"外，其余均需要选择绑定一个已创建的数据源，用数据源的接入模式；点击"保存"完成自定义组件的创建。</li><li>其余"图片型"、"关键数据型"、"列表型"，只需绑定应用，在点击"保存"后，系统生成对接信息（接口请求URL与秘钥），提供给应用方进行API的开发，通过调用该接口实现推送数据。</li></ol>
+
+<h4>14.3.2 编辑组件</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行原生工作台里的组件编辑操作，可修改组件的参数、完成后组件信息更新，仅"未发布"的组件可编辑。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>点击选中一个已创建的组件，在右边参数设置部分进行编辑，修改设置的参数。注意，仅"未发布"的组件可编辑，已发布的组件需要"撤销发布"才能编辑。</li></ol>
+
+<h4>14.3.3 删除组件</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行原生工作台里的组件删除操作，删除后组件消失，仅"未发布"的组件可删除。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>点击选中一个已创建的组件，在选中框右上角点击"删除"图标，进行删除操作。注意，仅"未发布"的组件可删除，已发布的组件需要"撤销发布"才能删除。</li></ol>
+
+<h4>14.3.4 查询组件</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行原生工作台里的组件查询操作，可按组件绑定的应用名称进行数据筛选，也支持按组件类型进行过滤。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>页面左边是组件栏，上方有查询输入框，输入查询目标的"应用名称"进行查询。也可以按类型进行数据过滤。</li></ol>
+
+<h4>14.3.5 发布/撤销组件</h4>
+
+<p><strong>功能描述</strong>：用户登录系统后，进行原生工作台里的组件发布操作，点击"发布"后，组件会通过接口推送至企业微信原生工作台上，将绑定的应用从图标变为自定义展示模块。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>点击选中一个已创建的组件，在右侧设置信息面板里，点击"发布"，进行发布操作。发布成功后，企业微信原生工作台上，将绑定的应用从图标变为自定义展示模块。自定义组件可见权限与绑定的应用可见权限一致无需再次设置。</li><li>撤销发布操作，将组件变回"未发布"状态；并且企业微信原生工作台上，将绑定的应用从自定义展示模块变回图标。</li></ol>
+
+<h4>14.3.6 调整组件排序</h4>
+
+<p><strong>功能描述</strong>：自定义组件发布至企业微信后，因本质是通过接口推送至企业微信，所以模块管控权不在工作台系统，需要到企业微信后台进行调序；调整原生工作台的组件排布。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>系统将自定义组件模块发布至企业微信后，需要到企业微信管理后台进行调序。</li><li>用企业微信管理员身份的账号登录【企业微信管理后台】，点击"我的企业"，再点击"工作台管理"，点击"修改应用分组"。</li><li>打开应用分组页面后，会看到已发布的应用单独成为了一块独立模块，此时可随意调整顺序。</li></ol>
+
+<h3>14.4 数据源设置</h3>
+
+<h4>14.4.1 创建自建数据源</h4>
+
+<p><strong>功能描述</strong>：输入数据源的配置信息，完成后可使用该数据源，在配置工作台时可作为组件的数据来源，数据源类型不一样，设置参数会有一些细微差别。</p>
+
+<p><strong>配置说明</strong>：</p>
+<ol><li>可以设置数据源共享属性，共享属性影响管理员配置工作台时选择页里的可见性，"私有"仅创建者可见，"共享"全员可见。</li><li>可以配置数据源数据获取方式，"接收推送"形式的数据源一般用于实时性不强的场景，由应用方请求接口，推送数据，组件再读取展示；"主动请求"形式的数据源一般用于实时性要求较高的场景，由工作台主动请求应用方接口获取数据展示。</li><li>"接收推送"形式的数据源可以设置IP白名单，未设置时，所有获取API的应用方都可以调用对接推送数据，若需要限制，则可设置白名单，在白名单内的IP地址才能请求调用API对接推送数据。</li><li>"主动请求"形式的数据源需要填写对方的API地址，若有特定参数的话，也需要填写记录作为请求参数。</li></ol>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入数据源设置页面后选择一项组件类型，点击"创建数据源"。</li><li>要依次填写基础信息、获取API接口凭证、验证数据源。（验证数据源为非必要选项）<br>- <strong>填写基础信息</strong>：弹出的创建信息页里填写数据源名称、描述、使用权限（仅个人代表仅自己可在搭建工作台时使用该数据源，全员共享代表所有管理员可使用，部分人共享代表选中的管理员可使用。）、选择获取数据方式（"接收推送"形式的数据源由应用方请求接口，推送数据，组件再读取展示；"主动请求"形式的数据源由工作台主动请求应用方接口获取数据展示）。<br>- <strong>填写高级参数</strong>：IP白名单（"接收推送"形式的数据源特有参数，默认全开放，设置后则只对设置的IP开放）、API地址（"主动请求"形式的数据源特有参数，填写数据方提供的API地址）、传参（"主动请求"形式的数据源特有参数，填写除组件接口标准参数外的额外参数）。<br>- <strong>验证数据源</strong>：填入用户参数值，点击左上角"点击验证"按钮，即可验证数据源连接结果。返回结果有数据正常返回表示该数据源连接正常且有数据返回，可切换其他tab看返回代码信息及组件预览效果。</li><li>点击"完成"，完成数据源的创建操作，生成一条新的数据源数据。</li></ol>
+
+<h4>14.4.2 编辑自建数据源</h4>
+
+<p><strong>功能描述</strong>：修改数据源的配置参数信息，完成后可更新该数据源的信息。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入数据源设置页面后选择一项组件类型，在列表里选择一条数据源点击可打开编辑页。</li><li>弹出的编辑信息页里依次修改数据源名称、描述、应用主页、属性、获取数据方式等内容。</li><li>点击"保存"完成编辑操作。</li></ol>
+
+<h4>14.4.3 删除数据源</h4>
+
+<p><strong>功能描述</strong>：进行删除数据源操作，删除后该数据源消失，并清除已接入推送的相关数据。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入数据源设置页面后选择一项组件类型，在列表里，鼠标移入一条数据源的卡片上，右下角部分出现的功能菜单点击"删除"。</li><li>在弹出的确认对话框里选择"确定"，删除该数据源。</li></ol>
+
+<h4>14.4.4 查询数据源</h4>
+
+<p><strong>功能描述</strong>：可按数据源名称模糊检索进行数据筛选，可按数据源推送方式、共享属性、修改创建时间及验证状态这几个维度进行数据筛选。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入数据源设置页面，根据查询需要进行查询。</li><li>可以点击"全部方式"，选择全部方式/接收推送/主动请求进行数据筛选查看。</li><li>可以点击"最新修改"，选择最新修改/最新创建进行数据排序。</li><li>可以点击"全部状态"，选择验证通过/验证异常/验证失败进行数据筛选查看。</li><li>可以输入工作台名称进行模糊检索查看。</li></ol>
+
+<h4>14.4.5 清理数据源/查看清理记录</h4>
+
+<p><strong>功能描述</strong>："接收推送"形式的数据源特有功能；用户可对数据源进行清理操作，设置想要清理的截止日期时间点，执行清理任务，系统会将该日期时间点之前接收到的数据都清理掉；并且可查看历次的清理操作记录。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入数据源设置页面后选择一项组件类型，在列表里，鼠标移入一条"接收推送"类数据源的卡片上，右下角部分出现的功能菜单点击"清除数据"。</li><li>输入想要清理已接入数据的传输截止时间。</li><li>点击"清理"，执行清理操作。</li><li>清理完成后，可点击"查看清理记录"进行查看；若想查看历史操作也在该页面查看。</li></ol>
+
+<h4>14.4.6 获取API</h4>
+
+<p><strong>功能描述</strong>："接收推送"形式的数据源特有功能；创建完的数据源需要提供api给应用方对接推送数据，系统生成API的地址和秘钥secret作为对接和鉴权依据。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>选中某个数据源详情页，进入下一步。</li><li>显示API的地址和秘钥信息，可以点击复制接口url和secret使用。</li></ol>
+
+<h4>14.4.7 官方数据源</h4>
+
+<p><strong>功能描述</strong>：官方数据源功能作为一类产品封装的数据源，让用户可直接绑定使用，也可以自建。</p>
+
+<p><strong>目前已提供的官方数据源有</strong>：</p>
+<ul><li>示例数据源</li><li>道一云知识百科（企微SaaS应用）</li><li>道一云大学（企微SaaS应用）</li><li>道一云新闻公告（企微SaaS应用）</li><li>道一云统一待办（企微SaaS应用）</li><li>智能门户待办中心（私有化部署）</li><li>道一云七巧Plus待办（企微SaaS应用）</li><li>智能门户日程中心（私有化部署）</li></ul>
+
+<p><strong>官方数据源详情</strong>：</p>
+<ol><li><strong>官方数据源</strong>：<br>- <strong>信息列表</strong>：<br>- 门户新闻公告：场景：信息列表组件内，查看门户新闻公告应用内的消息。前提：需同时拥有智能门户的"新闻公告"应用。<br>- SaaS知识百科：场景：信息列表组件内，查看知识百科应用内的消息。前提：需同时使用"道一云知识百科"SaaS版，并在初始化时让运维设置好对应参数。<br>- SaaS云大学：场景：信息列表组件内，查看道一云大学应用内的消息。前提：需同时使用"道一云大学"SaaS版，并在初始化时让运维设置好对应参数。<br>- SaaS新闻公告：场景：信息列表组件内，查看道一云新闻公告应用内的消息。前提：需同时使用"道一云新闻公告"SaaS版，并在初始化时让运维设置好对应参数。<br>- <strong>日程提醒</strong>：<br>- 智能门户日程中心：场景：在日程组件内，查看对应日程应用内的日程，并可跳转到对应日程详情。前提：需在部署门户时，同时部署"智能门户日程中心"私有化版本。<br>- <strong>统一待办</strong>：<br>- 道一云统一待办：场景：在统一待办组件内，查看由"道一云统一待办"提供的待办数据。前提：需要同时使用"道一云统一待办"SaaS版本。<br>- 门户待办中心：场景：在统一待办组件内，查看由"道一云统一待办"提供的待办数据。前提：需在部署门户时，同时部署"智能门户待办中心"私有化版本。<br>- 道一云七巧Plus待办：场景：在统一待办组件内，查看由"道一云七巧Plus待办"提供的待办数据。前提：需同时使用"道一云七巧Plus"SaaS版，并在初始化时让运维设置好对应参数。<br>- <strong>统一搜索</strong>：<br>- 场景：在工作台内，开启搜索功能，可针对设置好的内容完成统一搜索，如搜索应用、待办数据、新闻等其他数据。前提：需要提前配置好统一搜索的数据源，配置方式与其他的数据源略有不同，需要由企业超管与运营侧一起配置。门户自带接入门户的应用、待办、新闻资讯，若是第三方数据，需要另外对接。</li><li><strong>示例数据源</strong>：选中后，无需设置额外参数，该数据源提供系统生成的假数据显示，绑定后在终端查看数据。</li></ol>
+
+<h3>14.5 统计分析</h3>
+
+<p><strong>功能描述</strong>：工作台系统自动记录各工作台的组件、应用被点击的次数，形成点击量，在后台统计分析页可查看。</p>
+
+<p><strong>操作路径</strong>：智能门户 → 门户中心 → 统计分析</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li><strong>应用访问统计</strong>：可查看自定义工作台上应用的访问人数与访问次数。并支持点击"累加企业微信数据"，可累加上从私有化企微获取的数据进行展示。</li><li><strong>工作台组件访问统计</strong>：可查看工作台内各个组件的访问人数与次数。</li><li><strong>用户访问统计</strong>：可以工作台为维度查看访问人数与次数。</li></ol>
+
+<h3>14.6 门户模板管理</h3>
+
+<h4>14.6.1 设置自建模板</h4>
+
+<p><strong>功能描述</strong>：将一个已配置好的工作台设为模板，后续根据模板创建工作台，不需要每次从0开始搭建工作台。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>在标准工作台下，点击某个工作台的【更多】，点击【设置为模板】，弹出设置弹框。</li><li>在弹框中填写基本内容，点击创建，即可设置成功。模板内容包含：主题/头部/导航栏分页等内容、设计面板组件内容和位置和参数和数据源、包含自定义上传的图标、图片、文件，不包含权限相关内容。</li><li>可在门户模板模块，查看本管理员设置的模板。</li></ol>
+
+<h4>14.6.2 查看或使用模板</h4>
+
+<p><strong>功能描述</strong>：管理员可查看已有的模板，并在已有模板的基础上快速创建工作台。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>可切换查看官方模板或自建模板、搜索模板。</li><li>编辑模板信息。</li><li>使用模板：<br>- <strong>方式一</strong>：在模板中心，选择好模板后，点击【使用模板】，即可进入设计面板里，且将模板工作台的配置内容自动填充进面板。<br>- <strong>方式二</strong>：在H5工作台模块，点击【创建工作台】，选择【从模板创建】，选择模板，填写基础信息后，可进入设计面板，且模板内容已被自动填充入内。</li></ol>
+
+<h3>14.7 自定义组件管理</h3>
+
+<h4>14.7.1 设置自定义组件</h4>
+
+<p><strong>功能描述</strong>：当标准组件无法满足特殊业务场景时，开发人员可根据开发指引，开发自定义组件，并将对应代码上传至智能门户以供搭建工作台使用。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>研发人员根据自定义组件的开发指引编写自定义组件的代码。</li><li>在智能门户"管理后台"-"门户中心"-"自定义组件管理"模块创建自定义组件，设置组件名称、使用权限（组件可被哪些管理员使用）、组件图标、上传组件包，再点击【验证】，可查看实际效果，最后点击保存，即可完成创建。</li><li>当需要删除自定义组件时，可点击组件的右下角，点击【删除】，二次确认后即可删除该组件。</li></ol>
+
+<h4>14.7.2 使用自定义组件</h4>
+
+<p><strong>功能描述</strong>：创建好的自定义组件，可在搭建自定义工作台时，通过拖拉拽的方式拖入到工作中使用。</p>
+
+<p><strong>操作路径</strong>：在工作台设计页面的组件列表中选择自定义组件。</p>
+
+<h3>14.8 注意事项</h3>
+
+<ol><li>工作台无自动存储机制，配置完成后需要手动点击"保存"。</li><li>"未发布"状态的工作台不会在运行端生效可见。</li><li>只有"未发布"的工作台可以被删除，发布的工作台需要撤销后才能删除。</li><li>移动端仅出现应用中心里分类为"企业微信"类的应用。</li><li>"webview"类型组件因鉴权限制，产品采用无鉴权方案进行数据发布，故不建议与数据私密性较高的信息应用对接。</li><li>已被其他组件绑定的应用不可再选中。</li><li>原生工作台组件发布后，调整排序需要到企业微信管理后台进行。</li><li>官方数据源需要满足特定前提条件才能使用。</li><li>数据源清理操作不可逆，会清除截止日期之前的所有数据。</li></ol>
+
+<hr>
+
+<h2>15. 新闻公告管理</h2>
+
+<h3>15.1 概述</h3>
+
+<p>新闻公告管理模块用于管理企业内部的新闻、公告、通知等信息的发布与展示。管理员可以通过该模块创建、编辑、发布文章，管理文章分类和专栏，并控制文章的可见范围和推送消息。</p>
+
+<p><strong>主要功能模块</strong>：</p>
+<ul><li>文章管理</li><li>分类管理</li><li>专栏管理</li></ul>
+
+<h3>15.2 文章管理</h3>
+
+<h4>15.2.1 新建文章</h4>
+
+<p><strong>功能描述</strong>：支持新建一篇文章，该文章可以在PC端和移动端查看。</p>
+
+<p><strong>操作路径</strong>：智能门户管理后台 → 文章管理 → 新建文章</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，点击新建文章。</li><li>首先需要完成基础字段设置，包括配置标题、作者、正文、附件、封面、摘要、分类以及专栏字段。</li><li>支持对文章发布进行配置。其中发布对象为配置哪些用户可以在PC端或移动端查看该文章。推送消息数据源为配置哪些人能在数据源平台接收到消息提醒。当前仅支持推送至企业微信。</li><li>配置完成后，支持定时发布或立即发布文章。定时发布即到达用户配置的时间后，才支持发布至PC端和移动端。立即发布即立刻将文章发布至PC端和移动端并推送消息提醒。</li></ol>
+
+<p><strong>配置项</strong>：</p>
+
+<table><thead><tr><th>配置类别</th><th>配置项</th><th>说明</th></tr></thead><tbody><tr><td><strong>基础字段</strong></td><td>标题、作者、正文、附件、封面、摘要、分类、专栏</td><td>文章的基本信息</td></tr><tr><td><strong>发布配置</strong></td><td>发布对象</td><td>配置哪些用户可以在PC端或移动端查看该文章</td></tr><tr><td></td><td>推送消息数据源</td><td>配置哪些人能在数据源平台接收到消息提醒（当前仅支持推送至企业微信）</td></tr><tr><td><strong>发布方式</strong></td><td>定时发布</td><td>到达用户配置的时间后，才支持发布至PC端和移动端</td></tr><tr><td></td><td>立即发布</td><td>立刻将文章发布至PC端和移动端并推送消息提醒</td></tr></tbody></table>
+
+<h4>15.2.2 编辑文章</h4>
+
+<p><strong>功能概述</strong>：支持修改一篇文章，修改后该文章可以在PC端和移动端查看。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，找到有编辑权限且处于下线状态或草稿状态下的文章，点击后方的更多按钮，点击编辑。</li><li>进入文章编辑页面后，支持修改文章基础字段以及文章发布配置。包括标题、作者、正文、发布对象、推送消息等字段。</li><li>修改完成后，支持定时发布或立即发布文章。</li></ol>
+
+<h4>15.2.3 删除文章</h4>
+
+<p><strong>功能概述</strong>：支持删除一篇下线或草稿状态的文章，删除后文章在文章列表中消失，用户将无法找回该文章。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，找到有编辑权限且处于下线状态或草稿状态下的文章，点击后方的更多按钮，点击删除。</li><li>系统弹出提示窗，点击确定，即可完成文章删除操作。</li></ol>
+
+<h4>15.2.4 下线文章</h4>
+
+<p><strong>功能概述</strong>：支持将一篇上线状态的文章进行下线，下线后，普通员工将无法在PC端或者移动端查看该文章。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，找到有编辑权限且处于上线状态下的文章，点击后方的更多按钮，点击下线。</li><li>系统弹出提示窗，点击确定，即可完成文章下线操作。</li></ol>
+
+<h4>15.2.5 上线文章</h4>
+
+<p><strong>功能概述</strong>：支持将一篇下线状态的文章进行上线，上线后，普通员工将在PC端或者移动端能查看该文章。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，找到有编辑权限且处于下线状态下的文章，点击后方的更多按钮，点击上线。</li><li>系统弹出提示窗，点击确定，即可完成文章上线操作。</li></ol>
+
+<h4>15.2.6 文章授权</h4>
+
+<p><strong>功能概述</strong>：支持将文章授权给其他管理员，让其他管理员对此文章拥有查看、编辑、授权权限。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-文章管理界面，找到有授权权限的文章。点击后方的更多按钮，点击授权。默认情况，文章创建人和后台超级管理员有该文章的授权权限。</li><li>支持修改查看权限、编辑权限、授权权限管理员。超管和文章创建人不支持修改。<br>- 拥有查看权限的管理员支持在文章列表查看该文章以及查看文章详情。<br>- 拥有编辑权限的管理员支持对此文章进行编辑、删除、上线、下线等操作。<br>- 拥有授权权限的管理员支持对文章进行授权。</li><li>点击保存，文章授权修改完成。</li></ol>
+
+<h4>15.2.7 查看文章</h4>
+
+<p><strong>后台查看文章</strong>：</p>
+<ol><li>在文章列表中找到需要查看的文章，点击后方的更多按钮，点击查看。</li><li>此时页面侧边栏展开，用户支持查看ID、标题、摘要、正文等字段。</li></ol>
+
+<p><strong>PC端查看文章</strong>：</p>
+<ol><li><strong>方式1</strong>：当该员工处于消息推送对象中时，在企业微信中将会收到该文章的消息提醒。点击消息提醒，将跳转至文章详情页中，查看文章详情。</li><li><strong>方式2</strong>：当员工处于文章发布对象中时，在首页中可以查看到该文章，点击文章列表中的文章后，跳转至文章详情页。</li><li><strong>方式3</strong>：当文章有配置专栏时，进入PC端-专栏页中，点击文章所属专栏，进入专栏详情页面。在专栏详情页面中点击相应的文章，支持跳转至文章详情中。</li></ol>
+
+<p><strong>移动端查看文章</strong>：</p>
+<ol><li><strong>方式1</strong>：当该员工处于消息推送对象中时，在企业微信中将会收到该文章的消息提醒。点击消息提醒，将跳转至文章详情页中，查看文章详情。</li><li><strong>方式2</strong>：当员工处于文章发布对象中时，在首页中可以查看到该文章，点击文章列表中的文章后，跳转至文章详情页。</li><li><strong>方式3</strong>：当文章有配置专栏时，进入移动端-专栏页中，点击文章所属专栏，进入专栏详情页面。在专栏详情页面中点击相应的文章，支持跳转至文章详情中。</li></ol>
+
+<h3>15.3 分类管理</h3>
+
+<h4>15.3.1 新建分类</h4>
+
+<p><strong>功能描述</strong>：支持新建一个分类，该分类可以在PC端和移动端查看。</p>
+
+<p><strong>操作路径</strong>：智能门户管理后台 → 配置中心 → 分类管理 → 新建分类</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，点击新建分类。</li><li>新建分类需要填写分类名称、父级分类和分类状态。当不选择父级分类时，该分类为一级分类。当选择了父级分类后，该分类为选中的父级分类下的二级分类。</li><li>点击保存，新建分类完成。</li></ol>
+
+<p><strong>配置项</strong>：</p>
+<ul><li>分类名称</li><li>父级分类（可选）</li><li>分类状态</li></ul>
+
+<h4>15.3.2 编辑分类</h4>
+
+<p><strong>功能描述</strong>：支持对分类进行修改，修改后可以在PC端和移动端查看新的分类。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，选择拥有分类编辑权限的分类，点击分类后方的更多按钮，点击编辑按钮。</li><li>此时支持修改分类名称与分类状态。修改完成后，点击右下方的提交即可完成修改。</li></ol>
+
+<h4>15.3.3 删除分类</h4>
+
+<p><strong>功能描述</strong>：支持删除没有所属文章的分类，删除后PC端和移动端无法查看到分类。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，选择拥有分类编辑权限的分类，点击分类后方的更多按钮，点击删除按钮。</li><li>系统弹出提示窗，点击确定，即可完成删除分类操作。</li></ol>
+
+<p><strong>限制条件</strong>：只能删除没有所属文章的分类。</p>
+
+<h4>15.3.4 禁用分类</h4>
+
+<p><strong>功能描述</strong>：支持禁用分类，分类禁用后PC端和移动端无法查看到分类，该分类下的文章能正常阅读。在后台新建文章时也不支持选择该分类。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，选择拥有分类编辑权限的分类，点击分类后方的更多按钮，点击禁用按钮。</li><li>系统弹出提示窗，点击确定，即可完成分类禁用操作。</li><li>分类被禁用后，后方会出现【禁】字图标。</li></ol>
+
+<h4>15.3.5 启用分类</h4>
+
+<p><strong>功能描述</strong>：支持启用分类，启用后PC端和移动端可以查看到分类，在后台新建文章时也能查看到该分类。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，选择拥有分类编辑权限的分类，点击分类后方的更多按钮，点击启用按钮。</li><li>系统弹出提示窗，点击确定，即可完成分类启用操作。</li></ol>
+
+<h4>15.3.6 分类授权</h4>
+
+<p><strong>功能描述</strong>：支持将分类授权给其他管理员，让其他管理员对此分类拥有编辑、授权权限。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-分类管理界面，选择拥有分类授权权限的分类，点击分类后方的更多按钮，点击授权按钮。默认情况，分类创建人和后台超级管理员有该分类的授权权限。</li><li>支持修改编辑权限、授权权限管理员。超管和分类创建人不支持修改。<br>- 拥有编辑权限的管理员支持对此分类进行编辑、删除、启用、禁用等操作。<br>- 拥有授权权限的管理员支持对分类进行授权。</li></ol>
+
+<h3>15.4 专栏管理</h3>
+
+<h4>15.4.1 新建专栏</h4>
+
+<p><strong>功能描述</strong>：支持新建一个专栏，该专栏可以在PC端和移动端查看。</p>
+
+<p><strong>操作路径</strong>：智能门户管理后台 → 配置中心 → 专栏管理 → 新建专栏</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，点击新建专栏。</li><li>新建专栏需要填写专栏名称、专栏封面、专栏描述以及状态。</li><li>点击保存，新建专栏完成。</li></ol>
+
+<p><strong>配置项</strong>：</p>
+<ul><li>专栏名称</li><li>专栏封面</li><li>专栏描述</li><li>状态</li></ul>
+
+<h4>15.4.2 编辑专栏</h4>
+
+<p><strong>功能描述</strong>：支持对专栏进行修改，修改后可以在PC端和移动端查看新的专栏。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，选择拥有专栏编辑权限的分类，点击分类后方的更多按钮，点击编辑按钮。</li><li>此时支持修改专栏名称、专栏描述、专栏封面和专栏状态。修改完成后，点击右下方的提交即可完成修改。</li></ol>
+
+<h4>15.4.3 删除专栏</h4>
+
+<p><strong>功能描述</strong>：支持删除专栏，删除后PC端和移动端无法查看到专栏。若专栏下仍有文章，则文章所属专栏将减少被删除的专栏，专栏仍然支持被删除。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，选择拥有专栏编辑权限的分类，点击分类后方的更多按钮，点击删除按钮。</li><li>系统弹出提示窗，点击确定，即可完成删除专栏操作。</li></ol>
+
+<h4>15.4.4 禁用专栏</h4>
+
+<p><strong>功能描述</strong>：支持禁用专栏，专栏禁用后PC端和移动端无法查看到专栏，该专栏下的文章能正常阅读。在后台新建文章时也不支持选择该专栏。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，选择拥有专栏编辑权限的专栏，点击专栏后方的更多按钮，点击禁用按钮。</li><li>系统弹出提示窗，点击确定，即可完成专栏禁用操作。</li><li>专栏被禁用后，后方会出现【禁】字图标。</li></ol>
+
+<h4>15.4.5 启用专栏</h4>
+
+<p><strong>功能描述</strong>：支持启用专栏，启用后PC端和移动端可以查看到专栏，在后台新建文章时也能查看到该专栏。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，选择拥有专栏编辑权限的专栏，点击专栏后方的更多按钮，点击启用按钮。</li><li>系统弹出提示窗，点击确定，即可完成专栏启用操作。</li></ol>
+
+<h4>15.4.6 专栏授权</h4>
+
+<p><strong>功能描述</strong>：支持将专栏授权给其他管理员，让其他管理员对此专栏拥有编辑、授权权限。</p>
+
+<p><strong>操作步骤</strong>：</p>
+<ol><li>进入智能门户管理后台-配置中心-专栏管理界面，选择拥有专栏授权权限的专栏，点击专栏后方的更多按钮，点击授权按钮。默认情况，专栏创建人和后台超级管理员有该专栏的授权权限。</li><li>支持修改编辑权限、授权权限管理员。超管和专栏创建人不支持修改。<br>- 拥有编辑权限的管理员支持对此专栏进行编辑、删除、启用、禁用等操作。<br>- 拥有授权权限的管理员支持对专栏进行授权。</li></ol>
+
+<h4>15.4.7 查看专栏</h4>
+
+<p><strong>PC端查看专栏</strong>：</p>
+<ol><li>进入新闻公告PC端，点击专栏tab，查看专栏列表页面。</li><li>点击专栏，查看专栏详情及专栏下的文章。</li></ol>
+
+<p><strong>移动端查看专栏</strong>：</p>
+<ol><li>进入新闻公告移动端，点击专栏tab，查看专栏列表页面。</li><li>点击专栏，查看专栏详情及专栏下的文章。</li></ol>
+
+<h3>15.5 注意事项</h3>
+
+<ol><li>只有下线状态或草稿状态下的文章才能被编辑或删除。</li><li>只有上线状态的文章才能被下线，只有下线状态的文章才能被上线。</li><li>文章删除后无法找回。</li><li>分类删除限制：只能删除没有所属文章的分类。</li><li>分类禁用后，该分类下的文章仍能正常阅读，但新建文章时不能选择该分类。</li><li>专栏删除后，若专栏下仍有文章，文章所属专栏将减少被删除的专栏。</li><li>专栏禁用后，该专栏下的文章仍能正常阅读，但新建文章时不能选择该专栏。</li><li>文章、分类、专栏的授权权限默认属于创建人和后台超级管理员。</li><li>超管和创建人的权限不支持修改。</li><li>文章推送消息当前仅支持推送至企业微信。</li></ol>
+
+<hr>
+
+<h2>附录</h2>
+
+<h3>A. 联系方式</h3>
+
+<table><thead><tr><th>联系类型</th><th>联系方式</th><th>说明</th></tr></thead><tbody><tr><td>系统管理员</td><td>程文斐：0551-62201332 / 葛鹏飞：0551-62207154</td><td>系统配置、权限管理问题</td></tr><tr><td>技术支持</td><td>程文斐：0551-62201332 / 葛鹏飞：0551-62207154</td><td>系统故障、技术问题</td></tr><tr><td>业务咨询</td><td>程文斐：0551-62201332 / 葛鹏飞：0551-62207154</td><td>业务流程、功能使用问题</td></tr></tbody></table>
+
+<h3>B. 相关文档</h3>
+
+<table><thead><tr><th>文档编号</th><th>文档名称</th><th>说明</th></tr></thead><tbody><tr><td>D1</td><td>元信 &amp; 智能门户使用指南</td><td>普通用户使用指南</td></tr><tr><td>D2</td><td>常见问题FAQ</td><td>用户常见问题解答</td></tr><tr><td>D4</td><td>组织架构同步运维指南</td><td>组织架构同步技术文档</td></tr><tr><td>D5</td><td>消息中心 &amp; 新闻公告发布指南</td><td>内容管理员操作指南</td></tr><tr><td>D6</td><td>第三方应用接入指南</td><td>第三方应用接入技术文档</td></tr><tr><td>D7</td><td>七巧低码平台接入指南</td><td>低代码平台使用指南</td></tr></tbody></table>
+
+<h3>C. 版本历史</h3>
+
+<table><thead><tr><th>版本</th><th>日期</th><th>修改人</th><th>修改说明</th></tr></thead><tbody><tr><td>V1.0</td><td>2026-07-03</td><td>王昭</td><td>初始版本</td></tr><tr><td>V1.1</td><td>2026-07-04</td><td>王昭</td><td>新增第11章认证中心管理、第12章消息中心管理、第13章子账户管理</td></tr><tr><td>V1.2</td><td>2026-07-04</td><td>王昭</td><td>新增第14章门户中心管理、第15章新闻公告管理</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档结束</strong></p>
+</body>
+</html>

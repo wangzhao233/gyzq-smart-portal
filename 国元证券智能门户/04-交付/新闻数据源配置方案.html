@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新闻数据源配置方案</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    background: #fff;
+}
+h1 { font-size: 24px; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a73e8; color: #1a73e8; }
+h2 { font-size: 20px; margin: 20px 0 12px; color: #222; }
+h3 { font-size: 17px; margin: 16px 0 8px; color: #444; }
+h4 { font-size: 15px; margin: 12px 0 6px; color: #555; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 24px; }
+li { margin: 4px 0; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+th {
+    background: #f0f5ff;
+    font-weight: 600;
+    color: #1a73e8;
+}
+tr:nth-child(even) { background: #fafafa; }
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+}
+pre {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+    border-left: 4px solid #1a73e8;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: #f0f5ff;
+    color: #555;
+}
+strong { font-weight: 600; color: #222; }
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+@media print {
+    body { max-width: none; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<h1>国元证券智能门户 — 新闻数据源配置方案</h1>
+
+<p><strong>编制人员</strong>：王昭</p>
+<p><strong>文档版本</strong>：V3.0</p>
+<p><strong>编制日期</strong>：2026-07-18（重大修订：基于门户API文档重新设计）</p>
+
+<blockquote>本文档基于客户OA（SharePoint）REST API + 智能门户数据源API文档（主动拉取v6.0.8 / 数据推送v6.0.8 / 对接指南2.14），指导将OA新闻同步到门户首页。<br><strong>V3.0 修订</strong>：纠正对门户数据源机制的误解——门户主动拉取是POST请求且要求特定JSON格式，不能简单透传SharePoint OData，需要代理层做格式转换。</blockquote>
+
+<hr>
+
+<h2>1. 技术背景纠正</h2>
+
+<h3>1.1 之前理解的错误</h3>
+
+<table><thead><tr><th>之前以为</th><th>实际情况</th></tr></thead><tbody><tr><td>门户发GET请求调SP API</td><td>门户发<strong>POST</strong>请求，参数<code>time/nonce/userId/wxUserId/maxCount/currentPage/typeId</code></td></tr><tr><td>数据源URL填 <code>https://portal.oa.gyzq.com/oa-news/...</code></td><td>数据源URL填代理服务地址 <code>http://10.0.63.11:8899/api/news</code></td></tr><tr><td>透传SharePoint JSON即可</td><td><strong>必须转换为门户消息列表格式</strong></td></tr><tr><td>门户前端直接渲染</td><td>门户<strong>后端</strong>代发请求，Nginx代理非必须</td></tr></tbody></table>
+
+<h3>1.2 门户数据源三种模式对比</h3>
+
+<table><thead><tr><th>模式</th><th>方向</th><th>实时性</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>主动拉取</strong></td><td>门户→代理→SP</td><td>实时</td><td>✅ 新闻列表（主推）</td></tr><tr><td><strong>数据推送</strong></td><td>脚本→SP→推送→门户</td><td>准实时</td><td>备选</td></tr><tr><td>官方数据源</td><td>内置</td><td>实时</td><td>需部署道一云新闻公告私有化版</td></tr></tbody></table>
+
+<hr>
+
+<h2>2. 最终方案：主动拉取 + JSON格式转换代理</h2>
+
+<h3>2.1 架构</h3>
+
+<pre><code class="language-">
+门户后端(POST) → http://10.0.63.11:8899/api/news
+                      ↓
+              OaProxyServer (Java/Python)
+                 ├─ 接收: time, nonce, userId, wxUserId, maxCount, currentPage, typeId
+                 ├─ 注入OA Cookie → 调用 SharePoint REST API
+                 ├─ 转换: OData JSON → 门户消息列表JSON
+                 └─ 返回: {code:0, data:{value:[...]}}
+</code></pre>
+
+<h3>2.2 门户侧配置（管理员在后台操作）</h3>
+
+<table><thead><tr><th>配置项</th><th>值</th></tr></thead><tbody><tr><td>数据源类型</td><td>主动拉取</td></tr><tr><td>组件类型</td><td>消息列表</td></tr><tr><td>接口URL</td><td><code>http://10.0.63.11:8899/api/news</code></td></tr><tr><td>请求方式</td><td>POST（门户自动）</td></tr><tr><td>认证方式</td><td>无需（代理内网调用）</td></tr><tr><td>自定义参数</td><td><code>typeId=gsdt</code>（公司动态，可配多个数据源对应不同分类）</td></tr></tbody></table>
+
+<p><strong>每个新闻分类创建独立数据源</strong>：</p>
+
+<table><thead><tr><th>数据源名称</th><th>typeId参数</th><th>对应SharePoint</th></tr></thead><tbody><tr><td>OA公司动态</td><td><code>gsdt</code></td><td><code>/gsdt/_api/...</code></td></tr><tr><td>OA部门简报</td><td><code>bmjb</code></td><td><code>/bmjb/_api/...</code></td></tr><tr><td>OA创新发展</td><td><code>cxfz</code></td><td><code>/cxfz/zcdt/_api/...</code></td></tr><tr><td>OA监管动态</td><td><code>jgdt</code></td><td><code>/hggl/jgdt/_api/...</code></td></tr><tr><td>OA党建群团</td><td><code>djqt</code></td><td><code>/gsdt/djqt/_api/...</code></td></tr><tr><td>OA子公司</td><td><code>zgs</code></td><td><code>/gsdt/zgsfzjg/_api/...</code></td></tr><tr><td>OA党建指南</td><td><code>lxyz</code></td><td><code>/jdlm/lxyz/_api/...</code></td></tr></tbody></table>
+
+<h3>2.3 代理服务请求响应规格</h3>
+
+<p><strong>接收（来自门户）</strong>：</p>
+<pre><code class="language-http">
+POST /api/news
+Content-Type: application/x-www-form-urlencoded
+
+time=1752835200&amp;nonce=abc123&amp;userId=xxx&amp;wxUserId=xxx&amp;maxCount=20&amp;currentPage=1&amp;typeId=gsdt
+</code></pre>
+
+<p><strong>返回（给门户）</strong>：</p>
+<pre><code class="language-json">
+{
+  "code": 0,
+  "msg": "执行成功",
+  "data": {
+    "value": [
+      {
+        "name": "公司动态",
+        "typeId": "gsdt",
+        "currPage": 1,
+        "pageSize": 20,
+        "totalCount": 156,
+        "totalPage": 8,
+        "value": [
+          {
+            "title": "国元证券召开2026年中期工作会议",
+            "image": "",
+            "subTitle": "金融科技部",
+            "createTime": "2026-07-15 10:30:00",
+            "appName": "老OA",
+            "jumpUrl": "http://home.oa.gyzq.com/gsdt/Pages/2026/07/xxx.aspx",
+            "publishUser": "系统管理员"
+          }
+        ]
+      }
+    ],
+    "moreUrl": "http://home.oa.gyzq.com/gsdt/Pages/default.aspx"
+  }
+}
+</code></pre>
+
+<h3>2.4 字段映射规则</h3>
+
+<table><thead><tr><th>SharePoint OData字段</th><th>门户消息列表字段</th><th>转换规则</th></tr></thead><tbody><tr><td><code>Title</code></td><td><code>title</code></td><td>直接映射</td></tr><tr><td>无</td><td><code>image</code></td><td>固定空字符串（SP页面无封面图）</td></tr><tr><td>无</td><td><code>subTitle</code></td><td>固定"国元证券"</td></tr><tr><td><code>ArticleStartDate</code></td><td><code>createTime</code></td><td><code>/Date(1751827200000)/</code> → <code>2026-07-06 14:40:00</code></td></tr><tr><td>无</td><td><code>appName</code></td><td>固定"老OA"</td></tr><tr><td><code>FileRef</code></td><td><code>jumpUrl</code></td><td><code>/gsdt/Pages/xxx.aspx</code> → <code>http://home.oa.gyzq.com/gsdt/Pages/xxx.aspx</code></td></tr><tr><td>无</td><td><code>publishUser</code></td><td>固定空</td></tr></tbody></table>
+
+<h3>2.5 typeId → SharePoint路径映射</h3>
+
+<table><thead><tr><th>typeId</th><th>SP站点</th><th>SP API路径</th><th>说明</th></tr></thead><tbody><tr><td><code>gsdt</code></td><td><code>/gsdt/</code></td><td><code>_api/lists/getbytitle('页面')/items?$orderby=ArticleStartDate desc&amp;$filter=OData__ModerationStatus eq 0</code></td><td>公司动态</td></tr><tr><td><code>bmjb</code></td><td><code>/bmjb/</code></td><td>同上</td><td>部门简报</td></tr><tr><td><code>cxfz</code></td><td><code>/cxfz/zcdt/</code></td><td>同上</td><td>创新发展</td></tr><tr><td><code>jgdt</code></td><td><code>/hggl/jgdt/</code></td><td>同上</td><td>监管动态</td></tr><tr><td><code>djqt</code></td><td><code>/gsdt/djqt/</code></td><td>同上</td><td>党建群团</td></tr><tr><td><code>zgs</code></td><td><code>/gsdt/zgsfzjg/</code></td><td>同上</td><td>子公司</td></tr><tr><td><code>lxyz</code></td><td><code>/jdlm/lxyz/</code></td><td>同上</td><td>党建指南</td></tr></tbody></table>
+
+<hr>
+
+<h2>3. 数据推送模式（备选，用于简单场景）</h2>
+
+<p>如果需要，也可以用推送模式：脚本定时从SP拉取 → 转格式 → 推送到门户推送API。</p>
+
+<p><strong>推送接口</strong>：<code>POST https://portal.oa.gyzq.com/data_sources/{tenantId}/{dataSourceId}/push</code></p>
+
+<p><strong>推送体示例</strong>：</p>
+<pre><code class="language-json">
+{
+  "secret": "从门户后台获取",
+  "jsonData": [
+    {
+      "infoId": "sp_gsdt_128",
+      "title": "国元证券召开2026年中期工作会议",
+      "image": "",
+      "subTitle": "金融科技部",
+      "createTime": "2026-07-15 10:30:00",
+      "appName": "老OA",
+      "jumpUrl": "http://home.oa.gyzq.com/gsdt/Pages/2026/07/xxx.aspx",
+      "dataType": 1
+    }
+  ]
+}
+</code></pre>
+
+<p><strong>优劣对比</strong>：</p>
+
+<table><thead><tr><th>维度</th><th>主动拉取（推荐）</th><th>数据推送</th></tr></thead><tbody><tr><td>实时性</td><td>✅ 实时</td><td>⚠️ 准实时</td></tr><tr><td>复杂度</td><td>代理需接受POST+转换</td><td>需管理定时任务+去重</td></tr><tr><td>网络</td><td>代理在应用服务器</td><td>需门户推送API可达</td></tr><tr><td>维护</td><td>代理一个服务</td><td>代理+定时任务</td></tr></tbody></table>
+
+<hr>
+
+<h2>4. 实施步骤（V3.0 修正）</h2>
+
+<table><thead><tr><th>阶段</th><th>事项</th><th>预估时间</th></tr></thead><tbody><tr><td><strong>① 配置</strong></td><td>门户后台创建8个主动拉取数据源（每个新闻分类一个）</td><td>0.5天</td></tr><tr><td><strong>② 部署</strong></td><td>部署新版代理（含JSON格式转换）到10.0.63.11</td><td>0.5天</td></tr><tr><td><strong>③ 验证</strong></td><td>门户测试数据源连通性 → 预览效果 → 正式发布</td><td>1天</td></tr></tbody></table>
+
+<hr>
+
+<h2>5. 依赖条件（V3.0 更新）</h2>
+
+<table><thead><tr><th>条件</th><th>状态</th><th>备注</th></tr></thead><tbody><tr><td>门户数据源组件</td><td>✅ 已确认</td><td>主动拉取模式，支持消息列表组件</td></tr><tr><td>OA服务账号</td><td>✅ 已有</td><td>—</td></tr><tr><td>门户→OA网络通</td><td>✅ 已通</td><td>应用服务器双网卡可访问内网</td></tr><tr><td>代理部署目标</td><td>✅ 门户应用服务器10.0.63.11</td><td>—</td></tr><tr><td>格式转换开发</td><td>❓ 待开发</td><td>代理需新增JSON转换逻辑</td></tr><tr><td>OA Cookie有效期</td><td>❓ 待确认</td><td>影响自动刷新频率</td></tr></tbody></table>
+
+<hr>
+
+<p><strong>文档版本</strong>：V3.0</p>
+<p><strong>编制日期</strong>：2026-07-18</p>
+<p><strong>编制人员</strong>：王昭</p>
+
+<p><strong>参考文档</strong>：</p>
+<ul><li>《智能门户数据源对接指南2.14》</li><li>《智能门户数据源API文档--主动拉取-v608》</li><li>《智能门户数据源API文档--数据推送-v608》</li><li>《统一身份认证平台接入说明》</li></ul>
+
+</body>
+</html>

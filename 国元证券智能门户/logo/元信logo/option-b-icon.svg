@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgGradB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1f33"/>
+      <stop offset="60%" stop-color="#0d2b45"/>
+      <stop offset="100%" stop-color="#103655"/>
+    </linearGradient>
+    <linearGradient id="goldGradB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c96a"/>
+      <stop offset="40%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#b8912e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect x="10" y="10" width="180" height="180" rx="32" ry="32" fill="url(#bgGradB)"/>
+
+  <!-- Subtle radial glow -->
+  <circle cx="100" cy="95" r="75" fill="none" stroke="rgba(196,164,74,0.06)" stroke-width="30"/>
+
+  <!-- Converging lines (一网通办 - network/convergence) -->
+  <g stroke="url(#goldGradB)" stroke-width="0.8" opacity="0.25">
+    <!-- Top-left cluster -->
+    <line x1="45" y1="35" x2="95" y2="90"/>
+    <line x1="55" y1="30" x2="95" y2="90"/>
+    <line x1="35" y1="45" x2="95" y2="90"/>
+    <!-- Top-right cluster -->
+    <line x1="155" y1="35" x2="105" y2="90"/>
+    <line x1="145" y1="30" x2="105" y2="90"/>
+    <line x1="165" y1="45" x2="105" y2="90"/>
+    <!-- Bottom cluster -->
+    <line x1="50" y1="155" x2="95" y2="100"/>
+    <line x1="100" y1="160" x2="100" y2="100"/>
+    <line x1="150" y1="155" x2="105" y2="100"/>
+  </g>
+
+  <!-- Concentric convergence rings -->
+  <g fill="none" stroke="url(#goldGradB)" opacity="0.15" stroke-width="0.6">
+    <circle cx="100" cy="95" r="35"/>
+    <circle cx="100" cy="95" r="50"/>
+    <circle cx="100" cy="95" r="65"/>
+  </g>
+
+  <!-- Central node -->
+  <circle cx="100" cy="95" r="28" fill="#0d2b45" stroke="url(#goldGradB)" stroke-width="2"/>
+
+  <!-- Oracle bone "信" in gold -->
+  <g transform="translate(100,95)" fill="none" stroke="url(#goldGradB)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 人 (person) -->
+    <path d="M-12,-22 v22 c0,5 3,10 6,14"/>
+    <path d="M-20,-12 c-3,-3 -2,-12 0,-16 c1,3 3,12 0,16"/>
+    <!-- 言 (speech) -->
+    <line x1="-5" y1="-24" x2="20" y2="-24"/>
+    <line x1="-8" y1="-15" x2="22" y2="-15"/>
+    <line x1="-6" y1="-6" x2="20" y2="-6"/>
+    <rect x="-3" y="4" width="20" height="16" rx="3"/>
+  </g>
+
+  <!-- Small gold nodes at convergence points -->
+  <g fill="url(#goldGradB)">
+    <circle cx="45" cy="35" r="2.5"/>
+    <circle cx="155" cy="35" r="2.5"/>
+    <circle cx="50" cy="155" r="2.5"/>
+    <circle cx="150" cy="155" r="2.5"/>
+    <circle cx="35" cy="95" r="2"/>
+    <circle cx="165" cy="95" r="2"/>
+  </g>
+</svg>

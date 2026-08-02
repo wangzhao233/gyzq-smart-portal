@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国元项目支付计划全量汇总</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #0f1117;
+    color: #e1e4e8;
+    padding: 40px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #f0f6fc;
+  }
+  .subtitle { font-size: 13px; color: #8b949e; margin-bottom: 24px; }
+
+  /* 结构图 */
+  .structure {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-family: "SF Mono", "Cascadia Code", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #c9d1d9;
+  }
+  .structure .node { color: #79c0ff; }
+  .structure .money { color: #e3b341; }
+  .structure .paid { color: #3fb950; }
+  .structure .pending { color: #f0883e; }
+  .structure .arrow { color: #484f58; }
+  .structure .comment { color: #8b949e; }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  thead th {
+    background: #1c2128;
+    color: #8b949e;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #30363d;
+    white-space: nowrap;
+    position: sticky; top: 0;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #21262d;
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: #1a1f28; }
+
+  .badge-paid {
+    display: inline-block;
+    background: rgba(46, 160, 67, 0.15);
+    color: #3fb950;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-pending {
+    display: inline-block;
+    background: rgba(219, 109, 40, 0.15);
+    color: #f0883e;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .money-cell { text-align: right; font-variant-numeric: tabular-nums; font-family: "SF Mono", "Consolas", monospace; }
+
+  /* 汇总区 */
+  .summary-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .summary-card {
+    flex: 1;
+    min-width: 200px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .summary-card .label {
+    font-size: 12px;
+    color: #8b949e;
+    margin-bottom: 4px;
+  }
+  .summary-card .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f0f6fc;
+  }
+  .summary-card .sub {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 4px;
+  }
+  .card-paid .value { color: #3fb950; }
+  .card-pending .value { color: #f0883e; }
+  .card-total .value { color: #79c0ff; }
+
+  /* 产品对照 */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .product-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .product-card .name { font-size: 14px; color: #e1e4e8; }
+  .product-card .detail { font-size: 12px; color: #8b949e; margin-top: 2px; }
+  .product-card .cost { text-align: right; }
+  .product-card .cost-main { font-size: 16px; font-weight: 700; color: #f0f6fc; }
+  .product-card .cost-sub { font-size: 11px; color: #8b949e; }
+
+  hr { border: none; border-top: 1px solid #30363d; margin: 20px 0; }
+
+  /* 来源列样式 */
+  .source-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(121, 192, 255, 0.1);
+    color: #79c0ff;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>国元项目 · 支付计划全量汇总</h1>
+<p class="subtitle">计划采购 ¥3,056,600 | 报价 ¥3,112,200 | 更新于 2026-07-30</p>
+
+<!-- 结构图 -->
+<div class="structure">
+  <span class="money">3,056,600</span>
+  <br>&nbsp;&nbsp;<span class="arrow">├──</span> <span class="node">大笔</span> <span class="money">2,096,600</span>
+  <br>&nbsp;&nbsp;<span class="arrow">│&nbsp;&nbsp;&nbsp;&nbsp;├──</span> <span class="node">拆1</span> <span class="paid">1,120,000 ✅</span> <span class="comment">→ IM主授权 + 定制打包</span>
+  <br>&nbsp;&nbsp;<span class="arrow">│&nbsp;&nbsp;&nbsp;&nbsp;├──</span> <span class="node">拆2</span> <span class="pending">346,000 ⏳</span>
+  <br>&nbsp;&nbsp;<span class="arrow">│&nbsp;&nbsp;&nbsp;&nbsp;└──</span> <span class="node">拆3</span> <span class="pending">630,600 ⏳</span>
+  <br>&nbsp;&nbsp;<span class="arrow">│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="comment">─────────</span>
+  <br>&nbsp;&nbsp;<span class="arrow">│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="pending">1,811,600</span> <span class="comment">= 安全网关 + 文档 + 微盘 + Tab</span>
+  <br>&nbsp;&nbsp;<span class="arrow">└──</span> <span class="node">小笔</span> <span class="money">960,000</span>
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">├──</span> <span class="pending">835,000 ⏳</span> <span class="comment">产品采购</span>
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">├──</span> <span class="pending">93,750 ⏳</span> <span class="comment">会议采购</span>
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">└──</span> <span class="pending">31,250 ⏳</span> <span class="comment">业务外包</span>
+</div>
+
+<!-- 汇总卡片 -->
+<div class="summary-row">
+  <div class="summary-card card-total">
+    <div class="label">项目总预算</div>
+    <div class="value">¥3,556,600</div>
+    <div class="sub">8笔支付计划</div>
+  </div>
+  <div class="summary-card card-paid">
+    <div class="label">已支付</div>
+    <div class="value">¥1,220,000</div>
+    <div class="sub">占比 34.3% · 2笔</div>
+  </div>
+  <div class="summary-card card-pending">
+    <div class="label">待支付</div>
+    <div class="value">¥2,336,600</div>
+    <div class="sub">占比 65.7% · 6笔</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">产品采购成本</div>
+    <div class="value">¥2,931,600</div>
+    <div class="sub">6项产品 · 报价 3,112,200</div>
+  </div>
+</div>
+
+<!-- 主表 -->
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>来源</th>
+      <th>类别</th>
+      <th>类型</th>
+      <th style="text-align:right">计划金额</th>
+      <th>状态</th>
+      <th>计划日期</th>
+      <th>产品/内容</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><span class="source-tag">大笔-拆1</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">1,120,000</td>
+      <td><span class="badge-paid">已支付</span></td>
+      <td>2026-06-30</td>
+      <td>IM主授权 + 定制打包</td>
+      <td>回款后道一垫付</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><span class="source-tag">大笔-拆2</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">346,000</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>产品采购</td>
+      <td>回款后道一垫付</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><span class="source-tag">大笔-拆3</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">630,600</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>产品采购</td>
+      <td>回款后道一垫付</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><span class="source-tag">小笔-产品</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">835,000</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>产品采购</td>
+      <td>回款后道一垫付</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><span class="source-tag">小笔-会议</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">93,750</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>会议采购</td>
+      <td>外采费用</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><span class="source-tag">小笔-外包</span></td>
+      <td>企微license</td>
+      <td>进度款</td>
+      <td class="money-cell">31,250</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>业务外包</td>
+      <td></td>
+    </tr>
+    <tr style="border-top: 2px solid #30363d;">
+      <td>2</td>
+      <td><span class="source-tag">-</span></td>
+      <td>项目外包</td>
+      <td>预付款</td>
+      <td class="money-cell">100,000</td>
+      <td><span class="badge-paid">已支付</span></td>
+      <td>2026-02-27</td>
+      <td>项目外包预付款</td>
+      <td>外包50%比例</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><span class="source-tag">-</span></td>
+      <td>项目外包</td>
+      <td>进度款</td>
+      <td class="money-cell">400,000</td>
+      <td><span class="badge-pending">待支付</span></td>
+      <td>2026-07-31</td>
+      <td>项目外包进度款</td>
+      <td>外包50%比例</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr style="background: #1c2128; font-weight: 700;">
+      <td colspan="4">合计</td>
+      <td class="money-cell" style="color:#79c0ff; font-size:14px;">3,556,600</td>
+      <td>已付2 / 待付6</td>
+      <td></td><td></td><td></td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- 产品对照 -->
+<h2 style="margin-bottom: 12px; font-size: 16px; color: #f0f6fc;">产品报价对照</h2>
+<div class="product-grid">
+  <div class="product-card">
+    <div>
+      <div class="name">IM主授权</div>
+      <div class="detail">5000 × ¥203.99 = ¥1,019,950（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥960,000</div>
+      <div class="cost-sub">成本 ¥192.00/个</div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div>
+      <div class="name">定制化打包</div>
+      <div class="detail">1 × ¥170,000 = ¥170,000（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥160,000</div>
+      <div class="cost-sub">成本 ¥160,000/年</div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div>
+      <div class="name">安全网关</div>
+      <div class="detail">5000 × ¥103.67 = ¥518,350（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥489,600</div>
+      <div class="cost-sub">成本 ¥97.92/个</div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div>
+      <div class="name">腾讯文档</div>
+      <div class="detail">5000 × ¥122.39 = ¥611,950（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥576,000</div>
+      <div class="cost-sub">成本 ¥115.20/个</div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div>
+      <div class="name">腾讯微盘</div>
+      <div class="detail">5000 × ¥122.39 = ¥611,950（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥576,000</div>
+      <div class="cost-sub">成本 ¥115.20/个</div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div>
+      <div class="name">第五Tab页</div>
+      <div class="detail">1 × ¥180,000 = ¥180,000（报价）</div>
+    </div>
+    <div class="cost">
+      <div class="cost-main">¥170,000</div>
+      <div class="cost-sub">成本 ¥170,000/年</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- 按类别汇总 -->
+<h2 style="margin-bottom: 12px; font-size: 16px; color: #f0f6fc;">按类别汇总</h2>
+<table>
+  <thead>
+    <tr>
+      <th>类别</th>
+      <th style="text-align:right">已付</th>
+      <th style="text-align:right">待付</th>
+      <th style="text-align:right">小计</th>
+      <th style="text-align:right">占比</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>产品采购(6项)</td>
+      <td class="money-cell">1,120,000</td>
+      <td class="money-cell">1,811,600</td>
+      <td class="money-cell">2,931,600</td>
+      <td class="money-cell">82.4%</td>
+    </tr>
+    <tr>
+      <td>会议采购</td>
+      <td class="money-cell">—</td>
+      <td class="money-cell">93,750</td>
+      <td class="money-cell">93,750</td>
+      <td class="money-cell">2.6%</td>
+    </tr>
+    <tr>
+      <td>业务外包</td>
+      <td class="money-cell">—</td>
+      <td class="money-cell">31,250</td>
+      <td class="money-cell">31,250</td>
+      <td class="money-cell">0.9%</td>
+    </tr>
+    <tr>
+      <td>项目外包</td>
+      <td class="money-cell">100,000</td>
+      <td class="money-cell">400,000</td>
+      <td class="money-cell">500,000</td>
+      <td class="money-cell">14.1%</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr style="background: #1c2128; font-weight: 700;">
+      <td>合计</td>
+      <td class="money-cell" style="color:#3fb950;">1,220,000</td>
+      <td class="money-cell" style="color:#f0883e;">2,336,600</td>
+      <td class="money-cell" style="color:#79c0ff;">3,556,600</td>
+      <td class="money-cell" style="color:#79c0ff;">100%</td>
+    </tr>
+  </tfoot>
+</table>
+
+</div>
+</body>
+</html>
